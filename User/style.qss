@@ -1,0 +1,99 @@
+QWidget#mainWidget{
+	color : #CCCCCC;
+	background-color : #1e1c24;
+}
+QWidget#sideBar{
+	color : #CCCCCC;
+	background-color : #131217;
+}
+QWidget#menuBar{
+	color : #CCCCCC;
+	background-color : #131217;
+}
+QWidget#chatBox{
+	border : 0px solid #00A1AD;
+	color : #CCCCCC;
+	background-color : #131217;
+}
+
+QTabWidget{
+	color : #CCCCCC;
+	border : 0px;
+	background-color : #1e1c24;
+}
+QTabWidget#mainTabs QTabBar::tab{
+	width : 0px;
+	height: 0px;
+	border: 0px;
+}
+
+
+
+QLabel#h1{
+	color : #ADFF2F;
+	font-size : 28px;
+}
+QLabel#h2{
+	color : #23B2EE;
+	font-size : 20px;
+}
+QLabel#h3{
+	color : #999999;
+	font-size : 16px;
+}
+
+QScrollArea{
+	border : 0px;
+}
+QScrollArea QWidget{
+	background-color : #171B1F;
+}
+
+
+QPushButton{
+	font-size : 14px;
+	text-align : center; 	
+	border : 2px solid #008080;
+	background-color : #202428 ;
+	color : #62C9F3;
+}
+QPushButton::focus{
+	color : #00C9D8;
+	background-color : #2B2C39 ;
+}
+QPushButton::hover::focus{
+	color : #00C9D8;
+	background-color : #2B2C39 ;
+}
+QPushButton::hover{
+	color : #A7F9FF;
+	background-color : #202428 ;
+	border : 2px solid #00aaaa;
+}
+
+QPushButton#menuButton{
+	border-radius : 32;
+}
+
+
+QLineEdit{
+	height : 30px;
+	background : #2D353D;
+	color : #AAAAAA;
+	border : 1px solid #171B1F;
+	padding : 3px;
+}
+
+QToolTip{
+	color : #AAAAAA;
+	background : #2D353D;
+}
+
+QScrollBar:horizontal{
+	height : 0px;
+}
+QScrollBar:vertical{
+	width : 0px;
+}
+
+/*--------------MAIN LAYOUT ENDS----------------*/
