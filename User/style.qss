@@ -1,52 +1,88 @@
 QWidget#mainWidget{
 	color : #CCCCCC;
-	background-color : #1e1c24;
+	background-color : #131217;
 }
 QWidget#sideBar{
 	color : #CCCCCC;
 	background-color : #131217;
+	border-right : 1px solid #232227;
 }
 QWidget#menuBar{
 	color : #CCCCCC;
 	background-color : #131217;
 }
 QWidget#chatBox{
-	border : 0px solid #00A1AD;
+	border : 0px solid #00a1ad;
 	color : #CCCCCC;
 	background-color : #131217;
 }
+QWidget#avatarBox{
+	border : 0px;
+	background-color : #008080;
+}
+QWidget#contentBox{
+	border : 1px solid #131217;
+	background-color : #1e1c24;
+}
+
 
 QTabWidget{
 	color : #CCCCCC;
 	border : 0px;
 	background-color : #1e1c24;
+	margin : 0px;
+}
+QTabWidget::page{
+	margin : 0px;
+	broder : 0px;
 }
 QTabWidget#mainTabs QTabBar::tab{
 	width : 0px;
 	height: 0px;
 	border: 0px;
+	margin: 0px;
 }
-
 
 
 QLabel#h1{
 	color : #ADFF2F;
-	font-size : 28px;
+	font-size : 42px;
 }
 QLabel#h2{
 	color : #23B2EE;
-	font-size : 20px;
+	font-size : 30px;
 }
 QLabel#h3{
 	color : #999999;
-	font-size : 16px;
+	font-size : 26px;
 }
+QLabel#repLabel{
+	color : #999999;
+	font-size : 20px;
+}
+QLabel#repContent{
+	color : #AA2222;
+	font-size : 20px;
+}
+QLabel#memberSinceLabel{
+	color : #999999;
+	font-size : 20px bold;
+}
+QLabel#memberSinceContent{
+	color : #999999;
+	font-size : 20px;
+}
+QLabel#prestigeLabel{
+	font-size : 20px;
+	border : 3px solid #AAAAAA;
+}
+
 
 QScrollArea{
 	border : 0px;
 }
 QScrollArea QWidget{
-	background-color : #171B1F;
+	background-color : #131217;
 }
 
 
@@ -59,35 +95,45 @@ QPushButton{
 }
 QPushButton::focus{
 	color : #00C9D8;
-	background-color : #2B2C39 ;
+	background-color : #2b2c39 ;
 }
 QPushButton::hover::focus{
 	color : #00C9D8;
-	background-color : #2B2C39 ;
+	background-color : #2b2c39 ;
 }
 QPushButton::hover{
 	color : #A7F9FF;
 	background-color : #202428 ;
 	border : 2px solid #00aaaa;
 }
-
 QPushButton#menuButton{
 	border-radius : 32;
+}
+QPushButton#editButton{
+	border-radius : 4;
 }
 
 
 QLineEdit{
 	height : 30px;
-	background : #2D353D;
-	color : #AAAAAA;
-	border : 1px solid #171B1F;
+	background : #2d353d;
+	color : #aaaaaa;
+	border : 1px solid #171b1f;
 	padding : 3px;
+}
+QLineEdit#editableLineEdit{
+	background : #1e1c24;
+	border : 0px;
+	font-size : 20px;
+	padding : 0px;
+	border-bottom : 0px;
 }
 
 QToolTip{
-	color : #AAAAAA;
-	background : #2D353D;
+	color : #aaaaaa;
+	background : #2d353d;
 }
+
 
 QScrollBar:horizontal{
 	height : 0px;
@@ -95,5 +141,3 @@ QScrollBar:horizontal{
 QScrollBar:vertical{
 	width : 0px;
 }
-
-/*--------------MAIN LAYOUT ENDS----------------*/

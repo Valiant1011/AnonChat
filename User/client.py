@@ -4,6 +4,7 @@ from PyQt5.QtGui import QIcon, QPixmap
 from PyQt5.QtCore import pyqtSlot, pyqtSignal, QObject, QTimer, Qt, QModelIndex, qInstallMessageHandler
 from profile import ProfileWidget
 from chat import ChatWidget
+from user import User
 # This is to ignore some warnings which were thrown when gui exited and 
 # python deleted some assests in wrong order
 # Nothing critical :)
@@ -16,8 +17,8 @@ class serverWindow(QMainWindow):
 	def __init__(self):
 		super().__init__()
 		# Get user data
-
-		self.userName = 'Admin'
+		self.userObject = User()
+		self.userObject.loadUser()
 
 		# Set app icon
 		self.setWindowIcon(QIcon('Resources/logo.png'))
@@ -48,9 +49,9 @@ class serverWindow(QMainWindow):
 			self.topLayout.addWidget(self.menuBar)
 
 			self.topLayout.setContentsMargins(0, 0, 0, 0)
-			self.topLayout.setStretch(0, 22)
-			self.topLayout.setStretch(1, 70)
-			self.topLayout.setStretch(2, 8)
+			self.topLayout.setStretch(0, 20)
+			self.topLayout.setStretch(1, 74)
+			self.topLayout.setStretch(2, 6)
 			
 			self.setCentralWidget(self.topWidget)
 		except:
@@ -72,6 +73,14 @@ class serverWindow(QMainWindow):
 		self.sideBarLayout.setAlignment(Qt.AlignTop)
 
 
+	def makeProfileWidget(self):
+		self.profileWidget = ProfileWidget(self.userObject)
+
+
+	def makeChatWidget(self):
+		self.chatWidget = ChatWidget()
+
+
 	def makeCentralArea(self):
 		self.centralArea = QWidget()
 		self.centralLayout = QVBoxLayout(self.centralArea)
@@ -84,14 +93,6 @@ class serverWindow(QMainWindow):
 		self.centralLayout.addWidget(self.contentTabs)
 		self.centralLayout.setAlignment(Qt.AlignTop)
 		self.centralLayout.setContentsMargins(0, 0, 0, 0)
-
-
-	def makeProfileWidget(self):
-		self.profileWidget = ProfileWidget()
-
-
-	def makeChatWidget(self):
-		self.chatWidget = ChatWidget()
 
 
 	def makeMenuBar(self):
