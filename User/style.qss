@@ -5,7 +5,6 @@ QWidget#mainWidget{
 QWidget#sideBar{
 	color : #CCCCCC;
 	background-color : #131217;
-	border-right : 1px solid #232227;
 }
 QWidget#menuBar{
 	color : #CCCCCC;
@@ -24,6 +23,27 @@ QWidget#contentBox{
 	border : 1px solid #131217;
 	background-color : #1e1c24;
 }
+QWidget#headerBox{
+	border : 1px solid #131217;
+	background-color : #1e1c24;
+}
+QWidget#aboutBox{
+	border : 0px;
+	width : 70px;
+	height : 170px;
+	background-repeat: no-repeat; 
+    background-position: center;	
+    background-image : url('Resources/Assets/aboutBG.png') 0 0 0 0 streth stretch;
+}
+QWidget#badgesBox{
+	border : 0px;
+	width : 70px;
+	height : 170px;
+	background-repeat: no-repeat; 
+    background-position: center;	
+    background-image : url('Resources/Assets/badgesBG.png') 0 0 0 0 streth stretch;
+}
+
 
 
 QTabWidget{
@@ -55,6 +75,10 @@ QLabel#h2{
 QLabel#h3{
 	color : #999999;
 	font-size : 26px;
+}
+QLabel#h4{
+	color : #bbbbbb;
+	font-size : 20px;
 }
 QLabel#repLabel{
 	color : #999999;
@@ -89,13 +113,14 @@ QScrollArea QWidget{
 QPushButton{
 	font-size : 14px;
 	text-align : center; 	
-	border : 2px solid #008080;
+	border : 1px solid #008080;
 	background-color : #202428 ;
 	color : #62C9F3;
 }
 QPushButton::focus{
 	color : #00C9D8;
 	background-color : #2b2c39 ;
+	border : 2px solid #008080;
 }
 QPushButton::hover::focus{
 	color : #00C9D8;
@@ -107,7 +132,13 @@ QPushButton::hover{
 	border : 2px solid #00aaaa;
 }
 QPushButton#menuButton{
-	border-radius : 32;
+	background-color : #00000000;
+	border : 0px;
+}
+QPushButton#menuButton::focus{
+	background-color : #00000000;
+	border : 1.5px solid #ffe22c; 
+	border-radius : 32px;
 }
 QPushButton#editButton{
 	border-radius : 4;
@@ -127,6 +158,12 @@ QLineEdit#editableLineEdit{
 	font-size : 20px;
 	padding : 0px;
 	border-bottom : 0px;
+}
+
+
+QTextEdit{
+	background : #1e1c24;
+	color : #aaaaaa;
 }
 
 QToolTip{

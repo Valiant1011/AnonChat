@@ -2,28 +2,103 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtGui import QIcon, QPixmap
 from PyQt5.QtCore import pyqtSlot, pyqtSignal, QObject, QTimer, Qt, QModelIndex, qInstallMessageHandler
 from editableLineEdit import editableLineEdit
+from editableTextEdit import editableTextEdit
 from prestigeWidget import prestigeWidget
 
 class ProfileWidget(QWidget):
 	def __init__(self, userObject):
 		super().__init__()
 		self.layout = self.getCentralLayout(userObject)
-		self.layout.setContentsMargins(10, 10, 10, 10)
+		self.layout.setContentsMargins(5, 5, 5, 5)
 		self.setLayout(self.layout)
 
 
 	def getCentralLayout(self, userObject):
 		mainLayout = QVBoxLayout()
+
 		header = self.makeHeader(userObject)
+		badge = self.makeBadges(userObject)
+		aboutMe = self.makeAboutMe(userObject)
 
 		mainLayout.addWidget(header)
+		mainLayout.addWidget(badge)
+		mainLayout.addWidget(aboutMe)
+
 		mainLayout.setAlignment(Qt.AlignTop)
+		mainLayout.addStretch(1)
+		mainLayout.setContentsMargins(0, 0, 0, 0)
 		return mainLayout
+
+
+	def makeBadges(self, userObject):
+		overlayWidget = QWidget()
+		overlayWidget.setObjectName('contentBox')
+		overlayLayout = QHBoxLayout(overlayWidget)
+		
+		badgesLabelImage = QWidget()
+		badgesLabelImage.setObjectName('badgesBox')
+		badgesLabelImage.setFixedHeight(170)
+
+		badgeWidget = QWidget()
+		badgeLayout = QHBoxLayout(badgeWidget)
+		badgeLayout.setContentsMargins(0, 0, 0, 0)
+
+		badgeCount = 0
+		for badge in userObject.badges:
+			newBadge = QLabel()
+			try:
+				badgeImage = QPixmap('Resources/Badges/' + badge + '.png')
+				newBadge.setPixmap(badgeImage)
+			except:
+				pass
+			else:
+				badgeCount += 1
+				badgeLayout.addWidget(newBadge)
+
+		while badgeCount < 6:
+			badgeCount += 1
+			newBadge = QLabel()
+			try:
+				badgeImage = QPixmap('Resources/Badges/Empty.png')
+				newBadge.setPixmap(badgeImage)
+				badgeLayout.addWidget(newBadge)
+			except:
+				pass
+
+		overlayLayout.addWidget(badgesLabelImage)
+		overlayLayout.addWidget(badgeWidget)
+		overlayLayout.setStretch(0, 5)
+		overlayLayout.setStretch(1, 95)
+		overlayLayout.setContentsMargins(0, 0, 0, 0)
+
+		return overlayWidget
+
+
+	def makeAboutMe(self, userObject):
+		overlayWidget = QWidget()
+		overlayWidget.setObjectName('contentBox')
+		overlayLayout = QHBoxLayout(overlayWidget)
+
+		aboutImage = QWidget()
+		aboutImage.setObjectName('aboutBox')
+		aboutImage.setFixedHeight(170)
+
+		aboutMeContent = QLabel(userObject.aboutMe)
+		aboutMeContent.setAlignment(Qt.AlignTop)
+		aboutMeContent.setObjectName('h4')
+
+		overlayLayout.addWidget(aboutImage)
+		overlayLayout.addWidget(aboutMeContent)
+		overlayLayout.setStretch(0, 5)
+		overlayLayout.setStretch(1, 95)
+		overlayLayout.setContentsMargins(0, 0, 0, 0)
+		overlayLayout.setAlignment(Qt.AlignTop)
+		return overlayWidget
 
 
 	def makeHeader(self, userObject):
 		headerWidget = QWidget()
-		headerWidget.setObjectName('contentBox')
+		headerWidget.setObjectName('headerBox')
 		headerLayout = QHBoxLayout(headerWidget)
 
 		nameBox = QWidget()
@@ -34,9 +109,10 @@ class ProfileWidget(QWidget):
 		userAliasLabel.setObjectName('h1')
 		userAliasWidget = self.getComboWidget(prestigeIcon, userAliasLabel)
 
-		userMottoLabel = editableLineEdit(userObject.userMotto[:100])
+		userMottoLabel = QLabel(userObject.userMotto[:100])
+		userMottoLabel.setObjectName('h4')
 
-		repLabel = QLabel('Rep:')
+		repLabel = QLabel('Reputation:')
 		repLabel.setObjectName('repLabel')
 		repContent = QLabel(userObject.userRep)
 		repContent.setObjectName('repContent')

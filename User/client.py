@@ -22,7 +22,6 @@ class serverWindow(QMainWindow):
 
 		# Set app icon
 		self.setWindowIcon(QIcon('Resources/logo.png'))
-
 		# Set window title
 		self.setWindowTitle('AnonChat')
 		self.setGeometry(300, 200, 1366, 768) 
@@ -104,14 +103,18 @@ class serverWindow(QMainWindow):
 		self.profileButton = QPushButton()
 		self.profileButton.setFixedSize(64, 64)
 		self.profileButton.setObjectName('menuButton')
-		self.profileButton.setStyleSheet("background-image : url(Resources/profile.png);")
+		self.profileButton.setStyleSheet(
+			"background-image : url(Resources/profile.png);background-position: center;"
+		)
 		self.profileButton.setToolTip('Your profile')
 		self.profileButton.clicked.connect(self.handleProButtonClick)
 
 		self.chatButton = QPushButton()
 		self.chatButton.setFixedSize(64, 64)
 		self.chatButton.setObjectName('menuButton')
-		self.chatButton.setStyleSheet("background-image : url(Resources/chat.png);")
+		self.chatButton.setStyleSheet(
+			"background-image : url(Resources/chat.png);background-position: center;"
+		)
 		self.chatButton.clicked.connect(self.handleChatButtonClick)
 		
 		self.menuBarLayout.addStretch(1)

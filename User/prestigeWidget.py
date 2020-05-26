@@ -28,7 +28,13 @@ class prestigeWidget(QWidget):
 	def getHexValue(self, prestigeLevel):
 		hexMap = {10:'A', 11:'B', 12 : 'C', 13 : 'D', 14 : 'E', 15 : 'F'}
 		hexVal = ''
-		prestigeLevel = int(prestigeLevel)
+		try:
+			prestigeLevel = int(prestigeLevel)
+			if prestigeLevel > 255:
+				prestigeLevel = 255
+		except:
+			prestigeLevel = 0
+
 		while prestigeLevel:
 			temp = prestigeLevel % 16
 			prestigeLevel = int(prestigeLevel / 16)

@@ -10,6 +10,8 @@ class User():
 		self.userWallMessage = ''
 		self.userMotto = ''
 		self.memberSince = 'Eternity'
+		self.aboutMe = ''
+		self.badges = []
 
 	def loadUser(self):
 		fileName = 'profile.json'
@@ -27,6 +29,8 @@ class User():
 			self.userWallMessage = data.get('userWallMessage', '')
 			self.userMotto = data.get('userMotto', '')
 			self.memberSince = data.get('memberSince', 'Eternity')
+			self.aboutMe = data.get('aboutMe', '')
+			self.badges = data.get('badges', [])
 
 
 
