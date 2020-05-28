@@ -30,41 +30,40 @@ class ProfileWidget(QWidget):
 
 		mainLayout.setAlignment(Qt.AlignTop)
 		mainLayout.addStretch(1)
-		mainLayout.setContentsMargins(0, 0, 0, 0)
+		mainLayout.setSpacing(10)
+		mainLayout.setContentsMargins(0, 10, 0, 10)
 		return mainLayout
 
 
 	def makeHeader(self, userObject):
-		headerWidget = QWidget()
-		headerWidget.setObjectName('headerBox')
-		headerWidget.setFixedHeight(200)
-		headerLayout = QHBoxLayout(headerWidget)
-
+		# nameBox contains Prestige, Alias, Motto, Member Since and Reputation
 		nameBox = QWidget()
 		nameLayout = QVBoxLayout(nameBox)
-
+		# Prestige Icon
 		prestigeIcon = prestigeWidget(userObject.userPrestige)
+		# User Alias label
 		userAliasLabel = QLabel(userObject.userAlias)
 		userAliasLabel.setObjectName('userAlias')
 		userAliasWidget = self.getComboWidget(prestigeIcon, userAliasLabel)
-
-		userMottoLabel = QLabel(userObject.userMotto[:100])
+		# User Motto label
+		userMottoLabel = QLabel("' " + userObject.userMotto[:100] + " '")
 		userMottoLabel.setObjectName('userMotto')
-
+		# User Reputation label
 		repLabel = QLabel('Reputation:')
 		repLabel.setObjectName('repLabel')
 		repContent = QLabel(userObject.userRep)
 		repContent.setObjectName('repContent')
 		repWidget = self.getComboWidget(repLabel, repContent)
-
+		# User Member since label
 		memberSinceLabel = QLabel('Member Since:')
 		memberSinceLabel.setObjectName('memberSinceLabel')
 		memberSinceContent = QLabel(userObject.memberSince)
 		memberSinceContent.setObjectName('memberSinceContent')
 		memberSinceWidget = self.getComboWidget(memberSinceLabel, memberSinceContent)
-
+		# Add all these widgets into nameBox
 		nameLayout.addWidget(userAliasWidget)
 		nameLayout.addWidget(userMottoLabel)
+		nameLayout.addStretch(1)
 		nameLayout.addWidget(repWidget)
 		nameLayout.addWidget(memberSinceWidget)
 		nameLayout.setAlignment(userAliasWidget, Qt.AlignTop)
@@ -72,20 +71,54 @@ class ProfileWidget(QWidget):
 		nameLayout.setAlignment(repWidget, Qt.AlignBottom)
 		nameLayout.setAlignment(memberSinceWidget, Qt.AlignBottom)
 
-		avatarBox = QLabel()
+		# Edit Profile button
+		editProfileButton = QPushButton('Edit Profile')
+		editProfileButton.setFixedSize(100, 40)
+		editContainer = QWidget()
+		editContainerLayout = QHBoxLayout(editContainer)
+		editContainerLayout.setContentsMargins(0, 0, 0, 0)
+		editContainerLayout.setAlignment(Qt.AlignRight)
+		editContainerLayout.addWidget(editProfileButton)
+		# Avatar Image + Avatar Frame
+		avatarImage = QLabel()
+		avatarImage.setObjectName('avatarImage')
+		avatarImage.setFixedSize(180, 180)
+		avatarImageName = userObject.userAvatar
+		avatar = QPixmap("Resources/Avatars/" + avatarImageName);
+		scaled = avatar.scaled (180, 180)
+		avatarImage.setPixmap(scaled)
+
+		avatarBox = QWidget()
+		avatarBox.setFixedSize(210, 210)
 		avatarBox.setObjectName('avatarBox')
-		avatarImage = userObject.userAvatar + '.png'
-		avatar = QPixmap("Resources/Avatars/" + avatarImage);
-		scaled = avatar.scaled (180, 180, Qt.IgnoreAspectRatio, Qt.FastTransformation)
-		avatarBox.setPixmap(scaled)
-		userFrame = userObject.userAvatarFrame
-		style = "QLabel#avatarBox{border-image : url(Resources/Frames/" + userFrame + ")}"
-		avatarBox.setStyleSheet(style)
+		avatarLayout = QVBoxLayout(avatarBox)
+		avatarLayout.addWidget(avatarImage)
+		avatarImage.lower()
+		avatarLayout.setContentsMargins(15, 15, 15, 15)
+		avatarLayout.setAlignment(Qt.AlignCenter | Qt.AlignTop)
+		try:
+			userFrame = userObject.userAvatarFrame
+			style = "QWidget#avatarBox{border-image : url(Resources/Frames/" + userFrame + ") 0 0 0 0 stretch stretch}"
+			avatarBox.setStyleSheet(style)
+		except:
+			pass
+		# Edit Button + Avatar Widget
+		avatarContainer = QWidget()
+		avatarContainerLayout = QVBoxLayout(avatarContainer)
+		avatarContainerLayout.setContentsMargins(0, 0, 0, 0)
+		avatarContainerLayout.addWidget(avatarBox)
+		avatarContainerLayout.addWidget(editContainer)
+		avatarContainerLayout.setAlignment(Qt.AlignTop)
 		
+		headerWidget = QWidget()
+		headerWidget.setObjectName('headerBox')
+		headerLayout = QHBoxLayout(headerWidget)
 		headerLayout.addWidget(nameBox)
-		headerLayout.addWidget(avatarBox)
+		headerLayout.addWidget(avatarContainer)
 		headerLayout.setAlignment(nameBox, Qt.AlignLeft)
-		headerLayout.setAlignment(avatarBox, Qt.AlignRight)
+		headerLayout.setAlignment(avatarContainer, Qt.AlignRight)
+		headerLayout.setStretch(0, 70)
+		headerLayout.setStretch(1, 30)
 
 		return headerWidget
 
@@ -175,9 +208,14 @@ class ProfileWidget(QWidget):
 
 
 	def makeComments(self, userObject, viewer):
-		commentsHeading = QLabel('')
+		commentsHeading = QLabel('Comments')
 		commentsHeading.setObjectName('commentsHeading')
 		commentsHeading.setFixedHeight(40)
+		commentsHeadingContainer = QWidget()
+		commentsHeadingLayout = QHBoxLayout(commentsHeadingContainer)
+		commentsHeadingLayout.addWidget(commentsHeading)
+		commentsHeadingLayout.setAlignment(Qt.AlignCenter)
+		commentsHeadingLayout.setContentsMargins(0, 10, 0, 0)
 
 		comments = userObject.comments		
 		commentWidget = QWidget()
@@ -206,7 +244,7 @@ class ProfileWidget(QWidget):
 		mainWidget = QWidget()
 		mainLayout = QVBoxLayout(mainWidget)
 		mainLayout.setContentsMargins(0, 0, 10, 0)
-		mainLayout.addWidget(commentsHeading)
+		mainLayout.addWidget(commentsHeadingContainer)
 		mainLayout.addWidget(commentWidget)
 		mainLayout.addWidget(addCommentWidget)
 		mainLayout.setAlignment(addCommentWidget, Qt.AlignBottom)

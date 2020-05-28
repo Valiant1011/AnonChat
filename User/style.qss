@@ -22,14 +22,17 @@ QWidget#chatBox{
 }
 QWidget#avatarBox{
 	border : 0px;
-	background-color : #008080;
+	background-color : transparent;
+	width : 210px;
+	height : 210px;
+	padding : 15px;
 }
 QWidget#contentBox{
 	border : 0px;
-	background-color : rgba(30, 28, 36, 150);
+	background-color : rgba(30, 28, 36, 100);
 }
 QWidget#headerBox{
-	background-color : rgba(30, 28, 36, 180);
+	background-color : rgba(0, 170, 157, 40);
 }
 QWidget#aboutBox{
 	border : 0px;
@@ -59,6 +62,9 @@ QWidget#badgesBox{
 QWidget#comment{
 	border-left : 1px solid #bd00ff; 
 	background-color : rgba(255, 255, 255, 20);
+}
+QWidget#sideBarButtonContainer{
+	border-bottom  :2px solid #171b1f;
 }
 
 
@@ -114,7 +120,7 @@ QLabel#repLabel{
 	font-family : Adequate;
 }
 QLabel#repContent{
-	color : #AA2222;
+	color : #00ff9f;
 	font-size : 20px;
 	font-family : Adequate;
 }
@@ -133,10 +139,9 @@ QLabel#prestigeLabel{
 	border : 3px solid #AAAAAA;
 }
 QLabel#commentsHeading{
-	background-image : url('Resources/Assets/comments.png');
-	background-repeat : no-repeat;
-	background-position : stretch;
-	width : 40px;
+	font-family : Adequate;
+	font-size : 40px;
+	color : yellow;
 }
 QLabel#commentUser{
 	font-size : 16px;
@@ -145,13 +150,17 @@ QLabel#commentUser{
 }
 QLabel#commentMessage{
 	font-size : 14px;
-	color : #aaaaaa;
+	color : #cccccc;
 	background-color : transparent;
 }
 QLabel#commentDate{
 	font-size : 12px;
 	color : #00ff9f;
 	background-color : transparent;
+}
+QLabel#avatarImage{
+	width : 180px;
+	height : 180px;
 }
 
 
@@ -173,16 +182,13 @@ QPushButton{
 }
 QPushButton::focus{
 	color : #00C9D8;
-	background-color : #2b2c39 ;
-	border : 2px solid #008080;
+	border : 3px solid #008080;
 }
 QPushButton::hover::focus{
 	color : #00C9D8;
-	background-color : #2b2c39 ;
 }
 QPushButton::hover{
 	color : #A7F9FF;
-	background-color : #202428 ;
 	border : 2px solid #00aaaa;
 }
 QPushButton#menuButton{
@@ -196,6 +202,25 @@ QPushButton#menuButton::focus{
 QPushButton#editButton{
 	border-radius : 4;
 }
+QPushButton#sideBarButton{
+	border-image : url('Resources/Assets/searchIcon.png');
+	background : rgba(6, 6, 6, 10);
+	width : 31px;
+	height : 31px;
+}
+QPushButton#sideBarButton::hover{
+	border-image : url('Resources/Assets/searchIconActive.png');
+	background : rgba(6, 6, 6, 10);
+}
+QPushButton#sideBarButton::hover::focus{
+	border-image : url('Resources/Assets/searchIconActive.png');
+	background : rgba(6, 6, 6, 10);
+}
+QPushButton#sideBarButton::focus{
+	border-image : url('Resources/Assets/searchIcon.png');
+	background : rgba(6, 6, 6, 10);
+}
+
 
 
 QLineEdit{
@@ -221,6 +246,9 @@ QLineEdit#editableLineEdit{
 	font-size : 20px;
 	padding-left : 10px;
 	border-bottom : 0px;
+}
+QLineEdit#searchBarInput{
+	height : 31px;
 }
 
 

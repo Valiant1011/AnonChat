@@ -65,16 +65,38 @@ class serverWindow(QMainWindow):
 
 
 	def makeSidebar(self):
-		self.sideBar = QWidget()
-		self.sideBar.setFixedWidth(300)
-		self.sideBar.setObjectName('sideBar')
-		self.sideBarLayout = QVBoxLayout(self.sideBar)
-
 		self.searchBarInput = QLineEdit()
+		self.searchBarInput.setObjectName('searchBarInput')
 		self.searchBarInput.setPlaceholderText('Search')
 
-		self.sideBarLayout.addWidget(self.searchBarInput)
+		sideBarButton = QPushButton('')
+		sideBarButton.setObjectName('sideBarButton')
+		sideBarButton.clicked.connect(self.searchButtonPressed)
+		sideBarButtonContainer = QWidget()
+		sideBarButtonContainer.setObjectName('sideBarButtonContainer')
+		sideBarButtonLayout = QVBoxLayout(sideBarButtonContainer)
+		sideBarButtonLayout.addWidget(sideBarButton)
+		sideBarButtonLayout.setContentsMargins(0, 0, 0, 0)
+
+		sideBarTopWidget = QWidget()
+		sideBarTopLayout = QHBoxLayout(sideBarTopWidget)
+		sideBarTopLayout.setContentsMargins(0, 0, 0, 0)
+		sideBarTopLayout.addWidget(self.searchBarInput)
+		sideBarTopLayout.addWidget(sideBarButtonContainer)
+		sideBarTopLayout.setStretch(0, 85)
+		sideBarTopLayout.setStretch(0, 15)
+		sideBarTopLayout.setSpacing(0)
+
+		self.sideBar = QWidget()
+		self.sideBar.setFixedWidth(330)
+		self.sideBar.setObjectName('sideBar')
+		self.sideBarLayout = QVBoxLayout(self.sideBar)
+		self.sideBarLayout.addWidget(sideBarTopWidget)
 		self.sideBarLayout.setAlignment(Qt.AlignTop)
+
+
+	def searchButtonPressed(self):
+		print('Press')
 
 
 	def makeCentralArea(self):

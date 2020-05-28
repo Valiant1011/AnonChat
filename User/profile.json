@@ -1,8 +1,9 @@
 {
 	"userID" : "0aT5a",
 	"userAlias" : "Valiant",
-	"userAvatar" : "Spy",
+	"userAvatar" : "V.png",
 	"userProfileBG" : "cyberpunk.jpeg",
+	"userAvatarFrame" : "Cyberpunk.png",
 	"userPrestige" : "255",
 	"userRep" : "32851",
 	"userMotto" : "To Live and let Live!",
@@ -18,4 +19,4 @@
 			"commentDate" : ["27", "May", "2020"]
 		}
 	]
-}
+} 
