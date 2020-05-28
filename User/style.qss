@@ -1,14 +1,19 @@
+QMainWindow{
+	background : transparent;
+}
+
 QWidget#mainWidget{
 	color : #CCCCCC;
 	background-color : #131217;
+	border-image : url('Resources/BG/cyberpunk.jpeg');		
 }
 QWidget#sideBar{
 	color : #CCCCCC;
-	background-color : #131217;
+	background-color : rgba(6, 6, 6, 230);
 }
 QWidget#menuBar{
 	color : #CCCCCC;
-	background-color : #131217;
+	background: rgba(6, 6, 6, 255);
 }
 QWidget#chatBox{
 	border : 0px solid #00a1ad;
@@ -20,22 +25,30 @@ QWidget#avatarBox{
 	background-color : #008080;
 }
 QWidget#contentBox{
-	border : 1px solid #131217;
-	background-color : #1e1c24;
+	border : 0px;
+	background-color : rgba(30, 28, 36, 150);
 }
 QWidget#headerBox{
-	border : 1px solid #131217;
-	background-color : #1e1c24;
+	background-color : rgba(30, 28, 36, 180);
 }
 QWidget#aboutBox{
 	border : 0px;
-	width : 70px;
-	height : 170px;
+	background-image : url('Resources/Assets/aboutBG.png');
 	background-repeat: no-repeat; 
-    background-position: center;	
-    background-image : url('Resources/Assets/aboutBG.png') 0 0 0 0 streth stretch;
+    background-position: stretch;	
+    padding : 0px;
+    margin-bottom : -10px;
+}
+QWidget#aboutBoxLoop{
+	background-image : url('Resources/Assets/aboutBGLoop.png') ;
+    background-position: stretch;	
+    background-repeat : repeat-y;
+    padding : 0px;
+    margin : 0px;
+    border : 0px;
 }
 QWidget#badgesBox{
+	padding-top : -5px;
 	border : 0px;
 	width : 70px;
 	height : 170px;
@@ -43,24 +56,29 @@ QWidget#badgesBox{
     background-position: center;	
     background-image : url('Resources/Assets/badgesBG.png') 0 0 0 0 streth stretch;
 }
-
+QWidget#comment{
+	border-left : 1px solid #bd00ff; 
+	background-color : rgba(255, 255, 255, 20);
+}
 
 
 QTabWidget{
 	color : #CCCCCC;
 	border : 0px;
-	background-color : #1e1c24;
+	background: transparent;
 	margin : 0px;
 }
-QTabWidget::page{
+QTabWidget::pane{
 	margin : 0px;
-	broder : 0px;
+	border : 0px;
+	background: rgba(10, 10, 10, 140);
 }
 QTabWidget#mainTabs QTabBar::tab{
 	width : 0px;
 	height: 0px;
 	border: 0px;
 	margin: 0px;
+	background-color : transparent;
 }
 
 
@@ -80,33 +98,69 @@ QLabel#h4{
 	color : #bbbbbb;
 	font-size : 20px;
 }
+QLabel#userAlias{
+	color : #ADFF2F;
+	font-size : 42px;
+	font-family : Roboto;
+}
+QLabel#userMotto{
+	color : #bbbbbb;
+	font-size : 25px;
+	font-family : White Smith;
+}
 QLabel#repLabel{
 	color : #999999;
 	font-size : 20px;
+	font-family : Adequate;
 }
 QLabel#repContent{
 	color : #AA2222;
 	font-size : 20px;
+	font-family : Adequate;
 }
 QLabel#memberSinceLabel{
 	color : #999999;
 	font-size : 20px bold;
+	font-family : Adequate;
 }
 QLabel#memberSinceContent{
-	color : #999999;
+	color : #00ff9f;
 	font-size : 20px;
+	font-family : Adequate;
 }
 QLabel#prestigeLabel{
 	font-size : 20px;
 	border : 3px solid #AAAAAA;
 }
+QLabel#commentsHeading{
+	background-image : url('Resources/Assets/comments.png');
+	background-repeat : no-repeat;
+	background-position : stretch;
+	width : 40px;
+}
+QLabel#commentUser{
+	font-size : 16px;
+	color : #00b8ff;
+	background-color : transparent;
+}
+QLabel#commentMessage{
+	font-size : 14px;
+	color : #aaaaaa;
+	background-color : transparent;
+}
+QLabel#commentDate{
+	font-size : 12px;
+	color : #00ff9f;
+	background-color : transparent;
+}
 
 
 QScrollArea{
 	border : 0px;
+	background-color : transparent;
 }
 QScrollArea QWidget{
-	background-color : #131217;
+	background-color : rgba(30, 28, 36, 0);
 }
 
 
@@ -132,13 +186,12 @@ QPushButton::hover{
 	border : 2px solid #00aaaa;
 }
 QPushButton#menuButton{
-	background-color : #00000000;
+	background-color : transparent;
 	border : 0px;
 }
 QPushButton#menuButton::focus{
-	background-color : #00000000;
-	border : 1.5px solid #ffe22c; 
-	border-radius : 32px;
+	background-color : rgba(255, 255, 255, 10);
+	border-radius  :32px;
 }
 QPushButton#editButton{
 	border-radius : 4;
@@ -147,22 +200,32 @@ QPushButton#editButton{
 
 QLineEdit{
 	height : 30px;
-	background : #2d353d;
+	background : transparent;
 	color : #aaaaaa;
-	border : 1px solid #171b1f;
+	border : 0px;
+	border-bottom : 2px solid #171b1f;
 	padding : 3px;
 }
+QTextEdit#addComment{
+	height : 30px;
+	background :  #171b1f;
+	color : #aaaaaa;
+	border-bottom : 1px solid #c8b029;
+	border-left : 5px solid #c8b029;
+	padding-left : 10px;
+	margin : 5px;
+}
 QLineEdit#editableLineEdit{
-	background : #1e1c24;
+	background : rgba(30, 28, 36, 255);
 	border : 0px;
 	font-size : 20px;
-	padding : 0px;
+	padding-left : 10px;
 	border-bottom : 0px;
 }
 
 
 QTextEdit{
-	background : #1e1c24;
+	background : rgba(30, 28, 36, 255);
 	color : #aaaaaa;
 }
 
@@ -173,8 +236,37 @@ QToolTip{
 
 
 QScrollBar:horizontal{
+	height : 5px;
+	border : 0px;
+}
+QScrollBar::handle:horizontal{
+	height : 10px;
+	min-width : 10px;
+	background : solid grey;
+}
+QScrollBar::add-line:horizontal{
+	width : 0px;
 	height : 0px;
 }
-QScrollBar:vertical{
+QScrollBar::sub-line:horizontal{
 	width : 0px;
+	height : 0px;
+}
+
+QScrollBar:vertical{
+	width : 5px;
+	border : 0px;
+}
+QScrollBar::handle:vertical{
+	height : 10px;
+	min-width : 10px;
+	background : solid grey;
+}
+QScrollBar::add-line:vertical{
+	width : 0px;
+	height : 0px;
+}
+QScrollBar::sub-line:vertical{
+	width : 0px;
+	height : 0px;
 }

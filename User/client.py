@@ -1,6 +1,6 @@
 import time , sys, os, json
 from PyQt5.QtWidgets import *
-from PyQt5.QtGui import QIcon, QPixmap
+from PyQt5.QtGui import QIcon, QPixmap, QFontDatabase
 from PyQt5.QtCore import pyqtSlot, pyqtSignal, QObject, QTimer, Qt, QModelIndex, qInstallMessageHandler
 from profile import ProfileWidget
 from chat import ChatWidget
@@ -16,12 +16,14 @@ qInstallMessageHandler(handler)
 class serverWindow(QMainWindow):
 	def __init__(self):
 		super().__init__()
-		# Get user data
+		# Get user (self) data
 		self.userObject = User()
 		self.userObject.loadUser()
+		self.userName = self.userObject.userAlias
 
 		# Set app icon
-		self.setWindowIcon(QIcon('Resources/logo.png'))
+		self.setWindowIcon(QIcon('Resources/Assets/logo.png'))
+		# self.setWindowOpacity(0.99) # USEFUL later?
 		# Set window title
 		self.setWindowTitle('AnonChat')
 		self.setGeometry(300, 200, 1366, 768) 
@@ -29,8 +31,6 @@ class serverWindow(QMainWindow):
 		self.setMinimumHeight(600)
 
 		self.makeSidebar()
-		self.makeProfileWidget()
-		self.makeChatWidget()
 		self.makeCentralArea()
 		self.makeMenuBar()
 		serverWindow.initUI(self)
@@ -41,11 +41,15 @@ class serverWindow(QMainWindow):
 		try:
 			self.topWidget = QWidget()
 			self.topWidget.setObjectName('mainWidget')
+			profileBG = self.userObject.userProfileBG
+			style = "QWidget#mainWidget{background-image : url('Resources/BG/" + profileBG + "')}"
+			self.topWidget.setStyleSheet(style)
 			self.topLayout = QHBoxLayout(self.topWidget)
 
 			self.topLayout.addWidget(self.sideBar)
 			self.topLayout.addWidget(self.centralArea)
 			self.topLayout.addWidget(self.menuBar)
+			self.topLayout.setSpacing(0)
 
 			self.topLayout.setContentsMargins(0, 0, 0, 0)
 			self.topLayout.setStretch(0, 20)
@@ -62,6 +66,7 @@ class serverWindow(QMainWindow):
 
 	def makeSidebar(self):
 		self.sideBar = QWidget()
+		self.sideBar.setFixedWidth(300)
 		self.sideBar.setObjectName('sideBar')
 		self.sideBarLayout = QVBoxLayout(self.sideBar)
 
@@ -72,15 +77,11 @@ class serverWindow(QMainWindow):
 		self.sideBarLayout.setAlignment(Qt.AlignTop)
 
 
-	def makeProfileWidget(self):
-		self.profileWidget = ProfileWidget(self.userObject)
-
-
-	def makeChatWidget(self):
-		self.chatWidget = ChatWidget()
-
-
 	def makeCentralArea(self):
+		#  Generate Profile widget and chat widget
+		self.makeProfileWidget()
+		self.makeChatWidget()
+
 		self.centralArea = QWidget()
 		self.centralLayout = QVBoxLayout(self.centralArea)
 
@@ -94,8 +95,22 @@ class serverWindow(QMainWindow):
 		self.centralLayout.setContentsMargins(0, 0, 0, 0)
 
 
+	def makeProfileWidget(self):
+		profileWidget = ProfileWidget(self.userObject, self.userName)
+		scrollArea = QScrollArea()
+		scrollArea.setWidgetResizable(True)
+		scrollArea.setWidget(profileWidget)
+		self.profileWidget = scrollArea
+
+
+
+	def makeChatWidget(self):
+		self.chatWidget = ChatWidget()
+
+
 	def makeMenuBar(self):
 		self.menuBar = QWidget()
+		self.menuBar.setFixedWidth(80)
 		self.menuBar.setObjectName('menuBar')
 		self.menuBarLayout = QVBoxLayout()
 		self.menuBar.setLayout(self.menuBarLayout)
@@ -104,7 +119,7 @@ class serverWindow(QMainWindow):
 		self.profileButton.setFixedSize(64, 64)
 		self.profileButton.setObjectName('menuButton')
 		self.profileButton.setStyleSheet(
-			"background-image : url(Resources/profile.png);background-position: center;"
+			"background-image : url(Resources/Assets/profile.png);background-position: center;"
 		)
 		self.profileButton.setToolTip('Your profile')
 		self.profileButton.clicked.connect(self.handleProButtonClick)
@@ -113,7 +128,7 @@ class serverWindow(QMainWindow):
 		self.chatButton.setFixedSize(64, 64)
 		self.chatButton.setObjectName('menuButton')
 		self.chatButton.setStyleSheet(
-			"background-image : url(Resources/chat.png);background-position: center;"
+			"background-image : url(Resources/Assets/chat.png);background-position: center;"
 		)
 		self.chatButton.clicked.connect(self.handleChatButtonClick)
 		
@@ -147,6 +162,12 @@ class initGUI(serverWindow):
 		# make a reference of App class
 		app = QApplication(sys.argv)
 		app.setStyle("Fusion")
+		QFontDatabase.addApplicationFont("Resources/Fonts/Cyberpunk.ttf")
+		QFontDatabase.addApplicationFont("Resources/Fonts/Adequate.ttf")
+		QFontDatabase.addApplicationFont("Resources/Fonts/White Smith.otf")
+		QFontDatabase.addApplicationFont("Resources/Fonts/Andromeda.ttf")
+		QFontDatabase.addApplicationFont("Resources/Fonts/Roboto.ttf")
+		QFontDatabase.addApplicationFont("Resources/Fonts/Padaloma.ttf")
 		app.setStyleSheet(open('style.qss', "r").read())
 		# If user is about to close window
 		app.aboutToQuit.connect(self.closeEvent)

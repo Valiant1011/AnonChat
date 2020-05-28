@@ -20,7 +20,6 @@ class prestigeWidget(QWidget):
 
 
 	def setText(self, text):
-		print('Updating prestige icon...')
 		self.prestigeIcon.setText(self.getHexValue(text))
 		self.setObjectAttributes(text)
 

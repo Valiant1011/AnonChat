@@ -4,14 +4,16 @@ class User():
 	def __init__(self):
 		self.userID = ''
 		self.userAlias = ''
-		self.userAvatar = ''
 		self.userPrestige = 0
-		self.userRep = 0
-		self.userWallMessage = ''
 		self.userMotto = ''
 		self.memberSince = 'Eternity'
+		self.userRep = 0
+		self.userAvatar = 'Default'
+		self.userProfileBG = 'cyberpunk.jpeg'
+		self.userAvatarFrame = 'Default.png'
 		self.aboutMe = ''
-		self.badges = []
+		self.badges = {}
+		self.comments = []	# List of dictionaries
 
 	def loadUser(self):
 		fileName = 'profile.json'
@@ -24,13 +26,18 @@ class User():
 			self.userID = data.get('userID', 'NULL')
 			self.userAlias = data.get('userAlias', 'Newbie')
 			self.userAvatar = data.get('userAvatar', 'Default')
+			self.userProfileBG = data.get('userProfileBG', 'cyberpunk.jpeg')
 			self.userPrestige = data.get('userPrestige', 0)
 			self.userRep = data.get('userRep', 0)
-			self.userWallMessage = data.get('userWallMessage', '')
 			self.userMotto = data.get('userMotto', '')
-			self.memberSince = data.get('memberSince', 'Eternity')
+			memberSince = data.get('memberSince', ['25', 'May', '2020'])
+			self.memberSince = memberSince[1] + " " + memberSince[0] + ", " + memberSince[2] 
 			self.aboutMe = data.get('aboutMe', '')
 			self.badges = data.get('badges', [])
+			self.comments = data.get('comments', [])
+			self.userAvatarFrame = data.get('userAvatarFrame', 'Default.png')
+
+
 
 
 

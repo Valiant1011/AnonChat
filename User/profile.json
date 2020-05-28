@@ -2,10 +2,20 @@
 	"userID" : "0aT5a",
 	"userAlias" : "Valiant",
 	"userAvatar" : "Spy",
+	"userProfileBG" : "cyberpunk.jpeg",
 	"userPrestige" : "255",
 	"userRep" : "32851",
 	"userMotto" : "To Live and let Live!",
-	"memberSince" : "25 May 2020",
-	"aboutMe" : "Nothing much to say here!",
-	"badges" : ["Master"]
+	"memberSince" : ["25", "May", "2020"],
+	"aboutMe" : "There is nothing to see here, trust me :)",
+	"badges" : {
+		"Master" : "You're Number 1!"
+	},
+	"comments" : [
+		{
+			"commentUser" : "Valiant",
+			"commentMessage" : "+rep Nice fella!",
+			"commentDate" : ["27", "May", "2020"]
+		}
+	]
 }
