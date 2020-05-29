@@ -20,7 +20,7 @@ class serverWindow(QMainWindow):
 		self.userObject = User()
 		self.userObject.loadUser()
 		self.userName = self.userObject.userAlias
-
+		
 		# Set app icon
 		self.setWindowIcon(QIcon('Resources/Assets/logo.png'))
 		# self.setWindowOpacity(0.99) # USEFUL later?
@@ -42,7 +42,7 @@ class serverWindow(QMainWindow):
 			self.topWidget = QWidget()
 			self.topWidget.setObjectName('mainWidget')
 			profileBG = self.userObject.userProfileBG
-			style = "QWidget#mainWidget{background-image : url('Resources/BG/" + profileBG + "')}"
+			style = "QWidget#mainWidget{border-image : url('Resources/BG/" + profileBG + "');}"
 			self.topWidget.setStyleSheet(style)
 			self.topLayout = QHBoxLayout(self.topWidget)
 

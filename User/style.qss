@@ -4,8 +4,7 @@ QMainWindow{
 
 QWidget#mainWidget{
 	color : #CCCCCC;
-	background-color : #131217;
-	border-image : url('Resources/BG/cyberpunk.jpeg');		
+	background-color : #131217;		
 }
 QWidget#sideBar{
 	color : #CCCCCC;
@@ -29,10 +28,10 @@ QWidget#avatarBox{
 }
 QWidget#contentBox{
 	border : 0px;
-	background-color : rgba(30, 28, 36, 100);
+	background-color : rgba(100, 100, 100, 20);
 }
 QWidget#headerBox{
-	background-color : rgba(0, 170, 157, 40);
+	background-color : rgba(0, 81, 87, 200);
 }
 QWidget#aboutBox{
 	border : 0px;
@@ -77,7 +76,7 @@ QTabWidget{
 QTabWidget::pane{
 	margin : 0px;
 	border : 0px;
-	background: rgba(10, 10, 10, 140);
+	background: rgba(12, 12, 12, 180);
 }
 QTabWidget#mainTabs QTabBar::tab{
 	width : 0px;
@@ -109,13 +108,8 @@ QLabel#userAlias{
 	font-size : 42px;
 	font-family : Roboto;
 }
-QLabel#userMotto{
-	color : #bbbbbb;
-	font-size : 25px;
-	font-family : White Smith;
-}
 QLabel#repLabel{
-	color : #999999;
+	color : #ffffff;
 	font-size : 20px;
 	font-family : Adequate;
 }
@@ -125,7 +119,7 @@ QLabel#repContent{
 	font-family : Adequate;
 }
 QLabel#memberSinceLabel{
-	color : #999999;
+	color : #ffffff;
 	font-size : 20px bold;
 	font-family : Adequate;
 }
@@ -162,7 +156,11 @@ QLabel#avatarImage{
 	width : 180px;
 	height : 180px;
 }
-
+QLabel#userMotto{
+	color : #bbbbbb;
+	font-size : 25px;
+	font-family : White Smith;
+}
 
 QScrollArea{
 	border : 0px;
@@ -231,35 +229,44 @@ QLineEdit{
 	border-bottom : 2px solid #171b1f;
 	padding : 3px;
 }
-QTextEdit#addComment{
+QLineEdit#searchBarInput{
+	height : 31px;
+}
+QLineEdit#editableLineEdit{
+	background : transparent;
+	border : 0px;
+	border-bottom : 0px;
+	color : #bbbbbb;
+	font-size : 20px;
+	font-family : White Smith;
+}
+
+
+
+QPlainTextEdit{
+	background : rgba(30, 28, 36, 255);
+	color : #aaaaaa;
+}
+QPlainTextEdit#editableTextEdit{
+	border : 0px;
+	border-bottom : 0px;
+	color : #cccccc;
+	font-size : 20px;
+}
+QPlainTextEdit#addComment{
 	height : 30px;
-	background :  #171b1f;
+	background :  rgba(6, 6, 6, 86);
 	color : #aaaaaa;
 	border-bottom : 1px solid #c8b029;
 	border-left : 5px solid #c8b029;
 	padding-left : 10px;
 	margin : 5px;
 }
-QLineEdit#editableLineEdit{
-	background : rgba(30, 28, 36, 255);
-	border : 0px;
-	font-size : 20px;
-	padding-left : 10px;
-	border-bottom : 0px;
-}
-QLineEdit#searchBarInput{
-	height : 31px;
-}
 
-
-QTextEdit{
-	background : rgba(30, 28, 36, 255);
-	color : #aaaaaa;
-}
 
 QToolTip{
-	color : #aaaaaa;
-	background : #2d353d;
+	color : #cccccc;
+	background : rgb(6, 6, 6, 200)
 }
 
 
@@ -280,7 +287,6 @@ QScrollBar::sub-line:horizontal{
 	width : 0px;
 	height : 0px;
 }
-
 QScrollBar:vertical{
 	width : 5px;
 	border : 0px;

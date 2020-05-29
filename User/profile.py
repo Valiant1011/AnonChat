@@ -6,22 +6,24 @@ from editableTextEdit import editableTextEdit
 from prestigeWidget import prestigeWidget
 from comment import Comment
 from datetime import datetime
+from user import User
 
 class ProfileWidget(QWidget):
 	def __init__(self, userObject, viewer = ''):
 		super().__init__()
-		self.layout = self.getCentralLayout(userObject, viewer)
+		self.editFlag = False
+		self.userObject = userObject
+		self.layout = self.getCentralLayout(viewer)
 		self.layout.setContentsMargins(5, 5, 5, 5)
 		self.setLayout(self.layout)
-		
 
-	def getCentralLayout(self, userObject, viewer):
+	def getCentralLayout(self, viewer):
 		mainLayout = QVBoxLayout()
 
-		header = self.makeHeader(userObject)
-		badge = self.makeBadges(userObject)
-		aboutMe = self.makeAboutMe(userObject)
-		comments = self.makeComments(userObject, viewer)
+		header = self.makeHeader()
+		badge = self.makeBadges()
+		aboutMe = self.makeAboutMe()
+		comments = self.makeComments(viewer)
 
 		mainLayout.addWidget(header)
 		mainLayout.addWidget(badge)
@@ -35,55 +37,55 @@ class ProfileWidget(QWidget):
 		return mainLayout
 
 
-	def makeHeader(self, userObject):
+	def makeHeader(self):
 		# nameBox contains Prestige, Alias, Motto, Member Since and Reputation
 		nameBox = QWidget()
 		nameLayout = QVBoxLayout(nameBox)
 		# Prestige Icon
-		prestigeIcon = prestigeWidget(userObject.userPrestige)
+		prestigeIcon = prestigeWidget(self.userObject.userPrestige)
 		# User Alias label
-		userAliasLabel = QLabel(userObject.userAlias)
+		userAliasLabel = QLabel(self.userObject.userAlias)
 		userAliasLabel.setObjectName('userAlias')
 		userAliasWidget = self.getComboWidget(prestigeIcon, userAliasLabel)
 		# User Motto label
-		userMottoLabel = QLabel("' " + userObject.userMotto[:100] + " '")
-		userMottoLabel.setObjectName('userMotto')
+		self.userMottoLabel = editableLineEdit(self.userObject.userMotto[:100], 'Motto')
 		# User Reputation label
 		repLabel = QLabel('Reputation:')
 		repLabel.setObjectName('repLabel')
-		repContent = QLabel(userObject.userRep)
+		repContent = QLabel(self.userObject.userRep)
 		repContent.setObjectName('repContent')
 		repWidget = self.getComboWidget(repLabel, repContent)
 		# User Member since label
 		memberSinceLabel = QLabel('Member Since:')
 		memberSinceLabel.setObjectName('memberSinceLabel')
-		memberSinceContent = QLabel(userObject.memberSince)
+		memberSinceContent = QLabel(self.userObject.memberSince)
 		memberSinceContent.setObjectName('memberSinceContent')
 		memberSinceWidget = self.getComboWidget(memberSinceLabel, memberSinceContent)
 		# Add all these widgets into nameBox
 		nameLayout.addWidget(userAliasWidget)
-		nameLayout.addWidget(userMottoLabel)
+		nameLayout.addWidget(self.userMottoLabel)
 		nameLayout.addStretch(1)
 		nameLayout.addWidget(repWidget)
 		nameLayout.addWidget(memberSinceWidget)
 		nameLayout.setAlignment(userAliasWidget, Qt.AlignTop)
-		nameLayout.setAlignment(userMottoLabel, Qt.AlignTop)
+		nameLayout.setAlignment(self.userMottoLabel, Qt.AlignTop)
 		nameLayout.setAlignment(repWidget, Qt.AlignBottom)
 		nameLayout.setAlignment(memberSinceWidget, Qt.AlignBottom)
 
 		# Edit Profile button
-		editProfileButton = QPushButton('Edit Profile')
-		editProfileButton.setFixedSize(100, 40)
+		self.editProfileButton = QPushButton('Edit Profile')
+		self.editProfileButton.clicked.connect(self.editProfile)
+		self.editProfileButton.setFixedSize(100, 40)
 		editContainer = QWidget()
 		editContainerLayout = QHBoxLayout(editContainer)
 		editContainerLayout.setContentsMargins(0, 0, 0, 0)
 		editContainerLayout.setAlignment(Qt.AlignRight)
-		editContainerLayout.addWidget(editProfileButton)
+		editContainerLayout.addWidget(self.editProfileButton)
 		# Avatar Image + Avatar Frame
 		avatarImage = QLabel()
 		avatarImage.setObjectName('avatarImage')
 		avatarImage.setFixedSize(180, 180)
-		avatarImageName = userObject.userAvatar
+		avatarImageName = self.userObject.userAvatar
 		avatar = QPixmap("Resources/Avatars/" + avatarImageName);
 		scaled = avatar.scaled (180, 180)
 		avatarImage.setPixmap(scaled)
@@ -97,7 +99,7 @@ class ProfileWidget(QWidget):
 		avatarLayout.setContentsMargins(15, 15, 15, 15)
 		avatarLayout.setAlignment(Qt.AlignCenter | Qt.AlignTop)
 		try:
-			userFrame = userObject.userAvatarFrame
+			userFrame = self.userObject.userAvatarFrame
 			style = "QWidget#avatarBox{border-image : url(Resources/Frames/" + userFrame + ") 0 0 0 0 stretch stretch}"
 			avatarBox.setStyleSheet(style)
 		except:
@@ -123,7 +125,7 @@ class ProfileWidget(QWidget):
 		return headerWidget
 
 
-	def makeBadges(self, userObject):
+	def makeBadges(self):
 		overlayWidget = QWidget()
 		overlayWidget.setObjectName('contentBox')
 		overlayLayout = QHBoxLayout(overlayWidget)
@@ -137,7 +139,7 @@ class ProfileWidget(QWidget):
 		badgeLayout.setContentsMargins(0, 0, 0, 0)
 
 		badgeCount = 0
-		for badgeName, badgeDesc in userObject.badges.items():
+		for badgeName, badgeDesc in self.userObject.badges.items():
 			newBadge = QLabel()
 			try:
 				badgeImage = QPixmap('Resources/Badges/' + badgeName + '.png')
@@ -172,7 +174,7 @@ class ProfileWidget(QWidget):
 		return overlayWidget
 
 
-	def makeAboutMe(self, userObject):
+	def makeAboutMe(self):
 		overlayWidget = QWidget()
 		overlayWidget.setObjectName('contentBox')
 		overlayLayout = QHBoxLayout(overlayWidget)
@@ -194,12 +196,10 @@ class ProfileWidget(QWidget):
 		aboutImageContainerLayout.setStretch(1, 90)
 		aboutImageContainerLayout.setSpacing(0)
 		
-		aboutMeContent = QLabel(userObject.aboutMe)
-		aboutMeContent.setAlignment(Qt.AlignTop)
-		aboutMeContent.setObjectName('h4')
+		self.aboutMeContent = editableTextEdit(self.userObject.aboutMe, 'About Me content.')
 
 		overlayLayout.addWidget(aboutImageContainer)
-		overlayLayout.addWidget(aboutMeContent)
+		overlayLayout.addWidget(self.aboutMeContent)
 		overlayLayout.setStretch(0, 5)
 		overlayLayout.setStretch(1, 95)
 		overlayLayout.setContentsMargins(0, 0, 0, 0)
@@ -207,7 +207,7 @@ class ProfileWidget(QWidget):
 		return overlayWidget
 
 
-	def makeComments(self, userObject, viewer):
+	def makeComments(self, viewer):
 		commentsHeading = QLabel('Comments')
 		commentsHeading.setObjectName('commentsHeading')
 		commentsHeading.setFixedHeight(40)
@@ -217,7 +217,7 @@ class ProfileWidget(QWidget):
 		commentsHeadingLayout.setAlignment(Qt.AlignCenter)
 		commentsHeadingLayout.setContentsMargins(0, 10, 0, 0)
 
-		comments = userObject.comments		
+		comments = self.userObject.comments		
 		commentWidget = QWidget()
 		commentWidget.setMinimumHeight(380)
 		self.commentLayout = QVBoxLayout(commentWidget)
@@ -226,7 +226,7 @@ class ProfileWidget(QWidget):
 			commentItem = Comment(comment)
 			self.commentLayout.addWidget(commentItem)
 
-		self.addCommentEditor = QTextEdit()
+		self.addCommentEditor = QPlainTextEdit()
 		self.addCommentEditor.setPlaceholderText('Post a comment...')
 		self.addCommentEditor.setMinimumHeight(50)
 		self.addCommentEditor.setObjectName('addComment')
@@ -256,6 +256,8 @@ class ProfileWidget(QWidget):
 
 
 	def processNewComment(self, text, viewer):
+		if text == '':
+			return
 		time = datetime.today()
 		monthDict = {
 			1:"January",
@@ -279,10 +281,8 @@ class ProfileWidget(QWidget):
 		}
 		commentItem = Comment(comment)
 		self.commentLayout.addWidget(commentItem)
-		self.addCommentEditor.setText('')
+		self.addCommentEditor.clear()
 		
-		
-
 		# TODO : Inform server of this event
 		
 
@@ -298,3 +298,23 @@ class ProfileWidget(QWidget):
 		layout.addWidget(widget2)
 		layout.setContentsMargins(0, 0, 0, 0)
 		return widget
+
+
+	def editProfile(self):
+		if self.editFlag == False:
+			# Edit Mode
+			self.userMottoLabel.setState('edit')
+			self.aboutMeContent.setState('edit')
+			self.editProfileButton.setText('Save Profile')
+			self.editFlag = True
+		else:
+			# Save Mode
+			self.userMottoLabel.setState('static')
+			self.aboutMeContent.setState('static')
+			self.editProfileButton.setText('Edit Profile')
+			self.editFlag = False
+			# Save profile changes locally for the while
+			self.userObject.userMotto = self.userMottoLabel.getText()
+			self.userObject.aboutMe = self.aboutMeContent.getText()
+			self.userObject.saveChanges()
+			# Inform Server of all changes

@@ -1,22 +1,30 @@
 {
-	"userID" : "0aT5a",
-	"userAlias" : "Valiant",
-	"userAvatar" : "V.png",
-	"userProfileBG" : "cyberpunk.jpeg",
-	"userAvatarFrame" : "Cyberpunk.png",
-	"userPrestige" : "255",
-	"userRep" : "32851",
-	"userMotto" : "To Live and let Live!",
-	"memberSince" : ["25", "May", "2020"],
-	"aboutMe" : "There is nothing to see here, trust me :)",
-	"badges" : {
-		"Master" : "You're Number 1!"
-	},
-	"comments" : [
-		{
-			"commentUser" : "Valiant",
-			"commentMessage" : "+rep Nice fella!",
-			"commentDate" : ["27", "May", "2020"]
-		}
-	]
-} 
+    "userID": "0aT5a",
+    "userAlias": "Valiant",
+    "userAvatar": "V.png",
+    "userProfileBG": "Tower.jpeg",
+    "userAvatarFrame": "Cyberpunk.png",
+    "userPrestige": "255",
+    "userRep": "32851",
+    "userMotto": "To Live and let Live, that's the question!",
+    "memberSince": [
+        "25",
+        "May",
+        "2020"
+    ],
+    "aboutMe": "There is nothing to see here, trust me!\nI don't think you should try this hard?\nCome on!!!",
+    "badges": {
+        "Master": "You're Number 1!"
+    },
+    "comments": [
+        {
+            "commentUser": "Valiant",
+            "commentMessage": "+rep Nice fella!",
+            "commentDate": [
+                "27",
+                "May",
+                "2020"
+            ]
+        }
+    ]
+}
