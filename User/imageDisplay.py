@@ -6,12 +6,14 @@ from os import path
 # Displays a carousal of images on 'path', whose names are stored in fileList.
 # It will allow a single image to be in 'Active' state, ie, that image is selected by the user
 class imageDisplay(QWidget):
-	def __init__(self, path = './', fileList = []):
+	def __init__(self, path = './', fileList = [], dimensionX = 180, dimensionY = 180):
 		super().__init__()
 		self.path = path
 		self.fileList = fileList
 		self.selectedIndex = 0
 		self.itemCount = len(fileList)
+		self.dimensionX = dimensionX
+		self.dimensionY = dimensionY
 		self.imageLabels = [None] * self.itemCount
 		self.selectedStyle = "QLabel{border : 10px solid rgba(150, 150, 150, 200);}"
 		self.unselectedStyle = "QLabel{border : 0px;}"
@@ -19,6 +21,7 @@ class imageDisplay(QWidget):
 
 		self.mainLayout = self.getScroller()
 		self.setLayout(self.mainLayout)
+		self.setMinimumHeight(self.dimensionY + 10)
 
 
 	def getScroller(self):
@@ -33,10 +36,11 @@ class imageDisplay(QWidget):
 				print('Error while reading a file.')
 			else:
 				self.imageLabels[i] = QLabel()
-				self.imageLabels[i].setFixedSize(180, 180)
+				self.imageLabels[i].setFixedSize(self.dimensionX, self.dimensionY)
 				self.imageLabels[i].setObjectName('displayImage')
 				pixmap = QPixmap(fullPath)
-				self.imageLabels[i].setPixmap(pixmap)
+				scaled = pixmap.scaledToWidth(self.dimensionX)
+				self.imageLabels[i].setPixmap(scaled)
 				scrollLayout.addWidget(self.imageLabels[i])
 
 		self.imageLabels[self.selectedIndex].setStyleSheet(self.selectedStyle)
@@ -77,5 +81,7 @@ class imageDisplay(QWidget):
 		self.imageLabels[self.selectedIndex].setStyleSheet(self.unselectedStyle)
 		self.selectedIndex = newSelection
 		self.imageLabels[self.selectedIndex].setStyleSheet(self.selectedStyle)
-		
-	
+
+
+	def getSelected(self):
+		return self.fileList[self.selectedIndex]

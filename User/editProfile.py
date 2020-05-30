@@ -31,16 +31,35 @@ class editProfileWindow(QMainWindow):
 
 	def getMainLayout(self):
 		# Profile Picture settings
-		avatarHeading = QLabel('Select Avatar')
-		avatarHeading.setAlignment(Qt.AlignCenter)
-		avatarHeading.setObjectName('subsectionHeading')
-		avatarScroller = imageDisplay('Resources/Avatars/', self.userObject.availableAvatars)
+		self.avatarHeading = QLabel('Select Avatar')
+		self.avatarHeading.setAlignment(Qt.AlignCenter)
+		self.avatarHeading.setObjectName('subsectionHeading')
+		self.avatarScroller = imageDisplay(
+			'Resources/Avatars/', 
+			self.userObject.availableAvatars
+		)
 
 		# Profile Frame settings
-		frameHeading = QLabel('Select Frame')
-		frameHeading.setAlignment(Qt.AlignCenter)
-		frameHeading.setObjectName('subsectionHeading')
-		frameScroller = imageDisplay('Resources/Frames/', self.userObject.availableFrames)
+		self.frameHeading = QLabel('Select Frame')
+		self.frameHeading.setAlignment(Qt.AlignCenter)
+		self.frameHeading.setObjectName('subsectionHeading')
+		self.frameScroller = imageDisplay(
+			'Resources/Frames/', 
+			self.userObject.availableFrames,
+			210,
+			210
+		)
+
+		# ProfileBG settings
+		self.BGHeading = QLabel('Select Background')
+		self.BGHeading.setAlignment(Qt.AlignCenter)
+		self.BGHeading.setObjectName('subsectionHeading')
+		self.BGScroller = imageDisplay(
+			'Resources/BG/', 
+			self.userObject.availableBG,
+			410,
+			210
+		)
 
 
 		saveButton = QPushButton('Save')
@@ -52,16 +71,15 @@ class editProfileWindow(QMainWindow):
 		saveButtonLayout.setAlignment(Qt.AlignCenter)
 
 		self.mainLayout = QVBoxLayout()
-		self.mainLayout.addWidget(avatarHeading)
-		self.mainLayout.addWidget(avatarScroller)
-		self.mainLayout.addWidget(frameHeading)
-		self.mainLayout.addWidget(frameScroller)
+		self.mainLayout.addWidget(self.avatarHeading)
+		self.mainLayout.addWidget(self.avatarScroller)
+		self.mainLayout.addWidget(self.frameHeading)
+		self.mainLayout.addWidget(self.frameScroller)
+		self.mainLayout.addWidget(self.BGHeading)
+		self.mainLayout.addWidget(self.BGScroller)
 
 		self.mainLayout.addStretch(1)
 		self.mainLayout.addWidget(saveButtonContainer)
-
-
-		
 
 
 	def closeEvent(self, event):
@@ -72,7 +90,16 @@ class editProfileWindow(QMainWindow):
 
 
 	def saveButtonClicked(self):
-		pass
+		selectedAvatar = self.avatarScroller.getSelected()
+		selectedFrame = self.frameScroller.getSelected()
+		selectedBG = self.BGScroller.getSelected()
+		
+		self.userObject.userAvatar = selectedAvatar
+		self.userObject.userAvatarFrame = selectedFrame
+		self.userObject.userProfileBG = selectedBG
+		self.userObject.saveChanges()
+		# Display message box that it will be changed next time
+		self.close()
 
 
 	def getComboWidget(self, widget1, widget2, align = 'H'):

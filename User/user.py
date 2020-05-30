@@ -57,6 +57,9 @@ class User():
 		fileName = 'profile.json'
 		self.dictData['userMotto'] = self.userMotto
 		self.dictData['aboutMe'] = self.aboutMe
+		self.dictData['userAvatar'] = self.userAvatar
+		self.dictData['userAvatarFrame'] = self.userAvatarFrame
+		self.dictData['userProfileBG'] = self.userProfileBG
 		try:
 			with open(fileName, "w") as file:
 				json.dump(self.dictData, file, indent = 4)

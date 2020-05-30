@@ -27,7 +27,18 @@
             ]
         }
     ],
-    "availableAvatars" : ["Default.png", "Spy.png", "V.png", "VFemale.png"],
-	"availableBG" : ["Cyberpunk.jpeg", "Tower.jpeg"],
-	"availableFrames" : ["Default.png", "Cyberpunk.png"]	
+    "availableAvatars": [
+        "Default.png",
+        "Spy.png",
+        "V.png",
+        "VFemale.png"
+    ],
+    "availableBG": [
+        "Cyberpunk.jpeg",
+        "Tower.jpeg"
+    ],
+    "availableFrames": [
+        "Default.png",
+        "Cyberpunk.png"
+    ]
 }
