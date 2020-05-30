@@ -12,8 +12,8 @@ def handler(msg_type, msg_log_context, msg_string):
 	pass
 qInstallMessageHandler(handler) 
 
-# This class handles the main window of server
-class serverWindow(QMainWindow):
+# This class handles the main window of client
+class clientWindow(QMainWindow):
 	def __init__(self):
 		super().__init__()
 		# Get user (self) data
@@ -33,7 +33,7 @@ class serverWindow(QMainWindow):
 		self.makeSidebar()
 		self.makeCentralArea()
 		self.makeMenuBar()
-		serverWindow.initUI(self)
+		clientWindow.initUI(self)
 		return
 
 	
@@ -179,7 +179,7 @@ class serverWindow(QMainWindow):
 
 
 
-class initGUI(serverWindow):
+class initGUI(clientWindow):
 	def __init__(self):
 		# make a reference of App class
 		app = QApplication(sys.argv)
@@ -193,8 +193,8 @@ class initGUI(serverWindow):
 		app.setStyleSheet(open('style.qss', "r").read())
 		# If user is about to close window
 		app.aboutToQuit.connect(self.closeEvent)
-		server_app = serverWindow()
-		server_app.show()
+		client_app = clientWindow()
+		client_app.show()
 		# Execute the app mainloop
 		app.exec_()
 		return
