@@ -31,34 +31,55 @@ class editProfileWindow(QMainWindow):
 
 	def getMainLayout(self):
 		# Profile Picture settings
-		self.avatarHeading = QLabel('Select Avatar')
+		self.avatarHeading = QLabel('Avatar')
 		self.avatarHeading.setAlignment(Qt.AlignCenter)
 		self.avatarHeading.setObjectName('subsectionHeading')
+
+		currentAvatar = self.userObject.userAvatar
+		for i in range(len(self.userObject.availableAvatars)):
+			if self.userObject.availableAvatars[i] == currentAvatar:
+				currentAvatar = i
+				break
 		self.avatarScroller = imageDisplay(
 			'Resources/Avatars/', 
-			self.userObject.availableAvatars
+			self.userObject.availableAvatars,
+			180, 
+			180,
+			i
 		)
 
 		# Profile Frame settings
-		self.frameHeading = QLabel('Select Frame')
+		self.frameHeading = QLabel('Frame')
 		self.frameHeading.setAlignment(Qt.AlignCenter)
 		self.frameHeading.setObjectName('subsectionHeading')
+		currentFrame = self.userObject.userAvatarFrame
+		for i in range(len(self.userObject.availableFrames)):
+			if self.userObject.availableFrames[i] == currentFrame:
+				currentFrame = i
+				break
 		self.frameScroller = imageDisplay(
 			'Resources/Frames/', 
 			self.userObject.availableFrames,
 			210,
-			210
+			210,
+			i
 		)
 
 		# ProfileBG settings
-		self.BGHeading = QLabel('Select Background')
+		self.BGHeading = QLabel('Profile Background')
 		self.BGHeading.setAlignment(Qt.AlignCenter)
 		self.BGHeading.setObjectName('subsectionHeading')
+		currentBG = self.userObject.userProfileBG
+		for i in range(len(self.userObject.availableBG)):
+			if self.userObject.availableBG[i] == currentBG:
+				currentBG = i
+				break
 		self.BGScroller = imageDisplay(
 			'Resources/BG/', 
 			self.userObject.availableBG,
 			410,
-			210
+			210,
+			i
 		)
 
 

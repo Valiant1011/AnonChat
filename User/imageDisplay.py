@@ -6,18 +6,24 @@ from os import path
 # Displays a carousal of images on 'path', whose names are stored in fileList.
 # It will allow a single image to be in 'Active' state, ie, that image is selected by the user
 class imageDisplay(QWidget):
-	def __init__(self, path = './', fileList = [], dimensionX = 180, dimensionY = 180):
+	def __init__(
+			self, 
+			path = './', 
+			fileList = [], 
+			dimensionX = 180, 
+			dimensionY = 180,
+			currentSelected = 0
+		):
 		super().__init__()
 		self.path = path
 		self.fileList = fileList
-		self.selectedIndex = 0
+		self.selectedIndex = currentSelected
 		self.itemCount = len(fileList)
 		self.dimensionX = dimensionX
 		self.dimensionY = dimensionY
 		self.imageLabels = [None] * self.itemCount
 		self.selectedStyle = "QLabel{border : 10px solid rgba(150, 150, 150, 200);}"
 		self.unselectedStyle = "QLabel{border : 0px;}"
-
 
 		self.mainLayout = self.getScroller()
 		self.setLayout(self.mainLayout)
