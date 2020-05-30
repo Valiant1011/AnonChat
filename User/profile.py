@@ -1,9 +1,8 @@
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import QIcon, QPixmap
 from PyQt5.QtCore import pyqtSlot, pyqtSignal, QObject, QTimer, Qt, QModelIndex, qInstallMessageHandler
-from editableLineEdit import editableLineEdit
-from editableTextEdit import editableTextEdit
 from prestigeWidget import prestigeWidget
+from editProfile import editProfileWindow
 from comment import Comment
 from datetime import datetime
 from user import User
@@ -11,7 +10,6 @@ from user import User
 class ProfileWidget(QWidget):
 	def __init__(self, userObject, viewer = ''):
 		super().__init__()
-		self.editFlag = False
 		self.userObject = userObject
 		self.layout = self.getCentralLayout(viewer)
 		self.layout.setContentsMargins(5, 5, 5, 5)
@@ -48,7 +46,8 @@ class ProfileWidget(QWidget):
 		userAliasLabel.setObjectName('userAlias')
 		userAliasWidget = self.getComboWidget(prestigeIcon, userAliasLabel)
 		# User Motto label
-		self.userMottoLabel = editableLineEdit(self.userObject.userMotto[:100], 'Motto')
+		self.userMottoLabel = QLabel(self.userObject.userMotto[:100])
+		self.userMottoLabel.setObjectName('userMotto')
 		# User Reputation label
 		repLabel = QLabel('Reputation:')
 		repLabel.setObjectName('repLabel')
@@ -196,7 +195,9 @@ class ProfileWidget(QWidget):
 		aboutImageContainerLayout.setStretch(1, 90)
 		aboutImageContainerLayout.setSpacing(0)
 		
-		self.aboutMeContent = editableTextEdit(self.userObject.aboutMe, 'About Me content.')
+		self.aboutMeContent = QLabel(self.userObject.aboutMe)
+		self.aboutMeContent.setObjectName('h4')
+		self.aboutMeContent.setAlignment(Qt.AlignTop)
 
 		overlayLayout.addWidget(aboutImageContainer)
 		overlayLayout.addWidget(self.aboutMeContent)
@@ -209,7 +210,7 @@ class ProfileWidget(QWidget):
 
 	def makeComments(self, viewer):
 		commentsHeading = QLabel('Comments')
-		commentsHeading.setObjectName('commentsHeading')
+		commentsHeading.setObjectName('subsectionHeading')
 		commentsHeading.setFixedHeight(40)
 		commentsHeadingContainer = QWidget()
 		commentsHeadingLayout = QHBoxLayout(commentsHeadingContainer)
@@ -301,20 +302,11 @@ class ProfileWidget(QWidget):
 
 
 	def editProfile(self):
-		if self.editFlag == False:
-			# Edit Mode
-			self.userMottoLabel.setState('edit')
-			self.aboutMeContent.setState('edit')
-			self.editProfileButton.setText('Save Profile')
-			self.editFlag = True
-		else:
-			# Save Mode
-			self.userMottoLabel.setState('static')
-			self.aboutMeContent.setState('static')
-			self.editProfileButton.setText('Edit Profile')
-			self.editFlag = False
-			# Save profile changes locally for the while
-			self.userObject.userMotto = self.userMottoLabel.getText()
-			self.userObject.aboutMe = self.aboutMeContent.getText()
-			self.userObject.saveChanges()
-			# Inform Server of all changes
+		try:
+			self.editWindow.close()
+		except Exception as e:
+			pass
+	
+		self.editWindow = editProfileWindow(self.userObject)
+		self.editWindow.show()
+		

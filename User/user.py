@@ -9,11 +9,15 @@ class User():
 		self.memberSince = 'Eternity'
 		self.userRep = 0
 		self.userAvatar = 'Default'
+		self.availableAvatars = []
 		self.userProfileBG = ''
+		self.availableBG = []
 		self.userAvatarFrame = 'Default.png'
+		self.availableFrames = []
 		self.aboutMe = ''
 		self.badges = {}
 		self.comments = []	# List of dictionaries
+
 
 		self.dictData = {}
 
@@ -26,22 +30,10 @@ class User():
 		except:
 			pass
 		else:
-			self.userID = data.get('userID', 'NULL')
-			self.userAlias = data.get('userAlias', 'Newbie')
-			self.userAvatar = data.get('userAvatar', 'Default')
-			self.userProfileBG = data.get('userProfileBG', '')
-			self.userPrestige = data.get('userPrestige', 0)
-			self.userRep = data.get('userRep', 0)
-			self.userMotto = data.get('userMotto', '')
-			memberSince = data.get('memberSince', ['25', 'May', '2020'])
-			self.memberSince = memberSince[1] + " " + memberSince[0] + ", " + memberSince[2] 
-			self.aboutMe = data.get('aboutMe', '')
-			self.badges = data.get('badges', [])
-			self.comments = data.get('comments', [])
-			self.userAvatarFrame = data.get('userAvatarFrame', 'Default.png')
+			self.loadDict(data)
 
 
-	def loadDict(data):
+	def loadDict(self, data):
 		self.userID = data.get('userID', 'NULL')
 		self.userAlias = data.get('userAlias', 'Newbie')
 		self.userAvatar = data.get('userAvatar', 'Default')
@@ -55,6 +47,10 @@ class User():
 		self.badges = data.get('badges', [])
 		self.comments = data.get('comments', [])
 		self.userAvatarFrame = data.get('userAvatarFrame', 'Default.png')
+		self.availableAvatars = data.get('availableAvatars', [])
+		self.availableBG = data.get('availableBG', [])
+		self.availableFrames = data.get('availableFrames', [])
+
 
 
 	def saveChanges(self):
