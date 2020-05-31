@@ -260,12 +260,19 @@ QLineEdit#editableLineEdit{
 	font-size : 20px;
 	font-family : White Smith;
 }
-
+QLineEdit#userMotto{
+	color : #bbbbbb;
+	font-size : 25px;
+	font-family : White Smith;
+}
 
 
 QPlainTextEdit{
 	background : rgba(30, 28, 36, 255);
 	color : #aaaaaa;
+}
+QPlainTextEdit#editPlainText{
+	border : 1px solid #171b1f;
 }
 QPlainTextEdit#editableTextEdit{
 	border : 0px;

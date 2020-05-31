@@ -8,9 +8,11 @@ from datetime import datetime
 from user import User
 
 class ProfileWidget(QWidget):
-	def __init__(self, userObject, viewer = ''):
+	def __init__(self, editFlag, userObject, viewer = ''):
 		super().__init__()
 		self.userObject = userObject
+		self.editFlag = editFlag
+		
 		self.layout = self.getCentralLayout(viewer)
 		self.layout.setContentsMargins(5, 5, 5, 5)
 		self.setLayout(self.layout)
@@ -307,6 +309,5 @@ class ProfileWidget(QWidget):
 		except Exception as e:
 			pass
 	
-		self.editWindow = editProfileWindow(self.userObject)
+		self.editWindow = editProfileWindow(self.userObject, self.editFlag)
 		self.editWindow.show()
-		

@@ -2,6 +2,7 @@ import time , sys, os, json
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import QIcon, QPixmap, QFontDatabase
 from PyQt5.QtCore import pyqtSlot, pyqtSignal, QObject, QTimer, Qt, QModelIndex, qInstallMessageHandler
+from multiprocessing import Queue, Value
 from profile import ProfileWidget
 from chat import ChatWidget
 from user import User
@@ -16,11 +17,8 @@ qInstallMessageHandler(handler)
 class clientWindow(QMainWindow):
 	def __init__(self):
 		super().__init__()
-		# Get user (self) data
-		self.userObject = User()
-		self.userObject.loadUser()
-		self.userName = self.userObject.userAlias
-		
+		self.editFlag = Value('i')
+		self.editFlag.value = 0 
 		# Set app icon
 		self.setWindowIcon(QIcon('Resources/Assets/logo.png'))
 		# self.setWindowOpacity(0.99) # USEFUL later?
@@ -30,15 +28,31 @@ class clientWindow(QMainWindow):
 		self.setMinimumWidth(1066)
 		self.setMinimumHeight(600)
 
-		self.makeSidebar()
-		self.makeCentralArea()
-		self.makeMenuBar()
-		clientWindow.initUI(self)
+		# Timer to update GUI
+		self.timer = QTimer()
+		self.timer.timeout.connect(self.updateData)
+		self.timer.start(1000)
+
+		self.initUI()
 		return
 
+
+	def updateData(self):
+		if self.editFlag.value == 1:
+			self.editFlag.value = 0
+			self.initUI()
+			self.repaint()
+		
 	
 	def initUI(self):
 		try:
+			# Get user (self) data
+			self.userObject = User()
+			self.userObject.loadUser()
+			self.userName = self.userObject.userAlias
+
+			
+
 			self.topWidget = QWidget()
 			self.topWidget.setObjectName('mainWidget')
 			profileBG = self.userObject.userProfileBG
@@ -46,6 +60,10 @@ class clientWindow(QMainWindow):
 			self.topWidget.setStyleSheet(style)
 			self.topLayout = QHBoxLayout(self.topWidget)
 
+			self.makeSidebar()
+			self.makeCentralArea()
+			self.makeMenuBar()
+			
 			self.topLayout.addWidget(self.sideBar)
 			self.topLayout.addWidget(self.centralArea)
 			self.topLayout.addWidget(self.menuBar)
@@ -118,7 +136,7 @@ class clientWindow(QMainWindow):
 
 
 	def makeProfileWidget(self):
-		profileWidget = ProfileWidget(self.userObject, self.userName)
+		profileWidget = ProfileWidget(self.editFlag, self.userObject, self.userName)
 		scrollArea = QScrollArea()
 		scrollArea.setWidgetResizable(True)
 		scrollArea.setWidget(profileWidget)

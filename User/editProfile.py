@@ -4,10 +4,11 @@ from PyQt5.QtCore import pyqtSlot, pyqtSignal, QObject, QTimer, Qt, QModelIndex,
 from imageDisplay import imageDisplay
 
 class editProfileWindow(QMainWindow):
-	def __init__(self, userObject):
+	def __init__(self, userObject, editFlag):
 		super().__init__()
 		self.changesMade = False
 		self.userObject = userObject
+		self.editFlag = editFlag
 		# Set app icon
 		self.setWindowIcon(QIcon('Resources/Assets/logo.png'))
 		# Set window title
@@ -30,11 +31,38 @@ class editProfileWindow(QMainWindow):
 
 
 	def getMainLayout(self):
+		# User Motto settings
+		self.userMottoLabel = QLabel('Motto')
+		self.userMottoLabel.setAlignment(Qt.AlignCenter)
+		self.userMottoLabel.setObjectName('subsectionHeading')
+		self.userMottoContent = QLineEdit(self.userObject.userMotto)
+		self.userMottoContent.setObjectName('userMotto')
+		self.userMottoContent.setFixedWidth(800)
+		self.userMottoContent.setAlignment(Qt.AlignCenter)
+		self.mottoWrapper = QWidget()
+		self.mottoWrapperLayout = QHBoxLayout(self.mottoWrapper)
+		self.mottoWrapperLayout.addWidget(self.userMottoContent)
+		self.mottoWrapperLayout.setAlignment(Qt.AlignCenter)
+
+		# AboutMe Section
+		self.aboutLabel = QLabel('About Me')
+		self.aboutLabel.setAlignment(Qt.AlignCenter)
+		self.aboutLabel.setObjectName('subsectionHeading')
+		self.aboutContent = QPlainTextEdit(self.userObject.aboutMe)
+		# self.aboutContent.setObjectName('about')
+		self.aboutContent.setFixedWidth(800)
+		self.aboutContent.setMinimumHeight(300)
+		self.aboutContent.setObjectName('editPlainText')
+		self.aboutContent.setStyleSheet("background-color : rgba(30, 28, 36, 70);")
+		self.aboutWrapper = QWidget()
+		self.aboutWrapperLayout = QHBoxLayout(self.aboutWrapper)
+		self.aboutWrapperLayout.addWidget(self.aboutContent)
+		self.aboutWrapperLayout.setAlignment(Qt.AlignCenter)
+
 		# Profile Picture settings
 		self.avatarHeading = QLabel('Avatar')
 		self.avatarHeading.setAlignment(Qt.AlignCenter)
 		self.avatarHeading.setObjectName('subsectionHeading')
-
 		currentAvatar = self.userObject.userAvatar
 		for i in range(len(self.userObject.availableAvatars)):
 			if self.userObject.availableAvatars[i] == currentAvatar:
@@ -92,12 +120,20 @@ class editProfileWindow(QMainWindow):
 		saveButtonLayout.setAlignment(Qt.AlignCenter)
 
 		self.mainLayout = QVBoxLayout()
-		self.mainLayout.addWidget(self.avatarHeading)
-		self.mainLayout.addWidget(self.avatarScroller)
-		self.mainLayout.addWidget(self.frameHeading)
-		self.mainLayout.addWidget(self.frameScroller)
+		self.mainLayout.addWidget(self.userMottoLabel)
+		self.mainLayout.addWidget(self.mottoWrapper)
+
 		self.mainLayout.addWidget(self.BGHeading)
 		self.mainLayout.addWidget(self.BGScroller)
+
+		self.mainLayout.addWidget(self.avatarHeading)
+		self.mainLayout.addWidget(self.avatarScroller)
+
+		self.mainLayout.addWidget(self.frameHeading)
+		self.mainLayout.addWidget(self.frameScroller)
+
+		self.mainLayout.addWidget(self.aboutLabel)
+		self.mainLayout.addWidget(self.aboutWrapper)
 
 		self.mainLayout.addStretch(1)
 		self.mainLayout.addWidget(saveButtonContainer)
@@ -114,12 +150,18 @@ class editProfileWindow(QMainWindow):
 		selectedAvatar = self.avatarScroller.getSelected()
 		selectedFrame = self.frameScroller.getSelected()
 		selectedBG = self.BGScroller.getSelected()
-		
+		userMotto = self.userMottoContent.text()
+		aboutMe = self.aboutContent.toPlainText()
+
 		self.userObject.userAvatar = selectedAvatar
 		self.userObject.userAvatarFrame = selectedFrame
 		self.userObject.userProfileBG = selectedBG
+		self.userObject.userMotto = userMotto
+		self.userObject.aboutMe = aboutMe
 		self.userObject.saveChanges()
-		# Display message box that it will be changed next time
+		# Update interface
+		self.editFlag.value = 1
+		
 		self.close()
 
 
