@@ -27,23 +27,18 @@ class ChatWidget(QWidget):
 		loadingAnimation.setAlignment(Qt.AlignCenter)
 		loadingAnimation.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
 		anim = QMovie('Resources/Assets/loading.webp')
+		print(anim.supportedFormats())
 		loadingAnimation.setMovie(anim)
 		anim.start()
+
 		loadingAnimContainer = QWidget()
-		# loadingAnimContainer.setStyleSheet(
-		# 	"background-image : url('Resources/Assets/LoadingBG.png');" + 
-		# 	"background-repeat : no-repeat;" + 
-		# 	"background-position : center;"
-		# )
 		loadingAnimContainerLayout = QVBoxLayout(loadingAnimContainer)
 		loadingAnimContainerLayout.addWidget(loadingAnimation)
 		loadingAnimContainerLayout.setContentsMargins(0, 0, 0, 0)
 
-
-		loadingText = QLabel('Loading...')
+		loadingText = QLabel('Searching...')
 		loadingText.setObjectName('subsectionHeading')
 		loadingText.setAlignment(Qt.AlignCenter)
-
 
 		containerLayout = QVBoxLayout()
 		containerLayout.addWidget(loadingAnimContainer)
