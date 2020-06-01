@@ -63,7 +63,7 @@ class clientWindow(QMainWindow):
 			self.makeSidebar()
 			self.makeCentralArea()
 			self.makeMenuBar()
-			
+
 			self.topLayout.addWidget(self.sideBar)
 			self.topLayout.addWidget(self.centralArea)
 			self.topLayout.addWidget(self.menuBar)

@@ -1,18 +1,18 @@
 {
     "userID": "0aT5a",
     "userAlias": "Valiant",
-    "userAvatar": "V.png",
-    "userProfileBG": "Tower.jpeg",
-    "userAvatarFrame": "Default.png",
+    "userAvatar": "VFemale.png",
+    "userProfileBG": "Cyberpunk.jpeg",
+    "userAvatarFrame": "Cyberpunk.png",
     "userPrestige": "255",
     "userRep": "32851",
-    "userMotto": "To Live and let Live?",
+    "userMotto": "To Live and let Live, that's the point!",
     "memberSince": [
         "25",
         "May",
         "2020"
     ],
-    "aboutMe": "There is nothing to see here, trust me!\nI don't think you should try this hard!\nCome on!!!",
+    "aboutMe": "There is nothing to see here, trust me!\nI don't think you should try this hard!\nCome on!!!\nThis change is rendered immediately!",
     "badges": {
         "Master": "You're Number 1!"
     },

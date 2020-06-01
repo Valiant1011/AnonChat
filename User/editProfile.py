@@ -110,7 +110,6 @@ class editProfileWindow(QMainWindow):
 			i
 		)
 
-
 		saveButton = QPushButton('Save')
 		saveButton.setFixedSize(80, 40)
 		saveButton.clicked.connect(self.saveButtonClicked)
