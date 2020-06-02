@@ -79,7 +79,7 @@ class User():
 
 	def getFriends(self):
 		if self.friendsLoadedFlag == True:
-			return self.friendDataDict
+			return self.friendDataDict.get("friends", [])
 		else:
 			raise hasNotBeenLoadedError()
 

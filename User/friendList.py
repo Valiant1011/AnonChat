@@ -46,4 +46,61 @@ class FriendList(QWidget):
 		return layout
 
 	def getFriendListLayout(self):
-		return QVBoxLayout()
+		widgetList = [None] * self.userObject.getFriendCount()
+		friendList = self.userObject.getFriends()
+
+		for i in range(len(friendList)):
+			# friendList[i] is a dict type object with entities
+			# ID
+			# Alias
+			# Avatar
+			
+			avatar = friendList[i].get('Avatar', 'Default.png')
+			friendAvatar = QWidget()
+			friendAvatar.setFixedSize(64, 64)
+			style = "border-image : url('Resources/Avatars/" + avatar + "') center center;"
+			friendAvatar.setStyleSheet(style)
+
+			friendName = QLabel(friendList[i].get('Alias'))
+			friendName.setObjectName('sidebarName')
+			friendName.setAlignment(Qt.AlignTop)
+
+			status = friendList[i].get('Status', 'Offline')
+			statusLabel = QLabel(status)
+			statusLabel.setAlignment(Qt.AlignRight)
+			if status == 'Online':
+				statusLabel.setObjectName('online')
+			else:
+				statusLabel.setObjectName('offline')
+
+			containerWidget = QWidget()
+			containerLayout = QVBoxLayout(containerWidget)
+			containerLayout.addWidget(friendName)
+			containerLayout.addWidget(statusLabel)
+
+			friendWidget = QWidget()
+			friendWidget.setObjectName('friendWidget')
+			friendWidgetLayout = QHBoxLayout(friendWidget)
+			friendWidgetLayout.addWidget(friendAvatar)
+			friendWidgetLayout.addWidget(containerWidget)
+			friendWidgetLayout.setStretch(0, 10)
+			friendWidgetLayout.setStretch(1, 90)
+			friendWidget.setStyleSheet("QWidget#friendWidget{background-color : rgba(200, 200, 200, 5);}")
+
+			widgetList[i] = friendWidget
+
+		primaryWidget = QWidget()
+		primaryLayout = QVBoxLayout(primaryWidget)
+		primaryLayout.setAlignment(Qt.AlignTop)
+		for i in range(len(widgetList)):
+			primaryLayout.addWidget(widgetList[i])
+
+		friendScroller = QScrollArea()
+		friendScroller.setWidgetResizable(True)
+		friendScroller.setWidget(primaryWidget)
+
+		containerLayout = QVBoxLayout()
+		containerLayout.setContentsMargins(0, 0, 0, 0)
+		containerLayout.addWidget(friendScroller)
+			
+		return containerLayout
