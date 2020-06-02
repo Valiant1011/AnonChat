@@ -16,7 +16,7 @@ class editProfileWindow(QMainWindow):
 		self.setGeometry(300, 200, 1366, 768) 
 		self.setMinimumWidth(1066)
 		self.setMinimumHeight(600)
-		profileBG = self.userObject.userProfileBG
+		profileBG = self.userObject.getProfileBG()
 		style = "QMainWindow{border-image : url('Resources/BG/" + profileBG + "');}"
 		self.setStyleSheet(style)
 
@@ -35,7 +35,7 @@ class editProfileWindow(QMainWindow):
 		self.userMottoLabel = QLabel('Motto')
 		self.userMottoLabel.setAlignment(Qt.AlignCenter)
 		self.userMottoLabel.setObjectName('subsectionHeading')
-		self.userMottoContent = QLineEdit(self.userObject.userMotto)
+		self.userMottoContent = QLineEdit(self.userObject.getMotto())
 		self.userMottoContent.setObjectName('userMotto')
 		self.userMottoContent.setFixedWidth(800)
 		self.userMottoContent.setAlignment(Qt.AlignCenter)
@@ -48,7 +48,7 @@ class editProfileWindow(QMainWindow):
 		self.aboutLabel = QLabel('About Me')
 		self.aboutLabel.setAlignment(Qt.AlignCenter)
 		self.aboutLabel.setObjectName('subsectionHeading')
-		self.aboutContent = QPlainTextEdit(self.userObject.aboutMe)
+		self.aboutContent = QPlainTextEdit(self.userObject.getAboutMe())
 		# self.aboutContent.setObjectName('about')
 		self.aboutContent.setFixedWidth(800)
 		self.aboutContent.setMinimumHeight(300)
@@ -63,14 +63,15 @@ class editProfileWindow(QMainWindow):
 		self.avatarHeading = QLabel('Avatar')
 		self.avatarHeading.setAlignment(Qt.AlignCenter)
 		self.avatarHeading.setObjectName('subsectionHeading')
-		currentAvatar = self.userObject.userAvatar
-		for i in range(len(self.userObject.availableAvatars)):
-			if self.userObject.availableAvatars[i] == currentAvatar:
+		currentAvatar = self.userObject.getAvatar()
+		availableAvatars = self.userObject.getAvailableAvatars()
+		for i in range(len(availableAvatars)):
+			if availableAvatars[i] == currentAvatar:
 				currentAvatar = i
 				break
 		self.avatarScroller = imageDisplay(
 			'Resources/Avatars/', 
-			self.userObject.availableAvatars,
+			availableAvatars,
 			180, 
 			180,
 			i
@@ -80,14 +81,15 @@ class editProfileWindow(QMainWindow):
 		self.frameHeading = QLabel('Frame')
 		self.frameHeading.setAlignment(Qt.AlignCenter)
 		self.frameHeading.setObjectName('subsectionHeading')
-		currentFrame = self.userObject.userAvatarFrame
-		for i in range(len(self.userObject.availableFrames)):
-			if self.userObject.availableFrames[i] == currentFrame:
+		currentFrame = self.userObject.getAvatarFrame()
+		availableFrames = self.userObject.getAvailableFrames()
+		for i in range(len(availableFrames)):
+			if availableFrames[i] == currentFrame:
 				currentFrame = i
 				break
 		self.frameScroller = imageDisplay(
 			'Resources/Frames/', 
-			self.userObject.availableFrames,
+			availableFrames,
 			210,
 			210,
 			i
@@ -97,14 +99,15 @@ class editProfileWindow(QMainWindow):
 		self.BGHeading = QLabel('Profile Background')
 		self.BGHeading.setAlignment(Qt.AlignCenter)
 		self.BGHeading.setObjectName('subsectionHeading')
-		currentBG = self.userObject.userProfileBG
-		for i in range(len(self.userObject.availableBG)):
-			if self.userObject.availableBG[i] == currentBG:
+		currentBG = self.userObject.getProfileBG()
+		availableBG = self.userObject.getAvailableBG()
+		for i in range(len(availableBG)):
+			if availableBG[i] == currentBG:
 				currentBG = i
 				break
 		self.BGScroller = imageDisplay(
 			'Resources/BG/', 
-			self.userObject.availableBG,
+			availableBG,
 			410,
 			210,
 			i
@@ -152,11 +155,11 @@ class editProfileWindow(QMainWindow):
 		userMotto = self.userMottoContent.text()
 		aboutMe = self.aboutContent.toPlainText()
 
-		self.userObject.userAvatar = selectedAvatar
-		self.userObject.userAvatarFrame = selectedFrame
-		self.userObject.userProfileBG = selectedBG
-		self.userObject.userMotto = userMotto
-		self.userObject.aboutMe = aboutMe
+		self.userObject.setAvatar(selectedAvatar)
+		self.userObject.setAvatarFrame(selectedFrame)
+		self.userObject.setProfileBG(selectedBG)
+		self.userObject.setMotto(userMotto)
+		self.userObject.setAboutMe(aboutMe)
 		self.userObject.saveChanges()
 		# Update interface
 		self.editFlag.value = 1

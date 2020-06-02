@@ -2,7 +2,7 @@
     "userID": "0aT5a",
     "userAlias": "Valiant",
     "userAvatar": "VFemale.png",
-    "userProfileBG": "Cyberpunk.jpeg",
+    "userProfileBG": "Ciri.jpeg",
     "userAvatarFrame": "Cyberpunk.png",
     "userPrestige": "255",
     "userRep": "32851",
@@ -12,7 +12,7 @@
         "May",
         "2020"
     ],
-    "aboutMe": "There is nothing to see here, trust me!\nI don't think you should try this hard!\nCome on!!!\nThis change is rendered immediately!",
+    "aboutMe": "  ____      ____              ___   ___                             __        \n  \\       \\   /      /____     |     |   |__|____      ____   /     |_   \n    \\       Y      /  \\__    \\  |     |   |   \\__      \\  /         \\|     __\\    \n      \\            /    / __    \\ |     |_ |   |/ __     \\|      |     \\     |       \n        \\ ___ /    (____    /____/__(____    /___|     /__ |       \n                                  \\/                           \\/          \\/      \n",
     "badges": {
         "Master": "You're Number 1!"
     },
@@ -35,7 +35,8 @@
     ],
     "availableBG": [
         "Cyberpunk.jpeg",
-        "Tower.jpeg"
+        "Tower.jpeg",
+        "Ciri.jpeg"
     ],
     "availableFrames": [
         "Default.png",

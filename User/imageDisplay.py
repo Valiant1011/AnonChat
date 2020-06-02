@@ -2,7 +2,7 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtGui import QIcon, QPixmap
 from PyQt5.QtCore import pyqtSlot, pyqtSignal, QObject, QTimer, Qt, QModelIndex, qInstallMessageHandler
 from os import path
-
+from math import ceil
 # Displays a carousal of images on 'path', whose names are stored in fileList.
 # It will allow a single image to be in 'Active' state, ie, that image is selected by the user
 class imageDisplay(QWidget):
@@ -51,10 +51,15 @@ class imageDisplay(QWidget):
 
 		self.imageLabels[self.selectedIndex].setStyleSheet(self.selectedStyle)
 
-		scrollContainer = QScrollArea()
-		scrollContainer.setWidgetResizable(True)
-		scrollContainer.setWidget(scrollWidget)
-		scrollContainer.setFixedWidth(800)
+		self.scrollContainer = QScrollArea()
+		self.scrollContainer.setWidgetResizable(True)
+		self.scrollContainer.setWidget(scrollWidget)
+		self.scrollContainer.setFixedWidth(800)
+		self.scrollMinimum = self.scrollContainer.horizontalScrollBar().minimum()
+		self.scrollMaximum = self.scrollContainer.horizontalScrollBar().maximum()
+		self.scrollInterval = self.scrollMaximum - self.scrollMinimum
+		newScrollBarPos = ((self.selectedIndex + 1) * self.scrollInterval) / self.itemCount
+		self.scrollContainer.horizontalScrollBar().setValue(newScrollBarPos);  
 
 		# carousal buttons
 		leftButton = QPushButton()
@@ -68,7 +73,7 @@ class imageDisplay(QWidget):
 		
 		mainLayout = QHBoxLayout()
 		mainLayout.addWidget(leftButton)
-		mainLayout.addWidget(scrollContainer)
+		mainLayout.addWidget(self.scrollContainer)
 		mainLayout.addWidget(rightButton)
 		mainLayout.setContentsMargins(0, 0, 0, 0)
 
@@ -80,6 +85,9 @@ class imageDisplay(QWidget):
 		self.imageLabels[self.selectedIndex].setStyleSheet(self.unselectedStyle)
 		self.selectedIndex = newSelection
 		self.imageLabels[self.selectedIndex].setStyleSheet(self.selectedStyle)
+		newScrollBarPos = (newSelection * self.scrollInterval * 1.3) / self.itemCount
+		self.scrollContainer.horizontalScrollBar().setValue(newScrollBarPos);  
+
 		
 	
 	def rightPress(self):
@@ -87,6 +95,8 @@ class imageDisplay(QWidget):
 		self.imageLabels[self.selectedIndex].setStyleSheet(self.unselectedStyle)
 		self.selectedIndex = newSelection
 		self.imageLabels[self.selectedIndex].setStyleSheet(self.selectedStyle)
+		newScrollBarPos = ceil((newSelection * self.scrollInterval * 1.3) / self.itemCount)
+		self.scrollContainer.horizontalScrollBar().setValue(newScrollBarPos);  
 
 
 	def getSelected(self):

@@ -15,7 +15,6 @@ class ChatWidget(QWidget):
 	def reloadCentralLayout(self):
 		if self.state == 'search':
 			self.layout = self.loadingState()
-			self.setStyleSheet('QWidget{background : rgba(6, 6, 6, 50);}')
 
 		self.setLayout(self.layout)
 		self.repaint()
@@ -27,7 +26,6 @@ class ChatWidget(QWidget):
 		loadingAnimation.setAlignment(Qt.AlignCenter)
 		loadingAnimation.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
 		anim = QMovie('Resources/Assets/loading.webp')
-		print(anim.supportedFormats())
 		loadingAnimation.setMovie(anim)
 		anim.start()
 
@@ -47,7 +45,6 @@ class ChatWidget(QWidget):
 		containerLayout.setContentsMargins(0, 0, 0, 0)
 		containerLayout.setStretch(0, 70)
 		containerLayout.setStretch(1, 30)
-
 
 		return containerLayout
 

@@ -4,6 +4,7 @@ from PyQt5.QtGui import QIcon, QPixmap, QFontDatabase
 from PyQt5.QtCore import pyqtSlot, pyqtSignal, QObject, QTimer, Qt, QModelIndex, qInstallMessageHandler
 from multiprocessing import Queue, Value
 from profile import ProfileWidget
+from friendList import FriendList
 from chat import ChatWidget
 from user import User
 # This is to ignore some warnings which were thrown when gui exited and 
@@ -49,13 +50,13 @@ class clientWindow(QMainWindow):
 			# Get user (self) data
 			self.userObject = User()
 			self.userObject.loadUser()
-			self.userName = self.userObject.userAlias
-
-			
+			self.userObject.loadFriends()
+			self.userID = self.userObject.getID()
+			self.userName = self.userObject.getAlias()
 
 			self.topWidget = QWidget()
 			self.topWidget.setObjectName('mainWidget')
-			profileBG = self.userObject.userProfileBG
+			profileBG = self.userObject.getProfileBG()
 			style = "QWidget#mainWidget{border-image : url('Resources/BG/" + profileBG + "');}"
 			self.topWidget.setStyleSheet(style)
 			self.topLayout = QHBoxLayout(self.topWidget)
@@ -87,29 +88,31 @@ class clientWindow(QMainWindow):
 		self.searchBarInput.setObjectName('searchBarInput')
 		self.searchBarInput.setPlaceholderText('Search')
 
-		sideBarButton = QPushButton('')
-		sideBarButton.setObjectName('sideBarButton')
-		sideBarButton.clicked.connect(self.searchButtonPressed)
-		sideBarButtonContainer = QWidget()
-		sideBarButtonContainer.setObjectName('sideBarButtonContainer')
-		sideBarButtonLayout = QVBoxLayout(sideBarButtonContainer)
-		sideBarButtonLayout.addWidget(sideBarButton)
-		sideBarButtonLayout.setContentsMargins(0, 0, 0, 0)
+		# Top search area in sidebar _Search______________________
+		self.sideBarButton = QPushButton('')
+		self.sideBarButton.setObjectName('sideBarButton')
+		self.sideBarButton.clicked.connect(self.searchButtonPressed)
 
 		sideBarTopWidget = QWidget()
 		sideBarTopLayout = QHBoxLayout(sideBarTopWidget)
 		sideBarTopLayout.setContentsMargins(0, 0, 0, 0)
 		sideBarTopLayout.addWidget(self.searchBarInput)
-		sideBarTopLayout.addWidget(sideBarButtonContainer)
+		sideBarTopLayout.addWidget(self.sideBarButton)
 		sideBarTopLayout.setStretch(0, 85)
 		sideBarTopLayout.setStretch(0, 15)
 		sideBarTopLayout.setSpacing(0)
-
+		
+		# Friends List
+		self.friendsListWidget = FriendList(self.userObject)
+		
 		self.sideBar = QWidget()
 		self.sideBar.setFixedWidth(330)
 		self.sideBar.setObjectName('sideBar')
 		self.sideBarLayout = QVBoxLayout(self.sideBar)
 		self.sideBarLayout.addWidget(sideBarTopWidget)
+		self.sideBarLayout.addWidget(self.friendsListWidget)
+		self.sideBarLayout.setStretch(0, 5)
+		self.sideBarLayout.setStretch(1, 95)
 		self.sideBarLayout.setAlignment(Qt.AlignTop)
 
 
@@ -136,12 +139,14 @@ class clientWindow(QMainWindow):
 
 
 	def makeProfileWidget(self):
-		profileWidget = ProfileWidget(self.editFlag, self.userObject, self.userName)
+		try:
+			profileWidget = ProfileWidget(self.editFlag, self.userObject, self.userName)
+		except:
+			profileWidget = QWidget()
 		scrollArea = QScrollArea()
 		scrollArea.setWidgetResizable(True)
 		scrollArea.setWidget(profileWidget)
 		self.profileWidget = scrollArea
-
 
 
 	def makeChatWidget(self):
