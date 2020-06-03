@@ -19,8 +19,8 @@ class User():
 				data = json.load(file)
 				self.userDataDict = data
 		except:
-			print('[ ERROR ] Could not load user profile. Requesting a new copy from the Server...')
-		else:
+			data = {}
+		finally:
 			self.loadDict(data)
 
 
@@ -50,10 +50,11 @@ class User():
 		try:
 			with open(fileName, "r") as file:
 				data = json.load(file)
-				self.friendDataDict = data
-				self.friendCount = len(data.get('friends', {}))
 		except:
-			print('[ ERROR ] Could not load Friends. Requesting a new copy from the Server...')
+			data = {"friends" : []}
+		finally:
+			self.friendDataDict = data
+			self.friendCount = len(data.get('friends', {}))
 		
 
 	def saveChanges(self):
