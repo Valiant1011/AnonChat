@@ -33,9 +33,7 @@ class Chat(QWidget):
 		if self.chatsLoaded.get(ID, -1) != -1:
 			self.chatTabs.setCurrentIndex(self.chatsLoaded[ID])
 		else:
-			print('Making a new widget')
 			newChatWidget = ChatWidget(ID, receiver)
-
 			self.chatTabs.addTab(newChatWidget, '')
 			self.chatTabsCount += 1
 			self.chatsLoaded[ID] = self.chatTabsCount

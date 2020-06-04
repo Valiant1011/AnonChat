@@ -206,6 +206,7 @@ class clientWindow(QMainWindow):
 
 	def handleChatButtonClick(self):
 		self.contentTabs.setCurrentIndex(1)
+		self.chatWidget.setState('search')
 
 
 	def closeEvent(self, event):
