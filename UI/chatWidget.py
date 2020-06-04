@@ -4,6 +4,7 @@ import time
 
 class ChatWidget(QWidget):
 	def __init__(self, ID, receiver):
+		print('[ DEBUG ] Making a new widget!')
 		super().__init__()
 		self.ID = ID
 		self.receiver = receiver
