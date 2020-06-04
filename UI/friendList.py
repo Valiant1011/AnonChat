@@ -1,11 +1,22 @@
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import QIcon, QPixmap, QFontDatabase
 from PyQt5.QtCore import pyqtSlot, pyqtSignal, QObject, QTimer, Qt, QModelIndex, qInstallMessageHandler
+from FriendChatLabel import friendChatLabel
+
+class changeSignal(QObject):
+	# This signal acepts a string, ie, the ID of the label that is clicked
+	chatChanged = pyqtSignal(['QString'])
 
 class FriendList(QWidget):
 	def __init__(self, userObject):
 		super().__init__()
 		self.userObject = userObject
+		# Signal to send clcik information to its master(client.py)
+		self.chatChangeSignal = changeSignal()
+		# This dictionary will return friend index in its list from the friend ID
+		self.getIndexFromID = {}
+		self.friendList = self.userObject.getFriends()
+		self.mapIDtoIndex()
 
 		self.emptyLayout = self.getEmptyLayout()
 		self.friendsLayout = self.getFriendListLayout()
@@ -16,6 +27,61 @@ class FriendList(QWidget):
 			mainLayout = self.friendsLayout
 
 		self.setLayout(mainLayout)
+
+
+	def mapIDtoIndex(self):
+		for i in range(len(self.friendList)):
+			self.getIndexFromID[self.friendList[i].get("ID")] = i
+
+
+	def getInfoFromID(self, ID):
+		index = self.getIndexFromID[ID]
+		return self.friendList[index]
+
+
+	def getFriendListLayout(self):
+		widgetList = [None] * self.userObject.getFriendCount()
+
+		for i in range(len(self.friendList)):
+			# friendList[i] is a dict type object with entities
+			# ID
+			# Alias
+			# Avatar
+			fID = self.friendList[i].get('ID', None)
+			fName = self.friendList[i].get('Alias', 'Ghost')
+			status = self.friendList[i].get('Status', 'Offline')
+			avatar = self.friendList[i].get('Avatar', 'Default.png')
+			
+			try:
+				friendWidget = friendChatLabel(fID, fName, status, avatar)
+				friendWidget.pressSignal.clicked.connect(self.chatLabelClicked)
+				widgetList[i] = friendWidget
+			except Exception as error:
+				print(error)
+
+		primaryWidget = QWidget()
+		primaryLayout = QVBoxLayout(primaryWidget)
+		primaryLayout.setAlignment(Qt.AlignTop)
+		for i in range(len(widgetList)):
+			primaryLayout.addWidget(widgetList[i])
+
+		friendScroller = QScrollArea()
+		friendScroller.setWidgetResizable(True)
+		friendScroller.setWidget(primaryWidget)
+
+		containerLayout = QVBoxLayout()
+		containerLayout.setContentsMargins(0, 0, 0, 0)
+		containerLayout.addWidget(friendScroller)
+			
+		return containerLayout
+
+
+	def chatLabelClicked(self, ID):
+		# Gives us the ID of the chat label that is clicked.
+		# Signals and slots magic!!!
+		# Pass this signal to the main UI
+		self.chatChangeSignal.chatChanged.emit(ID)
+		
 
 
 	def getEmptyLayout(self):
@@ -45,62 +111,6 @@ class FriendList(QWidget):
 
 		return layout
 
-	def getFriendListLayout(self):
-		widgetList = [None] * self.userObject.getFriendCount()
-		friendList = self.userObject.getFriends()
 
-		for i in range(len(friendList)):
-			# friendList[i] is a dict type object with entities
-			# ID
-			# Alias
-			# Avatar
-			
-			avatar = friendList[i].get('Avatar', 'Default.png')
-			friendAvatar = QWidget()
-			friendAvatar.setFixedSize(64, 64)
-			style = "border-image : url('Resources/Avatars/" + avatar + "') center center;"
-			friendAvatar.setStyleSheet(style)
-
-			friendName = QLabel(friendList[i].get('Alias'))
-			friendName.setObjectName('sidebarName')
-			friendName.setAlignment(Qt.AlignTop)
-
-			status = friendList[i].get('Status', 'Offline')
-			statusLabel = QLabel(status)
-			statusLabel.setAlignment(Qt.AlignRight)
-			if status == 'Online':
-				statusLabel.setObjectName('online')
-			else:
-				statusLabel.setObjectName('offline')
-
-			containerWidget = QWidget()
-			containerLayout = QVBoxLayout(containerWidget)
-			containerLayout.addWidget(friendName)
-			containerLayout.addWidget(statusLabel)
-
-			friendWidget = QWidget()
-			friendWidget.setObjectName('friendWidget')
-			friendWidgetLayout = QHBoxLayout(friendWidget)
-			friendWidgetLayout.addWidget(friendAvatar)
-			friendWidgetLayout.addWidget(containerWidget)
-			friendWidgetLayout.setStretch(0, 10)
-			friendWidgetLayout.setStretch(1, 90)
-			friendWidget.setStyleSheet("QWidget#friendWidget{background-color : rgba(200, 200, 200, 5);}")
-
-			widgetList[i] = friendWidget
-
-		primaryWidget = QWidget()
-		primaryLayout = QVBoxLayout(primaryWidget)
-		primaryLayout.setAlignment(Qt.AlignTop)
-		for i in range(len(widgetList)):
-			primaryLayout.addWidget(widgetList[i])
-
-		friendScroller = QScrollArea()
-		friendScroller.setWidgetResizable(True)
-		friendScroller.setWidget(primaryWidget)
-
-		containerLayout = QVBoxLayout()
-		containerLayout.setContentsMargins(0, 0, 0, 0)
-		containerLayout.addWidget(friendScroller)
-			
-		return containerLayout
+	def addFriend(self, friendObject):
+		pass

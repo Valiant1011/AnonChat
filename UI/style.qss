@@ -62,11 +62,29 @@ QWidget#comment{
 	border-left : 1px solid #bd00ff; 
 	background-color : rgba(255, 255, 255, 20);
 }
+QWidget#chatWidget{
+	background-color : rgba(255, 255, 255, 20);
+}
 QWidget#sideBarButtonContainer{
 	border-bottom  :2px solid #171b1f;
 }
 QWidget#editProfile{
 	background: rgba(12, 12, 12, 180);
+}
+QWidget#friendWidget{
+	background-color : rgba(200, 200, 200, 15);
+}
+QWidget#userInput{
+	background-color : #97FF66;
+	border : 0px;
+	border-radius : 23px;
+	border-top-right-radius : 5px;
+}
+QWidget#response{
+	background-color : #23B2EE;
+	border : 0px;;
+	border-radius : 23px;
+	border-top-left-radius : 5px;
 }
 
 
@@ -188,6 +206,21 @@ QLabel#userMotto{
 QLabel#displayImage{
 	background : rgba(6, 6, 6, 180);
 	border : 0px;
+}
+QLabel#chatSender{
+	color : #121212;
+	font-size : 20px;
+	background-color : #00000000;
+}
+QLabel#chatMessage{
+	color : #121212;
+	font-size : 15px;
+	background-color : #00000000;
+}
+QLabel#chatTime{
+	color : #121212;
+	font-size : 10px;
+	background-color : #00000000;
 }
 
 

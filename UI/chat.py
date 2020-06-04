@@ -1,60 +1,45 @@
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import QIcon, QPixmap, QMovie
 from PyQt5.QtCore import pyqtSlot, pyqtSignal, QObject, QTimer, Qt
+from chatWidget import ChatWidget
+import time
 
-class ChatWidget(QWidget):
-	def __init__(self):
+class Chat(QWidget):
+	def __init__(self, state = 'search', talkingTo = None, talkingToID = '__SEARCH__'):
 		super().__init__()
-		self.state = 'chat'
-		try:
-			self.setState(self.state, 'Neo')
-		except Exception as error:
-			print(error)
-
-
-	def setState(self, state = 'search', reciever = ''):
 		self.state = state
+		self.talkingTo = talkingTo
+		self.talkingToID = talkingToID
+
+		# Stores backup of chat widgets
+		self.chatsLoaded = {}    # Map ID to chatTabs index
+
+		self.loadingWidget = self.loadingState()
+		self.chatTabs = QTabWidget()
+		self.chatTabs.addTab(self.loadingWidget, '')
+		self.chatTabsCount = 0		# (Number of tabs - 1) because of 0 based indexing
+
+		self.mainLayout = QVBoxLayout(self)	
+		self.mainLayout.setContentsMargins(0, 0, 0, 0)
+		self.mainLayout.addWidget(self.chatTabs)
+
+
+	def setState(self, state = 'search', receiver = None, ID = '__SEARCH__'):
 		if state == 'search':
-			self.layout = self.loadingState()
+			self.chatTabs.setCurrentIndex(0)
+			return
+
+		# Check if this chat has been loaded earlier
+		if self.chatsLoaded.get(ID, -1) != -1:
+			self.chatTabs.setCurrentIndex(self.chatsLoaded[ID])
 		else:
-			self.layout = self.chatState(reciever)
+			print('Making a new widget')
+			newChatWidget = ChatWidget(ID, receiver)
 
-		self.setLayout(self.layout)
-		self.repaint()
-
-
-	def chatState(self, reciever):
-		recieverLabel = QLabel(reciever)
-		recieverLabel.setObjectName('subsectionHeading')
-
-		chatWidget = QWidget()
-		chatLayout = QVBoxLayout(chatWidget)
-		chatScroller = QScrollArea()
-		chatScroller.setWidgetResizable(True)
-		chatScroller.setWidget(chatWidget)
-
-		inputBox = QPlainTextEdit()
-		inputBox.setObjectName('messageField')
-		inputBox.setPlaceholderText('What\'s on your mind?')
-		inputBox.setMinimumHeight(40)
-		sendButton = QPushButton('Send')
-		sendButton.setFixedHeight(40)
-
-		inputAreaWidget = QWidget()
-		inputAreaLayout = QHBoxLayout(inputAreaWidget)
-		inputAreaLayout.addWidget(inputBox)
-		inputAreaLayout.addWidget(sendButton)
-		inputAreaLayout.setStretch(0, 90)
-		inputAreaLayout.setStretch(1, 10)
-
-		primaryLayout = QVBoxLayout()
-		primaryLayout.addWidget(recieverLabel)
-		primaryLayout.addWidget(chatScroller)
-		primaryLayout.addWidget(inputAreaWidget)
-		primaryLayout.setStretch(0, 5)
-		primaryLayout.setStretch(1, 85)
-		primaryLayout.setStretch(2, 10)
-		return primaryLayout
+			self.chatTabs.addTab(newChatWidget, '')
+			self.chatTabsCount += 1
+			self.chatsLoaded[ID] = self.chatTabsCount
+			self.chatTabs.setCurrentIndex(self.chatTabsCount)
 
 
 	def loadingState(self):
@@ -83,7 +68,6 @@ class ChatWidget(QWidget):
 		containerLayout.setStretch(0, 70)
 		containerLayout.setStretch(1, 30)
 
-		return containerLayout
-
-
-	
+		subWidget = QWidget()
+		subWidget.setLayout(containerLayout)
+		return subWidget

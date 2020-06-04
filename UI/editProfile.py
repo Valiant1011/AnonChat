@@ -136,22 +136,23 @@ class editProfileWindow(QMainWindow):
 		
 
 		self.mainLayout = QVBoxLayout()
+		self.mainLayout.setContentsMargins(0, 10, 0, 0)
+		
 		self.mainLayout.addWidget(self.userMottoLabel)
 		self.mainLayout.addWidget(self.mottoWrapper)
-
+		
 		self.mainLayout.addWidget(self.BGHeading)
 		self.mainLayout.addWidget(self.BGScroller)
-
+		
 		self.mainLayout.addWidget(self.avatarHeading)
 		self.mainLayout.addWidget(self.avatarScroller)
-
+		
 		self.mainLayout.addWidget(self.frameHeading)
 		self.mainLayout.addWidget(self.frameScroller)
-
+		
 		self.mainLayout.addWidget(self.aboutLabel)
 		self.mainLayout.addWidget(self.aboutWrapper)
-
-		self.mainLayout.addStretch(1)
+		
 		
 
 	def closeEvent(self, event):

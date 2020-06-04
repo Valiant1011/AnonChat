@@ -5,7 +5,7 @@ from PyQt5.QtCore import pyqtSlot, pyqtSignal, QObject, QTimer, Qt, QModelIndex,
 from multiprocessing import Queue, Value
 from profile import ProfileWidget
 from friendList import FriendList
-from chat import ChatWidget
+from chat import Chat
 from user import User
 # This is to ignore some warnings which were thrown when gui exited and 
 # python deleted some assests in wrong order
@@ -20,6 +20,7 @@ class clientWindow(QMainWindow):
 		super().__init__()
 		self.editFlag = Value('i')
 		self.editFlag.value = 0 
+		self.userChatsDict = {}  # Maps userID to their chat widget
 		# Set app icon
 		self.setWindowIcon(QIcon('Resources/Assets/logo.png'))
 		# self.setWindowOpacity(0.99) # USEFUL later?
@@ -104,6 +105,7 @@ class clientWindow(QMainWindow):
 		
 		# Friends List
 		self.friendsListWidget = FriendList(self.userObject)
+		self.friendsListWidget.chatChangeSignal.chatChanged.connect(self.chatChanged) 
 		
 		self.sideBar = QWidget()
 		self.sideBar.setFixedWidth(330)
@@ -116,6 +118,13 @@ class clientWindow(QMainWindow):
 		self.sideBarLayout.setAlignment(Qt.AlignTop)
 
 
+	def chatChanged(self, ID):
+		info = self.friendsListWidget.getInfoFromID(ID)
+		fName = info['Alias']
+		self.chatWidget.setState(state = 'chat', receiver = fName, ID = ID)
+		self.contentTabs.setCurrentIndex(1)
+
+		
 	def searchButtonPressed(self):
 		print('Press')
 
@@ -150,7 +159,10 @@ class clientWindow(QMainWindow):
 
 
 	def makeChatWidget(self):
-		self.chatWidget = ChatWidget()
+		try:
+			self.chatWidget = Chat()
+		except Exception as error:
+			print(error)
 
 
 	def makeMenuBar(self):

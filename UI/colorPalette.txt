@@ -1,6 +1,0 @@
-#00ff9f Blue Green
-#00b8ff Blue
-#145e98 Blue 2
-#bd00ff pink
-#d600ff Dark Pink
-#c8b029 Yellow
