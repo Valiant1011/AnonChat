@@ -14,7 +14,7 @@ from UI.user import User
 def handler(msg_type, msg_log_context, msg_string):
 	pass
 qInstallMessageHandler(handler) 
-sys.path.append('./UI/')
+
 # This class handles the main window of client
 class clientWindow(QMainWindow):
 	def __init__(self):
@@ -39,23 +39,26 @@ class clientWindow(QMainWindow):
 		self.initUI()
 		return
 
-
+	# This function checks for UI updates every second
 	def updateData(self):
 		if self.editFlag.value == 1:
 			self.editFlag.value = 0
 			self.initUI()
 			self.repaint()
 		
-	
+	# This function is responsible for creating the main UI of client
 	def initUI(self):
 		try:
-			# Get user (self) data
+			# Load user (self) data
 			self.userObject = User()
 			self.userObject.loadUser()
 			self.userObject.loadFriends()
+
+			# Get user data
 			self.userID = self.userObject.getID()
 			self.userName = self.userObject.getAlias()
 
+			# Main layout -> TopWidget[Sidebar + CentralArea + MenuBar]
 			self.topWidget = QWidget()
 			self.topWidget.setObjectName('mainWidget')
 			profileBG = self.userObject.getProfileBG()
@@ -63,10 +66,12 @@ class clientWindow(QMainWindow):
 			self.topWidget.setStyleSheet(style)
 			self.topLayout = QHBoxLayout(self.topWidget)
 
+			# Generate reuired items by calling their constructors
 			self.makeSidebar()
 			self.makeCentralArea()
 			self.makeMenuBar()
 
+			# Add these items in the main layout
 			self.topLayout.addWidget(self.sideBar)
 			self.topLayout.addWidget(self.centralArea)
 			self.topLayout.addWidget(self.menuBar)
@@ -81,10 +86,10 @@ class clientWindow(QMainWindow):
 		except:
 			exc_type, exc_obj, exc_tb = sys.exc_info()
 			fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-			print('[ ERROR ] : ' , exc_type, fname, exc_tb.tb_lineno)
+			print('[ UI ][ ERROR ] : ' , exc_type, fname, exc_tb.tb_lineno)
 		return
 
-
+	# Generates the sidebar portion
 	def makeSidebar(self):
 		self.searchBarInput = QLineEdit()
 		self.searchBarInput.setObjectName('searchBarInput')
@@ -118,18 +123,18 @@ class clientWindow(QMainWindow):
 		self.sideBarLayout.setStretch(1, 95)
 		self.sideBarLayout.setAlignment(Qt.AlignTop)
 
-
+	# This function is called when a chat label is clicked on
 	def chatChanged(self, ID):
 		info = self.friendsListWidget.getInfoFromID(ID)
 		fName = info['Alias']
 		self.chatWidget.setState(state = 'chat', receiver = fName, ID = ID)
 		self.contentTabs.setCurrentIndex(1)
 
-		
+	# This function is called when user clicks on the Search button in the sidebar
 	def searchButtonPressed(self):
 		print('Press')
 
-
+	# Generates the central portion [ Profile + Chats ]
 	def makeCentralArea(self):
 		#  Generate Profile widget and chat widget
 		self.makeProfileWidget()
@@ -147,7 +152,7 @@ class clientWindow(QMainWindow):
 		self.centralLayout.setAlignment(Qt.AlignTop)
 		self.centralLayout.setContentsMargins(0, 0, 0, 0)
 
-
+	# Reads the user object and generates its profile view
 	def makeProfileWidget(self):
 		try:
 			profileWidget = ProfileWidget(self.editFlag, self.userObject, self.userName)
@@ -158,14 +163,14 @@ class clientWindow(QMainWindow):
 		scrollArea.setWidget(profileWidget)
 		self.profileWidget = scrollArea
 
-
+	# Generates a chat view for a user
 	def makeChatWidget(self):
 		try:
 			self.chatWidget = Chat()
 		except Exception as error:
 			print(error)
 
-
+	# Right side menu with profile and random chat butttons
 	def makeMenuBar(self):
 		self.menuBar = QWidget()
 		self.menuBar.setFixedWidth(80)
@@ -198,23 +203,21 @@ class clientWindow(QMainWindow):
 		self.menuBarLayout.setAlignment(Qt.AlignTop | Qt.AlignCenter)
 		self.menuBarLayout.setContentsMargins(0, 20, 0, 0)
 
-		# self.menuBar.setVisible(False)
-
-
+	# This function is called when profile button is clicked
 	def handleProButtonClick(self):
 		self.contentTabs.setCurrentIndex(0)
 
-
+	# This function is called when random button is clicked
 	def handleChatButtonClick(self):
 		self.contentTabs.setCurrentIndex(1)
 		self.chatWidget.setState('search')
 
-
+	# This fucntion is called when user quits the application
 	def closeEvent(self, event):
 		event.accept()		
 
 
-
+# This class runs the main app loop for interface and calls its object
 class initGUI(clientWindow):
 	def __init__(self):
 		# make a reference of App class

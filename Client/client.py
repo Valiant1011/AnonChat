@@ -1,31 +1,46 @@
 import multiprocessing, os, signal, sys, time 
 from UI.ui import *
+from Connections.makeConnection import MakeConnection
 
 sys.path.append('../')
-sys.path.append('./UI/')
 
-def main():
-	####################################################################
-	# Create variables/lists that will be shared between processes
-	flags = multiprocessing.Array('i', 10)
-	# This queue will be polled from core for handling tasks
-	taskQueue = multiprocessing.Queue(maxsize = 1000)   
-	####################################################################
-	# Tasks:
-	# Login Process
-		# - Status 1 : Continue
-		# - Status 0 : Exit
+####################################################################
+		# Tasks:
+		# Login Process
+			# - Status 1 : Continue
+			# - Status 0 : Exit
 
-	# Subprocesses:
-		# - Interface
-		# - Communications
+		# Subprocesses:
+			# - Interface	[Main Process]
+			# - Communications [Subprocess 1 : Communications]
+####################################################################
+class Client():
+	def __init__(self):
+		# Create variables/lists that will be shared between processes
+		self.flags = multiprocessing.Array('i', 10)
+		# This queue will be polled from core for handling tasks
+		self.taskQueue = multiprocessing.Queue(maxsize = 1000)   
 
-	# Initialize Interface handler
-	try:
+		# Connect to server
+		self.connect()
+
+		# Initialize Interface handler
+		self.makeGUI()
+
+
+	def makeGUI(self):
 		initGUI()
-	except Exception as error:
-		print("[ CRITICAL ] GUI could not be loaded! Restart App." + str(error))
+		
+
+	def connect(self):
+		connectionProcess = multiprocessing.Process(
+			target = MakeConnection,
+			args = ()
+		)
+		connectionProcess.start()
+		self.connectionPID = connectionProcess.pid
+
 
 
 if __name__ == '__main__':
-	main()
+	Client()
