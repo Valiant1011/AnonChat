@@ -1,7 +1,7 @@
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import QIcon, QPixmap, QMovie
 from PyQt5.QtCore import pyqtSlot, pyqtSignal, QObject, QTimer, Qt
-from chatWidget import ChatWidget
+from UI.chatWidget import ChatWidget
 import time
 
 class Chat(QWidget):

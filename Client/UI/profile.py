@@ -1,11 +1,13 @@
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import QIcon, QPixmap
 from PyQt5.QtCore import pyqtSlot, pyqtSignal, QObject, QTimer, Qt, QModelIndex, qInstallMessageHandler
-from prestigeWidget import prestigeWidget
-from editProfile import editProfileWindow
-from comment import Comment
 from datetime import datetime
-from user import User
+
+from UI.prestigeWidget import prestigeWidget
+from UI.editProfile import editProfileWindow
+from UI.comment import Comment
+from UI.user import User
+
 import sys, os
 
 class ProfileWidget(QWidget):

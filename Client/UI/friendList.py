@@ -1,7 +1,7 @@
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import QIcon, QPixmap, QFontDatabase
 from PyQt5.QtCore import pyqtSlot, pyqtSignal, QObject, QTimer, Qt, QModelIndex, qInstallMessageHandler
-from FriendChatLabel import friendChatLabel
+from UI.FriendChatLabel import friendChatLabel
 
 class changeSignal(QObject):
 	# This signal acepts a string, ie, the ID of the label that is clicked

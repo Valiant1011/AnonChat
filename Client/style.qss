@@ -1,110 +1,380 @@
-/*--------------MAIN LAYOUT STARTS----------------*/
-QWidget#main_widget{
+QMainWindow{
+	background : transparent;
+}
+
+QWidget#mainWidget{
+	color : #CCCCCC;
+	background-color : #131217;		
+}
+QWidget#sideBar{
+	color : #CCCCCC;
+	background-color : rgba(6, 6, 6, 230);
+}
+QWidget#menuBar{
+	color : #CCCCCC;
+	background: rgba(6, 6, 6, 255);
+}
+QWidget#chatBox{
+	border : 0px solid #00a1ad;
 	color : #CCCCCC;
 	background-color : #131217;
 }
-
-QWidget#chat_box{
-	border : 0px solid #00A1AD;
-	color : #CCCCCC;
-	background-color : #131217;
+QWidget#avatarBox{
+	border : 0px;
+	background-color : transparent;
+	width : 210px;
+	height : 210px;
+	padding : 15px;
 }
-
-QWidget#user_input{
+QWidget#contentBox{
+	border : 0px;
+	background-color : rgba(100, 100, 100, 20);
+}
+QWidget#headerBox{
+	background-color : rgba(0, 81, 87, 200);
+}
+QWidget#aboutBox{
+	border : 0px;
+	background-image : url('Resources/Assets/aboutBG.png');
+	background-repeat: no-repeat; 
+    background-position: stretch;	
+    padding : 0px;
+    margin-bottom : -10px;
+}
+QWidget#aboutBoxLoop{
+	background-image : url('Resources/Assets/aboutBGLoop.png') ;
+    background-position: stretch;	
+    background-repeat : repeat-y;
+    padding : 0px;
+    margin : 0px;
+    border : 0px;
+}
+QWidget#badgesBox{
+	padding-top : -5px;
+	border : 0px;
+	width : 70px;
+	height : 170px;
+	background-repeat: no-repeat; 
+    background-position: center;	
+    background-image : url('Resources/Assets/badgesBG.png') 0 0 0 0 streth stretch;
+}
+QWidget#comment{
+	border-left : 1px solid #bd00ff; 
+	background-color : rgba(255, 255, 255, 20);
+}
+QWidget#chatWidget{
+	background-color : rgba(255, 255, 255, 20);
+}
+QWidget#sideBarButtonContainer{
+	border-bottom  :2px solid #171b1f;
+}
+QWidget#editProfile{
+	background: rgba(12, 12, 12, 180);
+}
+QWidget#friendWidget{
+	background-color : rgba(200, 200, 200, 15);
+}
+QWidget#userInput{
 	background-color : #97FF66;
-	border : 1px solid #97FF66;
+	border : 0px;
 	border-radius : 23px;
 	border-top-right-radius : 5px;
 }
 QWidget#response{
 	background-color : #23B2EE;
-	border : 1px solid #23B2EE;
-	border-radius : 23px;
-	border-top-left-radius : 5px;
-}
-QWidget#admin{
-	background-color : #D45F5A;
-	border : 1px solid #D45F5A;
+	border : 0px;;
 	border-radius : 23px;
 	border-top-left-radius : 5px;
 }
 
-QLabel#sender{
+
+
+QTabWidget{
+	color : #CCCCCC;
+	border : 0px;
+	background: transparent;
+	margin : 0px;
+}
+QTabWidget::pane{
+	margin : 0px;
+	border : 0px;
+	background: rgba(12, 12, 12, 180);
+}
+QTabWidget#mainTabs QTabBar::tab{
+	width : 0px;
+	height: 0px;
+	border: 0px;
+	margin: 0px;
+	background-color : transparent;
+}
+
+
+QLabel#h1{
+	color : #ADFF2F;
+	font-size : 42px;
+}
+QLabel#h2{
+	color : #23B2EE;
+	font-size : 30px;
+}
+QLabel#h3{
+	color : #999999;
+	font-size : 26px;
+}
+QLabel#h4{
+	color : #bbbbbb;
+	font-size : 20px;
+}
+QLabel#sidebarText{
+	color : #eeeeee;
+	font-size : 14px;
+	font-family : Adequate;
+}
+QLabel#online{
+	color : #33ee33;
+	font-size : 12px;
+	font-family : Adequate;
+}
+QLabel#offline{
+	color : #ee3333;
+	font-size : 12px;
+	font-family : Adequate;
+}
+QLabel#sidebarName{
+	color : #eeeeee;
+	font-size : 20px;
+	font-family : Adequate;
+}
+QLabel#userAlias{
+	color : #ADFF2F;
+	font-size : 42px;
+	font-family : Roboto;
+}
+QLabel#repLabel{
+	color : #ffffff;
+	font-size : 20px;
+	font-family : Adequate;
+}
+QLabel#repContent{
+	color : #00ff9f;
+	font-size : 20px;
+	font-family : Adequate;
+}
+QLabel#memberSinceLabel{
+	color : #ffffff;
+	font-size : 20px bold;
+	font-family : Adequate;
+}
+QLabel#memberSinceContent{
+	color : #00ff9f;
+	font-size : 20px;
+	font-family : Adequate;
+}
+QLabel#prestigeLabel{
+	font-size : 20px;
+	border : 3px solid #AAAAAA;
+}
+QLabel#subsectionHeading{
+	font-family : Adequate;
+	font-size : 40px;
+	color : yellow;
+}
+QLabel#commentUser{
+	font-size : 16px;
+	color : #00b8ff;
+	background-color : transparent;
+}
+QLabel#commentMessage{
+	font-size : 14px;
+	color : #cccccc;
+	background-color : transparent;
+}
+QLabel#commentDate{
+	font-size : 12px;
+	color : #00ff9f;
+	background-color : transparent;
+}
+QLabel#avatarImage{
+	width : 180px;
+	height : 180px;
+}
+QLabel#userMotto{
+	color : #bbbbbb;
+	font-size : 25px;
+	font-family : White Smith;
+}
+QLabel#displayImage{
+	background : rgba(6, 6, 6, 180);
+	border : 0px;
+}
+QLabel#chatSender{
 	color : #121212;
 	font-size : 20px;
 	background-color : #00000000;
 }
-QLabel#text{
+QLabel#chatMessage{
 	color : #121212;
 	font-size : 15px;
 	background-color : #00000000;
 }
-QLabel#time{
+QLabel#chatTime{
 	color : #121212;
 	font-size : 10px;
 	background-color : #00000000;
 }
 
-QLabel#h1{
-	color : #ADFF2F;
-	font-size : 28px;
-}
-QLabel#h2{
-	color : #23B2EE;
-	font-size : 20px;
-}
-QLabel#h3{
-	color : #999999;
-	font-size : 16px;
-}
 
 QScrollArea{
 	border : 0px;
+	background-color : transparent;
 }
 QScrollArea QWidget{
-	background-color : #171B1F;
+	background-color : rgba(30, 28, 36, 0);
 }
 
 
-QPushButton#interior_button{
+QPushButton{
 	font-size : 14px;
 	text-align : center; 	
-	border : 2px solid #ADFF2F;
-	background-color : #202428 ;
+	border : 1px solid #008080;
+	background-color : transparent ;
 	color : #62C9F3;
 }
-QPushButton#interior_button::focus{
+QPushButton::focus{
 	color : #00C9D8;
-	background-color : #2B2C39 ;
+	border : 1px solid #008080;
 }
-QPushButton#interior_button::hover::focus{
+QPushButton::hover::focus{
 	color : #00C9D8;
-	background-color : #2B2C39 ;
 }
-QPushButton#interior_button::hover{
+QPushButton::hover{
 	color : #A7F9FF;
-	background-color : #202428 ;
-	border : 4px solid #ADFF2F;
+	border : 2px solid #00aaaa;
 }
+QPushButton#menuButton{
+	border : 0px;
+}
+QPushButton#menuButton::focus{
+	background-color : rgba(255, 255, 255, 10);
+	border-radius  :32px;
+}
+QPushButton#editButton{
+	border-radius : 4;
+}
+QPushButton#sideBarButton{
+	border-image : url('Resources/Assets/searchIcon.png');
+	background : rgba(6, 6, 6, 10);
+	width : 31px;
+	height : 31px;
+}
+QPushButton#sideBarButton::hover{
+	border-image : url('Resources/Assets/searchIconActive.png');
+	background : rgba(6, 6, 6, 10);
+}
+QPushButton#sideBarButton::hover::focus{
+	border-image : url('Resources/Assets/searchIconActive.png');
+	background : rgba(6, 6, 6, 10);
+}
+QPushButton#sideBarButton::focus{
+	border-image : url('Resources/Assets/searchIcon.png');
+	background : rgba(6, 6, 6, 10);
+}
+QPushButton#leftButton{
+	border-image:url('Resources/Assets/leftArrow.png');
+}
+QPushButton#leftButton::hover{
+	border-image:url('Resources/Assets/leftArrowActive.png');
+}
+QPushButton#rightButton{
+	border-image:url('Resources/Assets/rightArrow.png');
+}
+QPushButton#rightButton::hover{
+	border-image:url('Resources/Assets/rightArrowActive.png');
+}
+
 
 
 QLineEdit{
 	height : 30px;
-	background : #2D353D;
-	color : #AAAAAA;
-	border : 1px solid #171B1F;
+	background : transparent;
+	color : #aaaaaa;
+	border : 0px;
+	border-bottom : 2px solid #171b1f;
+	padding : 3px;
 }
+QLineEdit#searchBarInput{
+	height : 31px;
+}
+QLineEdit#editableLineEdit{
+	background : transparent;
+	border : 0px;
+	border-bottom : 0px;
+	color : #bbbbbb;
+	font-size : 20px;
+	font-family : White Smith;
+}
+QLineEdit#userMotto{
+	color : #bbbbbb;
+	font-size : 25px;
+	font-family : White Smith;
+}
+
+
+QPlainTextEdit{
+	background : rgba(6, 6, 6, 86);
+	color : #aaaaaa;
+}
+QPlainTextEdit#editPlainText{
+	border : 1px solid #171b1f;
+}
+QPlainTextEdit#messageField{
+	height : 30px;
+	background :  rgba(6, 6, 6, 186);
+	color : #aaaaaa;
+	border-bottom : 1px solid #c8b029;
+	border-left : 5px solid #c8b029;
+	padding-left : 10px;
+	margin : 5px;
+}
+
 
 QToolTip{
-	color : #AAAAAA;
-	background : #2D353D;
+	color : #cccccc;
+	background : rgb(6, 6, 6, 200)
 }
 
+
 QScrollBar:horizontal{
+	height : 5px;
+	border : 0px;
+}
+QScrollBar::handle:horizontal{
+	height : 10px;
+	min-width : 10px;
+	background : solid grey;
+}
+QScrollBar::add-line:horizontal{
+	width : 0px;
+	height : 0px;
+}
+QScrollBar::sub-line:horizontal{
+	width : 0px;
 	height : 0px;
 }
 QScrollBar:vertical{
-	width : 0px;
+	width : 5px;
+	border : 0px;
 }
-
-/*--------------MAIN LAYOUT ENDS----------------*/
+QScrollBar::handle:vertical{
+	height : 10px;
+	min-width : 10px;
+	background : solid grey;
+}
+QScrollBar::add-line:vertical{
+	width : 0px;
+	height : 0px;
+}
+QScrollBar::sub-line:vertical{
+	width : 0px;
+	height : 0px;
+}

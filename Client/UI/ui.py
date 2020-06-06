@@ -3,17 +3,18 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtGui import QIcon, QPixmap, QFontDatabase
 from PyQt5.QtCore import pyqtSlot, pyqtSignal, QObject, QTimer, Qt, QModelIndex, qInstallMessageHandler
 from multiprocessing import Queue, Value
-from profile import ProfileWidget
-from friendList import FriendList
-from chat import Chat
-from user import User
+
+from UI.profile import ProfileWidget
+from UI.friendList import FriendList
+from UI.chat import Chat
+from UI.user import User
 # This is to ignore some warnings which were thrown when gui exited and 
 # python deleted some assests in wrong order
 # Nothing critical :)
 def handler(msg_type, msg_log_context, msg_string):
 	pass
 qInstallMessageHandler(handler) 
-
+sys.path.append('./UI/')
 # This class handles the main window of client
 class clientWindow(QMainWindow):
 	def __init__(self):
@@ -26,7 +27,7 @@ class clientWindow(QMainWindow):
 		# self.setWindowOpacity(0.99) # USEFUL later?
 		# Set window title
 		self.setWindowTitle('AnonChat')
-		self.setGeometry(300, 200, 1366, 768) 
+		self.setGeometry(200, 100, 1600, 900) 
 		self.setMinimumWidth(1066)
 		self.setMinimumHeight(600)
 
@@ -108,7 +109,7 @@ class clientWindow(QMainWindow):
 		self.friendsListWidget.chatChangeSignal.chatChanged.connect(self.chatChanged) 
 		
 		self.sideBar = QWidget()
-		self.sideBar.setFixedWidth(330)
+		self.sideBar.setFixedWidth(360)
 		self.sideBar.setObjectName('sideBar')
 		self.sideBarLayout = QVBoxLayout(self.sideBar)
 		self.sideBarLayout.addWidget(sideBarTopWidget)
@@ -210,8 +211,7 @@ class clientWindow(QMainWindow):
 
 
 	def closeEvent(self, event):
-		event.accept()
-		
+		event.accept()		
 
 
 
@@ -234,5 +234,3 @@ class initGUI(clientWindow):
 		# Execute the app mainloop
 		app.exec_()
 		return
-
-initGUI()

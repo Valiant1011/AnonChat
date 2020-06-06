@@ -1,7 +1,7 @@
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import QIcon, QPixmap
 from PyQt5.QtCore import pyqtSlot, pyqtSignal, QObject, QTimer, Qt, QModelIndex, qInstallMessageHandler
-from imageDisplay import imageDisplay
+from UI.imageDisplay import imageDisplay
 
 class editProfileWindow(QMainWindow):
 	def __init__(self, userObject, editFlag):
