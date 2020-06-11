@@ -26,6 +26,7 @@ class Client():
 
 		# Initialize Interface handler
 		self.makeGUI()
+		self.handleExit()
 
 
 	def makeGUI(self):
@@ -35,10 +36,15 @@ class Client():
 	def connect(self):
 		connectionProcess = multiprocessing.Process(
 			target = MakeConnection,
-			args = ()
+			args = (self.flags,)
 		)
 		connectionProcess.start()
 		self.connectionPID = connectionProcess.pid
+
+
+	def handleExit(self):
+		print('Disconnecting...')
+		os.kill(self.connectionPID, signal.SIGINT)	
 
 
 
