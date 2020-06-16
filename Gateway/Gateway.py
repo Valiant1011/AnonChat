@@ -20,6 +20,7 @@ class Gateway():
 		self.systemQueue = multiprocessing.Array('i', 10)
 		self.systemQueue[0] = 0			# Global shutdown flag
 
+
 	def setupProcesses(self):
 		# Setup network service
 		self.networkProcess = multiprocessing.Process(
@@ -28,6 +29,7 @@ class Gateway():
 		)
 		self.networkProcessPID = self.networkProcess.pid
 		self.networkProcess.start()
+		
 
 if __name__ == '__main__':
 	Gateway()

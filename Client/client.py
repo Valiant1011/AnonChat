@@ -9,20 +9,20 @@ sys.path.append('../')
 		# Login Process
 			# - Status 1 : Continue
 			# - Status 0 : Exit
-
-		# Subprocesses:
-			# - Interface	[Main Process]
-			# - Communications [Subprocess 1 : Communications]
+		# Make connection object
+		# Start interface, and pass on the connection object to it.
 ####################################################################
 class Client():
 	def __init__(self):
 		# Create variables/lists that will be shared between processes
 		self.flags = multiprocessing.Array('i', 10)
+		self.flags[0] = 0
 		# This queue will be polled from core for handling tasks
 		self.taskQueue = multiprocessing.Queue(maxsize = 1000)   
 
 		# Connect to server
 		self.connect()
+		self.networkManager.sendData({'info' : 'Hello server!'})
 
 		# Initialize Interface handler
 		self.makeGUI()
@@ -30,22 +30,17 @@ class Client():
 
 
 	def makeGUI(self):
-		initGUI()
+		initGUI() 
 		
 
 	def connect(self):
-		connectionProcess = multiprocessing.Process(
-			target = MakeConnection,
-			args = (self.flags,)
-		)
-		connectionProcess.start()
-		self.connectionPID = connectionProcess.pid
+		self.networkManager = MakeConnection(self.flags)
 
 
 	def handleExit(self):
-		print('Disconnecting...')
-		os.kill(self.connectionPID, signal.SIGINT)	
-
+		self.flags[0] = 1	# Exit flag
+		self.networkManager.handleExit()
+		
 
 
 if __name__ == '__main__':

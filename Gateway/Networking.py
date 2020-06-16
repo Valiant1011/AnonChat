@@ -36,11 +36,13 @@ class NetworkManager():
 				# don't hang on exit
 				serverThread.setDaemon(True) 
 				serverThread.start()
-				print ('Server loop running in thread:', serverThread.getName())
+				print ('Gateway listen loop running in thread:', serverThread.getName())
 
-				# Run the server until flag ( for now, run for 10 seconds )
-				# while self.systemQueue[0] == 0:
-				# 	time.sleep(1)
+				# Run the sender loop 	process here
+
+
+
+
 				serverThread.join()
 				
 				server.shutdown()
@@ -54,6 +56,6 @@ class NetworkManager():
 				serverThread.join()
 
 			except Exception as error:
-				print('Error while initialising server:', error)
+				print('Error while initialising gateway:', error)
 				server.shutdown()
 				server.server_close()
