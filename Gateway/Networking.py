@@ -7,9 +7,9 @@ from RequestHandler import RequestHandler
 from ThreadedServer import ThreadedServer
 
 class NetworkManager():
-	def __init__(self, systemQueue):
+	def __init__(self, systemFlags):
 		print('Initialising connections...')
-		self.systemQueue = systemQueue
+		self.systemFlags = systemFlags
 		self.setupSocketServer() 
 
 
@@ -36,24 +36,20 @@ class NetworkManager():
 				# don't hang on exit
 				serverThread.setDaemon(True) 
 				serverThread.start()
-				print ('Gateway listen loop running in thread:', serverThread.getName())
+				print('Gateway listen loop running in thread:', serverThread.getName())
+				print('Press Ctrl+C to Exit.')
 
-				# Run the sender loop 	process here
-
-
-
-
-				serverThread.join()
-				
-				server.shutdown()
-				server.server_close()
-				print('[ EXIT ]')
+				# Wait until system exit
+				while self.systemFlags[0] == 0:
+					time.sleep(1)
 
 			except (KeyboardInterrupt, SystemExit):
-				print('Forcefully Exiting...')
+				print('Gateway Process Exiting...')
 				server.shutdown()
 				server.server_close()
 				serverThread.join()
+				print('[ EXIT ]')
+				
 
 			except Exception as error:
 				print('Error while initialising gateway:', error)

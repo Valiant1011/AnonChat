@@ -1,6 +1,9 @@
 QMainWindow{
 	background : transparent;
 }
+QMainWindow#loginWindow{
+	background-color : #002626;
+}
 
 QWidget#mainWidget{
 	color : #CCCCCC;
@@ -88,7 +91,6 @@ QWidget#response{
 }
 
 
-
 QTabWidget{
 	color : #CCCCCC;
 	border : 0px;
@@ -107,6 +109,19 @@ QTabWidget#mainTabs QTabBar::tab{
 	margin: 0px;
 	background-color : transparent;
 }
+QTabWidget#loginTabs::pane{
+	margin : 0px;
+	border : 0px;
+	background: transparent;
+}
+QTabWidget#loginTabs QTabBar::tab{
+	width : 0px;
+	height: 0px;
+	border: 0px;
+	margin: 0px;
+	background-color : transparent;
+}
+
 
 
 QLabel#h1{
@@ -291,15 +306,33 @@ QPushButton#rightButton{
 QPushButton#rightButton::hover{
 	border-image:url('Resources/Assets/rightArrowActive.png');
 }
+QPushButton#loginButton{
+	background-color : transparent;
+	border : 1px solid;
+	border-color : #34d989;
+	border-radius : 20px;
+	font-size : 20px;
+	font-family : Adequate;
+}
+QPushButton#loginButton:focus{
+	background-color : rgba(12, 12, 12, 50);
+	border : 2px solid;
+	border-color : #34d989;
+}
+QPushButton#loginButton:disabled{
+	background-color : rgba(12, 12, 12, 50);
+	border : 2px solid;
+	border-color : #32dd32;
+}
 
 
 
 QLineEdit{
 	height : 30px;
 	background : transparent;
-	color : #aaaaaa;
+	color : #ffffff;
 	border : 0px;
-	border-bottom : 2px solid #171b1f;
+	border-bottom : 2px solid #34d989;
 	padding : 3px;
 }
 QLineEdit#searchBarInput{
@@ -317,6 +350,10 @@ QLineEdit#userMotto{
 	color : #bbbbbb;
 	font-size : 25px;
 	font-family : White Smith;
+}
+QLineEdit#loginInput{
+	font-family : Adequate;
+	font-size : 24px;
 }
 
 
@@ -377,4 +414,20 @@ QScrollBar::add-line:vertical{
 QScrollBar::sub-line:vertical{
 	width : 0px;
 	height : 0px;
+}
+
+
+QMessageBox{
+	background-color : #004040;
+	border : 1px solid #001212;
+	color: #ffffff;
+}
+QMessageBox QLabel{
+	color : #ffffff;
+}
+QMessageBox QPushButton{
+	width : 60px;
+	height : 40px;
+	color : #ffffff;
+	border-radius : 20px;
 }

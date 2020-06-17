@@ -1,5 +1,5 @@
 import socketserver
-import threading
+import threading, time, json
 
 # The handle method is called everytime a new request appears, on a separate thread.
 class RequestHandler(socketserver.BaseRequestHandler):
@@ -8,23 +8,22 @@ class RequestHandler(socketserver.BaseRequestHandler):
 		cur_thread = threading.currentThread()
 		threadName = cur_thread.getName()
 
-		try:
-			data = self.request.recv(4096).decode('utf-8')
-		except:
-			print('Error: Could not parse client data')
-			return
-
 		# Get client INFO:
 		self.clientAddress = self.request.getpeername()
 		print('Client Address:', self.clientAddress)
 
-		# Process data and do something with it
+		# Get client DATA:
+		data = self.recvall(self.request)
 
-		
-		response = "Server says: " + ':' + data + " from Thread: " + threadName
-		response = response.encode('utf-8')
+		# Process the data sent by client
+		try:
+			response = self.processData(data)
+			response = response.encode('utf-8')
+		except Exception as error:
+			print('Error while making response:', error)
+			response = "NULL"
 
-		# Make an acknowledgement response and send it to client
+		# Send response to client
 		try:
 			self.request.send(response)
 		except:
@@ -34,3 +33,99 @@ class RequestHandler(socketserver.BaseRequestHandler):
 			return
 
 		# This thread is closed here.
+
+
+	def recvall(self, sock, timeout = 1):
+		# setup to use non-blocking sockets
+		# if no data arrives it assumes transaction is done
+		# recv() returns a string
+		sock.setblocking(0)
+		total_data=[]
+		data = ''
+		begin = time.time()
+
+		while True:
+			# If you got some data, then break after wait sec
+			if total_data and time.time() - begin > timeout:
+				break
+
+			# If you got no data at all, wait a little longer
+			elif time.time() - begin > timeout * 2:
+				break
+				
+			wait = 0
+			try:
+				data = sock.recv(4096).decode('utf-8')
+				if data:
+					total_data.append(data)
+					begin = time.time()
+					data = ''
+					wait = 0
+				else:
+					time.sleep(0.1)
+			except:
+				pass
+			#When a recv returns 0 bytes, other side has closed
+		result=''.join(total_data)
+		return result
+
+
+	def processData(self, data):
+		try:
+			data = json.loads(data)
+		except:
+			print('JSON load error.')
+			return "NULL"
+
+		try:
+			code = data.get("code", "NULL")
+			if code == "NULL":
+				return code
+			elif code == "Login":
+				print('Login Request')
+				return self.processLogin(data)
+			else:
+				print('Invalid code')
+				return "INVALID"
+		except:
+			print('Invalid message sent by client')
+			return "INVALID"
+
+
+	def processLogin(self, data):
+		try:
+			status = False
+			username = data.get("username", "")
+			password = data.get("password", "")
+			userID = data.get("userID", "")
+			if username == "" or password == "" or userID == "":
+				print('Invalid user details:', userID, username, password)
+				return "INVALID"
+
+			# Validate Login
+
+			# Upto here
+			# ------------------------------------
+			status = True
+
+			# If request is valid, load the client's json data and send it to our client
+			if status:
+				# Get user data
+				filename = "Users/" + userID + '.json'
+				with open(filename, 'r') as file:
+					response = json.load(file)
+
+				print(type(response))
+
+				response = json.dumps(response)
+				return response
+			else:
+				print('Login not verifed!')
+				return "INVALID"
+		except Exception as error:
+			print('Error during login:', error)
+			return "INVALID"
+		
+
+
+			
