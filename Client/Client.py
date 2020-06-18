@@ -27,6 +27,8 @@ class Client():
 
 		# Connect to server
 		self.networkManager = MakeConnection(self.flags, self.sessionData)
+		if self.flags[0] == 1:
+			return
 
 		# Initiate register/login UI
 		Login(self.flags, self.networkManager, self.sessionData)

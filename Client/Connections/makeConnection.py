@@ -18,13 +18,17 @@ class MakeConnection():
 		self.senderPort = 40000
 		self.receiverPort = 40001
 
-		self.recieverSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-		self.recieverSocket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-		self.recieverSocket.bind((self.clientHost, self.receiverPort))
-		self.recieverSocket.listen(1)
-		self.recieveThread = threading.Thread(target = self.recieveData)
-		self.recieveThread.setDaemon(True)
-		self.recieveThread.start()
+		try:
+			self.recieverSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+			self.recieverSocket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+			self.recieverSocket.bind((self.clientHost, self.receiverPort))
+			self.recieverSocket.listen(1)
+			self.recieveThread = threading.Thread(target = self.recieveData)
+			self.recieveThread.setDaemon(True)
+			self.recieveThread.start()
+		except Exception as error:
+			print('Error : Can not launch multiple instances of Client.')
+			self.flags[0] = 1
 
 
 	def getListenIP(self):

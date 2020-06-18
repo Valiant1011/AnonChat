@@ -115,11 +115,11 @@ class LoginWindow(QMainWindow):
 		print('Trying to Login...')
 		self.submitButton.setEnabled(False)
 		self.submitButton.setText('Logging In...')
+		self.submitButton.repaint()
 		message = {
 			"code" : "Login",
 			"username" : self.usernameInput.text(),
 			"password" : self.passwordInput.text(),
-			"userID" : self.sessionData.get("userID", ""),
 			"listenIP" : self.networkManager.getListenIP(),
 			"listenPort" : self.networkManager.getListenPort()
 		}
@@ -144,6 +144,7 @@ class LoginWindow(QMainWindow):
 			infoBox.exec_()
 		else:
 			try:
+				print('Logged in!')
 				response = eval(response)
 				with open('profile.json', "w") as file:
 					json.dump(response, file, indent = 4)

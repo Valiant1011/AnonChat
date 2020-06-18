@@ -97,26 +97,22 @@ class RequestHandler(socketserver.BaseRequestHandler):
 			status = False
 			username = data.get("username", "")
 			password = data.get("password", "")
-			userID = data.get("userID", "")
-			if username == "" or password == "" or userID == "":
-				print('Invalid user details:', userID, username, password)
+			
+			if username == "" or password == "" :
+				print('Invalid user details:', username, password)
 				return "INVALID"
 
 			# Validate Login
-
+			status = True
 			# Upto here
 			# ------------------------------------
-			status = True
-
+			
 			# If request is valid, load the client's json data and send it to our client
 			if status:
 				# Get user data
-				filename = "Users/" + userID + '.json'
+				filename = "Users/" + username + '.json'
 				with open(filename, 'r') as file:
 					response = json.load(file)
-
-				print(type(response))
-
 				response = json.dumps(response)
 				return response
 			else:
