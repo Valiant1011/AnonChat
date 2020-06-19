@@ -26,6 +26,8 @@ class User():
 
 	def loadDict(self, data):
 		self.userLoadedFlag = True
+		self.friendsLoadedFlag = True
+
 		self.userID = data.get('userID', 'NULL')
 		self.userAlias = data.get('userAlias', 'Newbie')
 		self.userAvatar = data.get('userAvatar', 'Default')
@@ -42,20 +44,9 @@ class User():
 		self.availableAvatars = data.get('availableAvatars', [])
 		self.availableBG = data.get('availableBG', [])
 		self.availableFrames = data.get('availableFrames', [])
+		self.friendData = data.get('friends', [])
+		self.friendCount = len(self.friendData) 
 
-
-	def loadFriends(self):
-		self.friendsLoadedFlag = True
-		fileName = 'friends.json'
-		try:
-			with open(fileName, "r") as file:
-				data = json.load(file)
-		except:
-			data = {"friends" : []}
-		finally:
-			self.friendDataDict = data
-			self.friendCount = len(data.get('friends', {}))
-		
 
 	def saveChanges(self):
 		fileName = 'profile.json'
@@ -80,7 +71,7 @@ class User():
 
 	def getFriends(self):
 		if self.friendsLoadedFlag == True:
-			return self.friendDataDict.get("friends", [])
+			return self.friendData
 		else:
 			raise hasNotBeenLoadedError()
 

@@ -10,7 +10,7 @@ class RequestHandler(socketserver.BaseRequestHandler):
 
 		# Get client INFO:
 		self.clientAddress = self.request.getpeername()
-		print('Client Address:', self.clientAddress)
+		print('Message from client.\nIP Address >', self.clientAddress[0], ':', self.clientAddress[1])
 
 		# Get client DATA:
 		data = self.recvall(self.request)
@@ -29,7 +29,6 @@ class RequestHandler(socketserver.BaseRequestHandler):
 		except:
 			print('Error: Could not send response!')
 		finally:
-			print('Thread:', threadName,' closed.')
 			return
 
 		# This thread is closed here.
@@ -75,18 +74,21 @@ class RequestHandler(socketserver.BaseRequestHandler):
 			data = json.loads(data)
 		except:
 			print('JSON load error.')
-			return "NULL"
+			return "ERROR"
 
 		try:
 			code = data.get("code", "NULL")
 			if code == "NULL":
-				return code
+				return "NULL"
 			elif code == "Login":
 				print('Login Request')
 				return self.processLogin(data)
+			elif code == "Register":
+				print('Register request')
+				return self.processRegisteration(data)
 			else:
-				print('Invalid code')
-				return "INVALID"
+				print('Alert : Invalid code sent by user: ', data.get("username", '---GHOST---'))
+				return "NULL"
 		except:
 			print('Invalid message sent by client')
 			return "INVALID"
@@ -122,6 +124,37 @@ class RequestHandler(socketserver.BaseRequestHandler):
 			print('Error during login:', error)
 			return "INVALID"
 		
+	def processRegisteration(self, data):
+		return "ERROR"
+		try:
+			status = False
+			username = data.get("username", "")
+			password = data.get("password", "")
+			
+			if username == "" or password == "" :
+				print('Invalid user details:', username, password)
+				return "INVALID"
+
+			# Validate Login
+			status = True
+			# Upto here
+			# ------------------------------------
+			
+			# If request is valid, load the client's json data and send it to our client
+			if status:
+				# Get user data
+				filename = "Users/" + username + '.json'
+				with open(filename, 'r') as file:
+					response = json.load(file)
+				response = json.dumps(response)
+				return response
+			else:
+				print('Login not verifed!')
+				return "INVALID"
+		except Exception as error:
+			print('Error during login:', error)
+			return "INVALID"
+
 
 
 			

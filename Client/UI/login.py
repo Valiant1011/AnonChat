@@ -2,7 +2,7 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtGui import QIcon, QPixmap, QFontDatabase
 from PyQt5.QtCore import pyqtSlot, pyqtSignal, QObject, QTimer, Qt, QModelIndex, qInstallMessageHandler
 
-import sys, json
+import sys, json 
 
 def handler(msg_type, msg_log_context, msg_string):
 	pass
@@ -87,12 +87,12 @@ class LoginWindow(QMainWindow):
 		self.bottomLayout = QHBoxLayout(self.bottomWidget)
 		self.namText = QLabel('New User?')
 		self.namText.setStyleSheet('color:#ffffff;')
-		self.registerButton = QPushButton('Register Here')
-		self.registerButton.setMinimumHeight(40)
-		self.registerButton.clicked.connect(self.handleRegisterButtonPress)
-		self.registerButton.setStyleSheet('border : 0px;font-size:18px;')
+		self.registerNowButton = QPushButton('Register Here')
+		self.registerNowButton.setMinimumHeight(40)
+		self.registerNowButton.clicked.connect(self.handleRegisterButtonPress)
+		self.registerNowButton.setStyleSheet('border : 0px;font-size:18px;')
 		self.bottomLayout.addWidget(self.namText)
-		self.bottomLayout.addWidget(self.registerButton)
+		self.bottomLayout.addWidget(self.registerNowButton)
 		self.bottomLayout.setAlignment(Qt.AlignCenter)
 		self.bottomLayout.setContentsMargins(0, 0, 0, 0)
 
@@ -154,7 +154,7 @@ class LoginWindow(QMainWindow):
 				infoBox = QMessageBox()
 				infoBox.setIcon(QMessageBox.Critical)
 				infoBox.setWindowTitle('Alert')
-				infoBox.setText('Server Connection failed! Retry.')
+				infoBox.setText('Server Connection failed! Please Retry.')
 				infoBox.setStandardButtons(QMessageBox.Ok)
 				infoBox.exec_()
 			finally:
@@ -163,29 +163,164 @@ class LoginWindow(QMainWindow):
 
 
 	def getRegisterWidget(self):
-		tempLabel = QLabel('Feature available in\nAlpha stage.')
-		tempLabel.setObjectName('subsectionHeading')
-		tempLabel.setStyleSheet('font-size : 25px;')
+		self.registerUsernameInput = QLineEdit()
+		self.registerUsernameInput.setPlaceholderText('Create a unique Alias')
+		self.registerUsernameInput.setAlignment(Qt.AlignCenter)
+		self.registerUsernameInput.setFixedWidth(400)
+		self.registerUsernameInput.setObjectName('loginInput')
+		self.registerUsernameInput.setMaxLength(50)
+
+		self.registerPasswordInput = QLineEdit()
+		self.registerPasswordInput.setPlaceholderText('Choose a Password')
+		self.registerPasswordInput.setAlignment(Qt.AlignCenter)
+		self.registerPasswordInput.setEchoMode(QLineEdit.Password)
+		self.registerPasswordInput.setFixedWidth(400)
+		self.registerPasswordInput.setObjectName('loginInput')
+		self.registerPasswordInput.setMaxLength(50)
+
+		self.registerPasswordInputConfirm = QLineEdit()
+		self.registerPasswordInputConfirm.setPlaceholderText('Confirm Password')
+		self.registerPasswordInputConfirm.setAlignment(Qt.AlignCenter)
+		self.registerPasswordInputConfirm.setEchoMode(QLineEdit.Password)
+		self.registerPasswordInputConfirm.setFixedWidth(400)
+		self.registerPasswordInputConfirm.setObjectName('loginInput')
+		self.registerPasswordInputConfirm.setMaxLength(50)
+
+		self.registerButton = QPushButton('Register')
+		self.registerButton.setFixedSize(250, 40)
+		self.registerButton.setObjectName('loginButton')
+		self.registerButton.clicked.connect(self.handleRegisterSubmitPress)
+		self.registerButtonContainer = QWidget()
+		self.registerButtonContainerLayout = QHBoxLayout(self.registerButtonContainer)
+		self.registerButtonContainerLayout.addWidget(self.registerButton)
+		self.registerButtonContainerLayout.setAlignment(Qt.AlignCenter)
+		self.registerButtonContainerLayout.setContentsMargins(0, 0, 0, 0)
 
 		self.backWidget = QWidget()
 		self.backLayout = QHBoxLayout(self.backWidget)
-		self.loginButton = QPushButton('< Back')
-		self.loginButton.setMinimumHeight(40)
-		self.loginButton.clicked.connect(self.handleLoginButtonPress)
-		self.loginButton.setStyleSheet('border : 0px;font-size:18px;')
-		self.backLayout.addWidget(self.loginButton)
+		self.backButton = QPushButton('< Back')
+		self.backButton.setMinimumHeight(40)
+		self.backButton.clicked.connect(self.handleLoginButtonPress)
+		self.backButton.setStyleSheet('border : 0px;font-size:18px;')
+		self.backLayout.addWidget(self.backButton)
 		self.backLayout.setAlignment(Qt.AlignCenter)
 		self.backLayout.setContentsMargins(0, 0, 0, 0)
+
+		uselessInput = QLineEdit()
+		uselessInput.setFixedSize(0, 0)
 
 		registerWidget = QWidget()
 		registerLayout = QVBoxLayout(registerWidget)
 		registerLayout.setContentsMargins(0, 0, 0, 0)
+		registerLayout.addStretch(3)
+		registerLayout.addWidget(uselessInput)
+		registerLayout.addWidget(self.registerUsernameInput)
 		registerLayout.addStretch(1)
-		registerLayout.addWidget(tempLabel)
+		registerLayout.addWidget(self.registerPasswordInput)
+		registerLayout.addStretch(1)
+		registerLayout.addWidget(self.registerPasswordInputConfirm)
+		registerLayout.addStretch(3)
+		registerLayout.addWidget(self.registerButtonContainer)
 		registerLayout.addStretch(1)
 		registerLayout.addWidget(self.backWidget)
 		registerLayout.setAlignment(Qt.AlignCenter)
 		return registerWidget
+
+
+	def handleRegisterSubmitPress(self):
+		# Some checks on user input:
+		if len(self.registerUsernameInput.text()) == 0:
+			infoBox = QMessageBox()
+			infoBox.setIcon(QMessageBox.Information)
+			infoBox.setWindowTitle('Alert')
+			infoBox.setText('Alias field can not be empty!')
+			infoBox.setStandardButtons(QMessageBox.Ok)
+			infoBox.exec_()
+			return
+			
+		if len(self.registerPasswordInput.text()) == 0:
+			infoBox = QMessageBox()
+			infoBox.setIcon(QMessageBox.Information)
+			infoBox.setWindowTitle('Alert')
+			infoBox.setText('Password field can not be empty!')
+			infoBox.setStandardButtons(QMessageBox.Ok)
+			infoBox.exec_()
+			return
+
+		if not self.registerPasswordInput.text() == self.registerPasswordInputConfirm.text():
+			infoBox = QMessageBox()
+			infoBox.setIcon(QMessageBox.Information)
+			infoBox.setWindowTitle('Alert')
+			infoBox.setText('Confirmed password does not match. Please Retry!')
+			infoBox.setStandardButtons(QMessageBox.Ok)
+			infoBox.exec_()
+			return
+
+		print('Trying to Register...')
+
+		self.registerButton.setEnabled(False)
+		self.registerButton.setText('On it!')
+		self.registerButton.repaint()
+
+		message = {
+			"code" : "Register",
+			"username" : self.registerUsernameInput.text(),
+			"password" : self.registerPasswordInput.text(),
+			"listenIP" : self.networkManager.getListenIP(),
+			"listenPort" : self.networkManager.getListenPort()
+		}
+
+		response = self.networkManager.sendData(message)
+
+		if response == "NULL":
+			# Some error occured during login process.
+			self.flags[1] = 3
+			self.close()
+
+		elif response == "ERROR":
+			# Network error
+			self.flags[1] = 2
+			self.registerButton.setEnabled(True)
+			self.registerButton.setText('Register')
+			# Pop up a message
+			infoBox = QMessageBox()
+			infoBox.setIcon(QMessageBox.Information)
+			infoBox.setWindowTitle('Alert')
+			infoBox.setText('A Network error occured during processing your request. Please check your Internet connection.')
+			infoBox.setStandardButtons(QMessageBox.Ok)
+			infoBox.exec_()
+
+		elif response == "INVALID":
+			# Invalid login request
+			self.flags[1] = 2
+			self.submitButton.setEnabled(True)
+			self.submitButton.setText('Login')
+			# Pop up a message
+			infoBox = QMessageBox()
+			infoBox.setIcon(QMessageBox.Critical)
+			infoBox.setWindowTitle('Alert')
+			infoBox.setText('Login Failed! Retry.')
+			infoBox.setStandardButtons(QMessageBox.Ok)
+			infoBox.exec_()
+
+		else:
+			try:
+				print('Logged in!')
+				response = eval(response)
+				with open('profile.json', "w") as file:
+					json.dump(response, file, indent = 4)
+
+			except Exception as error:
+				print(error)
+				infoBox = QMessageBox()
+				infoBox.setIcon(QMessageBox.Critical)
+				infoBox.setWindowTitle('Alert')
+				infoBox.setText('Server Connection failed! Retry.')
+				infoBox.setStandardButtons(QMessageBox.Ok)
+				infoBox.exec_()
+			finally:
+				self.flags[1] = 1
+				self.close()
 
 
 	def closeEvent(self, event):

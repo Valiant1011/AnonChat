@@ -52,7 +52,6 @@ class clientWindow(QMainWindow):
 			# Load user (self) data
 			self.userObject = User()
 			self.userObject.loadUser()
-			self.userObject.loadFriends()
 
 			# Get user data
 			self.userID = self.userObject.getID()
@@ -233,7 +232,7 @@ class initGUI(clientWindow):
 		# If user is about to close window
 		app.aboutToQuit.connect(self.closeEvent)
 		client_app = clientWindow()
-		client_app.show()
+		client_app.showMaximized()
 		# Execute the app mainloop
 		app.exec_()
 		return

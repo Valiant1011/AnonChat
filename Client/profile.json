@@ -1,8 +1,8 @@
 {
-    "userID": "th3G0d",
+    "userID": 0,
     "userAlias": "Valiant",
     "userAvatar": "VFemale.png",
-    "userProfileBG": "Tower.jpeg",
+    "userProfileBG": "Ciri.jpeg",
     "userAvatarFrame": "Cyberpunk.png",
     "userPrestige": "255",
     "userRep": "32851",
@@ -41,5 +41,31 @@
     "availableFrames": [
         "Default.png",
         "Cyberpunk.png"
+    ],
+    "friends": [
+        {
+            "ID": "00101",
+            "Alias": "Sachinam_1397",
+            "Avatar": "Default.png",
+            "Status": "Online"
+        },
+        {
+            "ID": "01010",
+            "Alias": "Prashant",
+            "Avatar": "VFemale.png",
+            "Status": "Offline"
+        },
+        {
+            "ID": "010101",
+            "Alias": "Amay",
+            "Avatar": "V.png",
+            "Status": "Offline"
+        },
+        {
+            "ID": "010q11",
+            "Alias": "Aman",
+            "Avatar": "Spy.png",
+            "Status": "Offline"
+        }
     ]
 }
