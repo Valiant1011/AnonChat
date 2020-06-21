@@ -1,5 +1,6 @@
 import socketserver
 import threading, time, json
+from User import User
 
 # The handle method is called everytime a new request appears, on a separate thread.
 class RequestHandler(socketserver.BaseRequestHandler):
@@ -7,6 +8,9 @@ class RequestHandler(socketserver.BaseRequestHandler):
 	def handle(self):
 		cur_thread = threading.currentThread()
 		threadName = cur_thread.getName()
+
+		# # Check DB connection:
+		# self.server.databaseManager.sayHi()	
 
 		# Get client INFO:
 		self.clientAddress = self.request.getpeername()
@@ -70,90 +74,112 @@ class RequestHandler(socketserver.BaseRequestHandler):
 
 
 	def processData(self, data):
+		# Convert JSON data to python dict
 		try:
 			data = json.loads(data)
 		except:
 			print('JSON load error.')
 			return "ERROR"
 
+		# Authenticate request
+		try:
+			status = self.authenticateUser(data)
+			if not status:
+				print('[ REQUEST ] Authentication Failed')
+				return "INVALID"
+			else:
+				pass
+		except Exception as e:
+			print('Error while Authentication:', e)
+			return "INVALID"
+
+		# Pass the request to its handler function
 		try:
 			code = data.get("code", "NULL")
 			if code == "NULL":
 				return "NULL"
+
 			elif code == "Login":
 				print('Login Request')
 				return self.processLogin(data)
+
 			elif code == "Register":
 				print('Register request')
 				return self.processRegisteration(data)
+
 			else:
-				print('Alert : Invalid code sent by user: ', data.get("username", '---GHOST---'))
+				print('Alert : Invalid code sent by user: ', data.get("userName", '---GHOST---'))
 				return "NULL"
-		except:
-			print('Invalid message sent by client')
+		except Exception as e:
+			print('Invalid message sent by client:', e)
 			return "INVALID"
 
 
-	def processLogin(self, data):
-		try:
-			status = False
-			username = data.get("username", "")
-			password = data.get("password", "")
-			
-			if username == "" or password == "" :
-				print('Invalid user details:', username, password)
-				return "INVALID"
+	def authenticateUser(self, data):
+		userID = data.get("userID", "")
+		userName = data.get("userName", "")
+		password = data.get("password", "")
+		code = data.get("code", "NULL")
 
-			# Validate Login
-			status = True
-			# Upto here
-			# ------------------------------------
+		if userName == "" or password == "" or userID == "":
+			print('Invalid user details:', userID, userName, password)
+			return False
+
+		if code == "Register":
+			# A new registeration need not be checked in database.
+			return True
+
+		# For all other requests, the client must be present in the database
+
+		# Hash the password
+		# password = self.Hash(password)
+
+		return self.server.databaseManager.authenticateUser(userID, userName, password)	
+
+
+	def processLogin(self, data):
+		userID = data.get("userID", "")
+		userName = data.get("userName", "")
+		password = data.get("password", "")
+
+		try:
+			# The request is confirmed to be valid. So send client data.
+			# Get user data
+			filename = "Users/" + userName + '.json'
+			with open(filename, 'r') as file:
+				response = json.load(file)
+			response = json.dumps(response)
+			return response
 			
-			# If request is valid, load the client's json data and send it to our client
-			if status:
-				# Get user data
-				filename = "Users/" + username + '.json'
-				with open(filename, 'r') as file:
-					response = json.load(file)
-				response = json.dumps(response)
-				return response
-			else:
-				print('Login not verifed!')
-				return "INVALID"
 		except Exception as error:
 			print('Error during login:', error)
 			return "INVALID"
 		
-	def processRegisteration(self, data):
-		return "ERROR"
-		try:
-			status = False
-			username = data.get("username", "")
-			password = data.get("password", "")
-			
-			if username == "" or password == "" :
-				print('Invalid user details:', username, password)
-				return "INVALID"
 
-			# Validate Login
-			status = True
-			# Upto here
-			# ------------------------------------
-			
-			# If request is valid, load the client's json data and send it to our client
-			if status:
-				# Get user data
-				filename = "Users/" + username + '.json'
-				with open(filename, 'r') as file:
-					response = json.load(file)
-				response = json.dumps(response)
-				return response
-			else:
-				print('Login not verifed!')
-				return "INVALID"
+	def processRegisteration(self, data):
+		userName = data.get("userName", "")
+		password = data.get("password", "")
+
+		# Add user to database:
+		userID = self.server.databaseManager.getNewUserID()
+		status = self.server.databaseManager.addUser(userID, userName, password)	
+		if not status:
+			print('Could not register user.')
+			# Username is taken.
+			return "UsernameTaken"
+
+		# User is added to the database now.
+		# Make user profile:	
+		user = User(userID, userName)
+		data = user.getData()
+	
+		# Send user profile to the client
+		try:
+			response = json.dumps(data)
+			return response
 		except Exception as error:
-			print('Error during login:', error)
-			return "INVALID"
+			print('Error during registeration:', error)
+			return "NULL"
 
 
 

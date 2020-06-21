@@ -18,6 +18,7 @@
 	},
 	"username" : "Valiant",
 	"password" : "12341234",
+	"userID" : 0,
 	"IP" : "localhost",
 	"port" : 30000
 }

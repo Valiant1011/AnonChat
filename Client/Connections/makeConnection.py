@@ -56,7 +56,7 @@ class MakeConnection():
 			self.senderSocket.connect((self.serverIP, self.serverPort))
 		except Exception as error:
 			print('Error: Host not reachable:', error)
-			return "NULL"
+			return "ERROR"
 
 		# Try to send data in specific format to the server
 		#----------------------------------------------------------- Format is Yet to be decided

@@ -5,6 +5,7 @@ import time
 
 from RequestHandler import RequestHandler
 from ThreadedServer import ThreadedServer
+from DatabaseManager import DatabaseManager
 
 class NetworkManager():
 	def __init__(self, systemFlags):
@@ -15,14 +16,18 @@ class NetworkManager():
 
 	def setupSocketServer(self):
 		print('Initialising socket server...')
-
 		# Listen on localhost:30000
 		address = ('localhost', 30000) 
-
 		server = ThreadedServer(
 			address, 
 			RequestHandler
 		)
+		# Connect to database
+		print('Making a connection to Database...')
+		server.databaseManager = DatabaseManager()
+		if not server.databaseManager.checkStatus():
+			print('Looks like an error occured in database connection. Stopping Authentication service.')
+			return
 
 		with server:
 			ip, port = server.server_address 
@@ -45,6 +50,7 @@ class NetworkManager():
 
 			except (KeyboardInterrupt, SystemExit):
 				print('Gateway Process Exiting...')
+				server.databaseManager.closeConnection()
 				server.shutdown()
 				server.server_close()
 				serverThread.join()

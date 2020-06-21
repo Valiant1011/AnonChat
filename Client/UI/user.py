@@ -31,7 +31,7 @@ class User():
 		self.userID = data.get('userID', 'NULL')
 		self.userAlias = data.get('userAlias', 'Newbie')
 		self.userAvatar = data.get('userAvatar', 'Default')
-		self.userProfileBG = data.get('userProfileBG', 'cyberpunk.jpeg')
+		self.userProfileBG = data.get('userProfileBG', 'Cyberpunk.jpeg')
 		self.userPrestige = data.get('userPrestige', '1')
 		self.userRep = data.get('userRep', '1')
 		self.userMotto = data.get('userMotto', 'Am I Alive, or in an Illusion?')

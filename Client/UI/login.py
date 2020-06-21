@@ -118,7 +118,8 @@ class LoginWindow(QMainWindow):
 		self.submitButton.repaint()
 		message = {
 			"code" : "Login",
-			"username" : self.usernameInput.text(),
+			"userID" : self.sessionData.get("userID", -1),
+			"userName" : self.usernameInput.text(),
 			"password" : self.passwordInput.text(),
 			"listenIP" : self.networkManager.getListenIP(),
 			"listenPort" : self.networkManager.getListenPort()
@@ -142,6 +143,15 @@ class LoginWindow(QMainWindow):
 			infoBox.setText('Login Failed! Retry.')
 			infoBox.setStandardButtons(QMessageBox.Ok)
 			infoBox.exec_()
+		elif response == 'ERROR':
+			infoBox = QMessageBox()
+			infoBox.setIcon(QMessageBox.Critical)
+			infoBox.setWindowTitle('Alert')
+			infoBox.setText('Server Connection failed! Please Retry.')
+			infoBox.setStandardButtons(QMessageBox.Ok)
+			infoBox.exec_()
+			self.flags[1] = 3
+			self.close()
 		else:
 			try:
 				print('Logged in!')
@@ -264,7 +274,8 @@ class LoginWindow(QMainWindow):
 
 		message = {
 			"code" : "Register",
-			"username" : self.registerUsernameInput.text(),
+			"userID" : -1,
+			"userName" : self.registerUsernameInput.text(),
 			"password" : self.registerPasswordInput.text(),
 			"listenIP" : self.networkManager.getListenIP(),
 			"listenPort" : self.networkManager.getListenPort()
@@ -272,8 +283,9 @@ class LoginWindow(QMainWindow):
 
 		response = self.networkManager.sendData(message)
 
-		if response == "NULL":
+		if response == "NULL" or response == "INVALID":
 			# Some error occured during login process.
+			# Here, INVALID is only possible if the client sent garbage data to the Server.
 			self.flags[1] = 3
 			self.close()
 
@@ -290,22 +302,21 @@ class LoginWindow(QMainWindow):
 			infoBox.setStandardButtons(QMessageBox.Ok)
 			infoBox.exec_()
 
-		elif response == "INVALID":
-			# Invalid login request
-			self.flags[1] = 2
-			self.submitButton.setEnabled(True)
-			self.submitButton.setText('Login')
-			# Pop up a message
+		elif response == "UsernameTaken":
 			infoBox = QMessageBox()
-			infoBox.setIcon(QMessageBox.Critical)
+			infoBox.setIcon(QMessageBox.Information)
 			infoBox.setWindowTitle('Alert')
-			infoBox.setText('Login Failed! Retry.')
+			infoBox.setText('Sorry, this Username is already taken. Please try another Username.')
 			infoBox.setStandardButtons(QMessageBox.Ok)
 			infoBox.exec_()
+			# Re enable the Register button
+			self.registerButton.setEnabled(True)
+			self.registerButton.setText('Register')
+			self.registerButton.repaint()
 
 		else:
 			try:
-				print('Logged in!')
+				print('Registered and Logged in!')
 				response = eval(response)
 				with open('profile.json', "w") as file:
 					json.dump(response, file, indent = 4)

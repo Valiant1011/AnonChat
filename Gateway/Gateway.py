@@ -34,6 +34,7 @@ class Gateway():
 
 
 	def tempWait(self):
+		print('Waiting for manual Exit...')
 		try:
 			while True:
 				pass
