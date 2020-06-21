@@ -1,17 +1,13 @@
 {
     "userID": 2,
     "userAlias": "Recker",
-    "userAvatar": "Default.png",
+    "userAvatar": "Default",
     "userProfileBG": "Cyberpunk.jpeg",
     "userPrestige": "100",
     "userRep": "1",
     "userMotto": "Hey, I'm new here!",
-    "memberSince": [
-        "22",
-        "June",
-        "2020"
-    ],
-    "aboutMe": "Hi! This is Recker :)",
+    "memberSince": ["22", "June", "2020"],
+    "aboutMe": "",
     "badges": {},
     "comments": [],
     "userAvatarFrame": "Default.png",

@@ -1,24 +1,23 @@
 {
-	"sessionID" : null,
-	"sessionStart" : {
-		"day" : null,
-		"month" : null,
-		"year" : null,
-		"hour" : null,
-		"minute" : null,
-		"second" : null
-	},
-	"sessionEnd" : {
-		"day" : null,
-		"month" : null,
-		"year" : null,
-		"hour" : null,
-		"minute" : null,
-		"second" : null
-	},
-	"username" : "Valiant",
-	"password" : "12341234",
-	"userID" : 0,
-	"IP" : "localhost",
-	"port" : 30000
+    "sessionID": null,
+    "sessionStart": {
+        "day": null,
+        "month": null,
+        "year": null,
+        "hour": null,
+        "minute": null,
+        "second": null
+    },
+    "sessionEnd": {
+        "day": null,
+        "month": null,
+        "year": null,
+        "hour": null,
+        "minute": null,
+        "second": null
+    },
+    "username": "Recker",
+    "userID": 2,
+    "IP": "localhost",
+    "port": 30000
 }

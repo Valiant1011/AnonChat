@@ -65,7 +65,7 @@ class LoginWindow(QMainWindow):
 		self.usernameInput.setObjectName('loginInput')
 		self.usernameInput.setMaxLength(50)
 
-		self.passwordInput = QLineEdit(self.sessionData.get('password', ''))
+		self.passwordInput = QLineEdit()
 		self.passwordInput.setPlaceholderText('Password')
 		self.passwordInput.setAlignment(Qt.AlignCenter)
 		self.passwordInput.setEchoMode(QLineEdit.Password)
@@ -156,6 +156,8 @@ class LoginWindow(QMainWindow):
 			try:
 				print('Logged in!')
 				response = eval(response)
+				userID = response.get('userID')
+				self.updateSessionInfo(self.usernameInput.text(), userID)
 				with open('profile.json', "w") as file:
 					json.dump(response, file, indent = 4)
 
@@ -318,6 +320,8 @@ class LoginWindow(QMainWindow):
 			try:
 				print('Registered and Logged in!')
 				response = eval(response)
+				userID = response.get('userID')
+				self.updateSessionInfo(self.registerUsernameInput.text(), userID)
 				with open('profile.json', "w") as file:
 					json.dump(response, file, indent = 4)
 
@@ -332,6 +336,17 @@ class LoginWindow(QMainWindow):
 			finally:
 				self.flags[1] = 1
 				self.close()
+
+
+	def updateSessionInfo(self, userName, userID):
+		filename = 'session.json'
+		with open(filename, 'r') as file:
+			sessionData = json.load(file)
+
+		sessionData['username'] = userName
+		sessionData['userID'] = userID
+		with open(filename, 'w') as file:
+			json.dump(sessionData, file, indent = 4)
 
 
 	def closeEvent(self, event):

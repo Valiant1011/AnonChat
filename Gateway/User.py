@@ -46,12 +46,12 @@ class User():
 		data["userPrestige"] = '1'
 		data["userRep"] = '1'
 		data["userMotto"] = "Hey, I'm new here!"
-		data["memberSince"] = memberSince[1] + " " + memberSince[0] + ", " + memberSince[2] 
+		data["memberSince"] = memberSince
 		data["aboutMe"] = ''
 		data["badges"] = {}
 		data["comments"] = []
 		data["userAvatarFrame"] = 'Default.png'
-		data["availableAvatars"] = ['Default']
+		data["availableAvatars"] = ['Default.png']
 		data["availableBG"] = ['Cyberpunk.jpeg']
 		data["availableFrames"] = ['Default.png']
 		data["friendData"] = []

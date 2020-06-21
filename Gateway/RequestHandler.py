@@ -145,6 +145,7 @@ class RequestHandler(socketserver.BaseRequestHandler):
 		try:
 			# The request is confirmed to be valid. So send client data.
 			# Get user data
+			print('[ LOGIN ] Success')
 			filename = "Users/" + userName + '.json'
 			with open(filename, 'r') as file:
 				response = json.load(file)
@@ -170,11 +171,12 @@ class RequestHandler(socketserver.BaseRequestHandler):
 
 		# User is added to the database now.
 		# Make user profile:	
-		user = User(userID, userName)
+		user = User(userID, userName)	# Makes user profile and maintains its dictionary
 		data = user.getData()
 	
 		# Send user profile to the client
 		try:
+			print('[ REGISTER ] Success')
 			response = json.dumps(data)
 			return response
 		except Exception as error:
