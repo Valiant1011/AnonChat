@@ -11,10 +11,11 @@ from UI.user import User
 import sys, os
 
 class ProfileWidget(QWidget):
-	def __init__(self, editFlag, userObject, viewer = ''):
+	def __init__(self, editFlag, dataQueue, userObject, viewer = ''):
 		super().__init__()
 		self.userObject = userObject
 		self.editFlag = editFlag
+		self.dataQueue = dataQueue
 		try:
 			self.layout = self.getCentralLayout(viewer)
 		except Exception as error:
@@ -349,5 +350,5 @@ class ProfileWidget(QWidget):
 		except Exception as e:
 			pass
 	
-		self.editWindow = editProfileWindow(self.userObject, self.editFlag)
+		self.editWindow = editProfileWindow(self.userObject, self.editFlag, self.dataQueue)
 		self.editWindow.show()

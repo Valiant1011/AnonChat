@@ -47,7 +47,7 @@ class Client():
 
 
 	def makeGUI(self):
-		initGUI() 
+		initGUI(self.networkManager) 
 			
 
 	def handleExit(self):

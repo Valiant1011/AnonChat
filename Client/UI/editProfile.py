@@ -1,14 +1,15 @@
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import QIcon, QPixmap
 from PyQt5.QtCore import pyqtSlot, pyqtSignal, QObject, QTimer, Qt, QModelIndex, qInstallMessageHandler
-from UI.imageDisplay import imageDisplay
+from UI.imageDisplay import imageDisplay 
 
 class editProfileWindow(QMainWindow):
-	def __init__(self, userObject, editFlag):
+	def __init__(self, userObject, editFlag, dataQueue):
 		super().__init__()
 		self.changesMade = False
 		self.userObject = userObject
 		self.editFlag = editFlag
+		self.dataQueue = dataQueue
 		# Set app icon
 		self.setWindowIcon(QIcon('Resources/Assets/logo.png'))
 		# Set window title
@@ -177,6 +178,16 @@ class editProfileWindow(QMainWindow):
 		self.userObject.saveChanges()
 		# Update interface
 		self.editFlag.value = 1
+		# Send data to Server
+		message = {
+			"code" : "ProfileUpdate",
+			"motto" : userMotto,
+			"avatar" : selectedAvatar,
+			"frame" : selectedFrame,
+			"bg" : selectedBG,
+			"about" : aboutMe
+		}
+		self.dataQueue.put(message)
 		
 		self.close()
 

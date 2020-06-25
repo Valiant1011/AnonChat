@@ -17,11 +17,14 @@ qInstallMessageHandler(handler)
 
 # This class handles the main window of client
 class clientWindow(QMainWindow):
-	def __init__(self):
+	def __init__(self, networkManager):
 		super().__init__()
 		self.editFlag = Value('i')
+		self.dataQueue = Queue(100)
 		self.editFlag.value = 0 
 		self.userChatsDict = {}  # Maps userID to their chat widget
+		self.networkManager = networkManager
+
 		# Set app icon
 		self.setWindowIcon(QIcon('Resources/Assets/logo.png'))
 		# self.setWindowOpacity(0.99) # USEFUL later?
@@ -45,6 +48,20 @@ class clientWindow(QMainWindow):
 			self.editFlag.value = 0
 			self.initUI()
 			self.repaint()
+
+		try:
+			data = self.dataQueue.get(block = False)
+			status = self.networkManager.sendData(data)
+			if status == 'OK':
+				pass
+			else:
+				print('Error: Could not update profile')
+
+		except Exception as e:
+			if "Empty" in str(e) or str(e) == "":
+				pass
+			else:
+				print('Error: ', e)
 		
 	# This function is responsible for creating the main UI of client
 	def initUI(self):
@@ -154,7 +171,7 @@ class clientWindow(QMainWindow):
 	# Reads the user object and generates its profile view
 	def makeProfileWidget(self):
 		try:
-			profileWidget = ProfileWidget(self.editFlag, self.userObject, self.userName)
+			profileWidget = ProfileWidget(self.editFlag, self.dataQueue, self.userObject, self.userName)
 		except:
 			profileWidget = QWidget()
 		scrollArea = QScrollArea()
@@ -218,7 +235,7 @@ class clientWindow(QMainWindow):
 
 # This class runs the main app loop for interface and calls its object
 class initGUI(clientWindow):
-	def __init__(self):
+	def __init__(self, networkManager):
 		# make a reference of App class
 		app = QApplication(sys.argv)
 		app.setStyle("Fusion")
@@ -231,7 +248,7 @@ class initGUI(clientWindow):
 		app.setStyleSheet(open('style.qss', "r").read())
 		# If user is about to close window
 		app.aboutToQuit.connect(self.closeEvent)
-		client_app = clientWindow()
+		client_app = clientWindow(networkManager)
 		client_app.showMaximized()
 		# Execute the app mainloop
 		app.exec_()

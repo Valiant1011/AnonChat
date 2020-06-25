@@ -1,0 +1,17 @@
+{
+	"availableAvatars": [
+        "Default.png",
+        "Spy.png",
+        "V.png",
+        "VFemale.png"
+    ],
+    "availableBG": [
+        "Cyberpunk.jpeg",
+        "Tower.jpeg",
+        "Ciri.jpeg"
+    ],
+    "availableFrames": [
+        "Default.png",
+        "Cyberpunk.png"
+    ]
+}

@@ -7,6 +7,9 @@ class User():
 
 	def makeUser(self):
 		try:
+			with open ("fileList.json") as file:
+				self.fileData = json.load(file)
+
 			self.data = self.makeDict()
 			fileName = "Users/" + self.userName + '.json'
 			with open(fileName, "w") as file:
@@ -49,11 +52,20 @@ class User():
 		data["memberSince"] = memberSince
 		data["aboutMe"] = ''
 		data["badges"] = {}
-		data["comments"] = []
+		data["comments"] = [
+			{
+				"commentUser": "Valiant",
+				"commentMessage": "Welcome to AnonChat",
+				"commentDate": memberSince
+			}
+		]
 		data["userAvatarFrame"] = 'Default.png'
-		data["availableAvatars"] = ['Default.png']
-		data["availableBG"] = ['Cyberpunk.jpeg']
-		data["availableFrames"] = ['Default.png']
+
+		data["availableAvatars"] = self.fileData.get("availableAvatars", ["Default.png"])
+		data["availableBG"] = self.fileData.get("availableBG", ["Cyberpunk.jpeg"])
+		data["availableFrames"] = self.fileData.get("availableFrames", ["Default.png"])
+
 		data["friendData"] = []
 		data["friendCount"] = 0
+		print('Set comment:', data["comments"])
 		return data

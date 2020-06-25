@@ -35,11 +35,13 @@ class imageDisplay(QWidget):
 		scrollWidget = QWidget()
 		scrollLayout = QHBoxLayout(scrollWidget)
 		scrollLayout.setContentsMargins(0, 0, 0, 0)
+		ErrorList = []
 		
 		for i in range(self.itemCount):
 			fullPath = self.path + self.fileList[i]
 			if not path.exists(fullPath):
 				print('Error while reading a file.')
+				ErrorList.append(self.fileList[i])
 			else:
 				self.imageLabels[i] = QLabel()
 				self.imageLabels[i].setFixedSize(self.dimensionX, self.dimensionY)
@@ -49,7 +51,8 @@ class imageDisplay(QWidget):
 				self.imageLabels[i].setPixmap(scaled)
 				scrollLayout.addWidget(self.imageLabels[i])
 
-		self.imageLabels[self.selectedIndex].setStyleSheet(self.selectedStyle)
+		if self.imageLabels[self.selectedIndex] not in ErrorList:
+			self.imageLabels[self.selectedIndex].setStyleSheet(self.selectedStyle)
 
 		self.scrollContainer = QScrollArea()
 		self.scrollContainer.setWidgetResizable(True)

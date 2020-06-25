@@ -45,6 +45,18 @@ class MakeConnection():
 			print('Error while sending data to server: Expected a python dict object.')
 			return "NULL"
 
+		if message.get('code', 'NULL') == 'Login':
+			self.userName = message.get('userName', 'NULL')
+			self.password = message.get('password', 'NULL')
+			self.clientID = message.get('userID', 'NULL')
+		elif message.get('code', 'NULL') == 'Register':
+			pass
+		else:
+			# Add authentication fields to message
+			message['userName'] = self.userName
+			message['password'] = self.password
+			message['userID'] = self.clientID
+
 		# Convert the message to JSON format:
 		message = json.dumps(message)
 
@@ -141,12 +153,35 @@ class MakeConnection():
 
 	def processServerData(self, conn):
 		# Recieve Server Data is decided format:
+		sock.setblocking(0)
+		total_data=[]
 		data = ''
+		begin = time.time()
+		timeout = 1
 		while True:
-			data += conn.recv(4096)
-			if not data: 
+			# If you got some data, then break after wait sec
+			if total_data and time.time() - begin > timeout:
 				break
-		print(data)
+
+			# If you got no data at all, wait a little longer
+			elif time.time() - begin > timeout * 2:
+				break
+
+			wait = 0
+			try:
+				data = sock.recv(4096).decode('utf-8')
+				if data:
+					total_data.append(data)
+					begin = time.time()
+					data = ''
+					wait = 0
+				else:
+					time.sleep(0.1)
+			except:
+				pass
+			#When a recv returns 0 bytes, other side has closed
+		result=''.join(total_data)
+		print(result)
 
 
 	def handleExit(self):

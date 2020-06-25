@@ -9,7 +9,17 @@
     "memberSince": ["22", "June", "2020"],
     "aboutMe": "",
     "badges": {},
-    "comments": [],
+    "comments": [
+        {
+            "commentUser": "Valiant",
+            "commentMessage": "Welcome to Anonchat!",
+            "commentDate": [
+                "27",
+                "May",
+                "2020"
+            ]
+        }
+    ],
     "userAvatarFrame": "Default.png",
     "availableAvatars": [
         "Default.png"

@@ -1,6 +1,6 @@
 import socketserver
 import threading, time, json
-from User import User
+from Gateway.User import User
 
 # The handle method is called everytime a new request appears, on a separate thread.
 class RequestHandler(socketserver.BaseRequestHandler):
@@ -14,7 +14,7 @@ class RequestHandler(socketserver.BaseRequestHandler):
 
 		# Get client INFO:
 		self.clientAddress = self.request.getpeername()
-		print('Message from client.\nIP Address >', self.clientAddress[0], ':', self.clientAddress[1])
+		print('\nNew request from >', self.clientAddress[0], ':', self.clientAddress[1])
 
 		# Get client DATA:
 		data = self.recvall(self.request)
@@ -107,9 +107,18 @@ class RequestHandler(socketserver.BaseRequestHandler):
 				print('Register request')
 				return self.processRegisteration(data)
 
+			elif code == "ProfileUpdate":
+				return self.processProfileUpdate(data)
+
 			else:
-				print('Alert : Invalid code sent by user: ', data.get("userName", '---GHOST---'))
-				return "NULL"
+				print('Client sent:', data)
+				# Send data to Server for processing
+				self.server.requestQueue.put(data)
+				if code in []:
+					return "WAIT"		# Ask client to resume as normal
+				else:
+					return "OK"   # Ask client to wait
+
 		except Exception as e:
 			print('Invalid message sent by client:', e)
 			return "INVALID"
@@ -128,13 +137,17 @@ class RequestHandler(socketserver.BaseRequestHandler):
 		if code == "Register":
 			# A new registeration need not be checked in database.
 			return True
-
 		# For all other requests, the client must be present in the database
 
 		# Hash the password
-		# password = self.Hash(password)
+		password = self.Hash(password)
 
 		return self.server.databaseManager.authenticateUser(userID, userName, password)	
+
+
+	def Hash(self, password):
+		# TODO
+		return password
 
 
 	def processLogin(self, data):
@@ -160,6 +173,8 @@ class RequestHandler(socketserver.BaseRequestHandler):
 	def processRegisteration(self, data):
 		userName = data.get("userName", "")
 		password = data.get("password", "")
+		# Hash the password
+		password = self.Hash(password)
 
 		# Add user to database:
 		userID = self.server.databaseManager.getNewUserID()
@@ -184,5 +199,27 @@ class RequestHandler(socketserver.BaseRequestHandler):
 			return "NULL"
 
 
+	def processProfileUpdate(self, data):
+		motto = data.get('motto', 'NULL')
+		avatar = data.get('avatar', 'NULL')
+		frame = data.get('frame', 'NULL')
+		bg = data.get('bg', 'NULL')
+		about = data.get('about', 'NULL')
+		userName = data.get('userName', 'NULL')
 
-			
+		try:
+			filename = "Users/" + userName + '.json'
+			with open(filename, 'r') as file:
+				data = json.load(file)
+			data['userAvatar'] = avatar
+			data['userProfileBG'] = bg
+			data['userAvatarFrame'] = frame
+			data['userMotto'] = motto
+			data['aboutMe'] = about
+
+			with open(filename, 'w') as file:
+				json.dump(data, file, indent = 4)
+
+			return 'OK'
+		except:
+			return 'ERROR'
