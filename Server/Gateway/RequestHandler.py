@@ -100,14 +100,15 @@ class RequestHandler(socketserver.BaseRequestHandler):
 				return "NULL"
 
 			elif code == "Login":
-				print('Login Request')
+				print('> Login Request')
 				return self.processLogin(data)
 
 			elif code == "Register":
-				print('Register request')
+				print('> Register request')
 				return self.processRegisteration(data)
 
 			elif code == "ProfileUpdate":
+				print('> Profile Update request')
 				return self.processProfileUpdate(data)
 
 			else:
@@ -117,7 +118,7 @@ class RequestHandler(socketserver.BaseRequestHandler):
 				if code in []:
 					return "WAIT"		# Ask client to resume as normal
 				else:
-					return "OK"   # Ask client to wait
+					return "OK"         # Ask client to wait
 
 		except Exception as e:
 			print('Invalid message sent by client:', e)

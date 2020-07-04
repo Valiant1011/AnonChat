@@ -228,7 +228,7 @@ class clientWindow(QMainWindow):
 		self.contentTabs.setCurrentIndex(1)
 		self.chatWidget.setState('search')
 
-	# This fucntion is called when user quits the application
+	# This function is called when user quits the application
 	def closeEvent(self, event):
 		event.accept()		
 

@@ -63,7 +63,7 @@ class MakeConnection():
 		# Make a socket connection to the Server:
 		try:
 			self.senderSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)	# This socket is used to send info
-			self.senderSocket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1) # Make our pot reuseable
+			self.senderSocket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1) # Make our port reuseable
 			self.senderSocket.bind((self.clientHost, self.senderPort))	# Bind sender socket to port 40000
 			self.senderSocket.connect((self.serverIP, self.serverPort))
 		except Exception as error:
@@ -73,7 +73,6 @@ class MakeConnection():
 		# Try to send data in specific format to the server
 		#----------------------------------------------------------- Format is Yet to be decided
 		try:
-			blank = ''
 			self.senderSocket.sendall(message.encode('utf-8'))
 			response = self.recvall(self.senderSocket)
 			self.senderSocket.close()
@@ -114,9 +113,10 @@ class MakeConnection():
 					wait = 0
 				else:
 					time.sleep(0.1)
-			except:
-				pass
-			#When a recv returns 0 bytes, other side has closed
+			except Exception as error:
+				print('Error while recvall call:', error)
+			
+				#When a recv returns 0 bytes, other side has closed
 		result=''.join(total_data)
 		return result
 
