@@ -1,5 +1,5 @@
 from Gateway.Gateway import Gateway  #From Gateway Folder's Gateway.py file, import Gateway class.
-from Gateway.DatabaseManager import DatabaseManager
+from DatabaseManager import DatabaseManager
 from UI.Interface import startInterface
 import multiprocessing, time
 

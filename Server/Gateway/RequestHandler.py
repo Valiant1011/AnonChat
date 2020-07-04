@@ -1,6 +1,6 @@
 import socketserver
 import threading, time, json
-from Gateway.User import User
+from User import User
 
 # The handle method is called everytime a new request appears, on a separate thread.
 class RequestHandler(socketserver.BaseRequestHandler):
@@ -8,9 +8,6 @@ class RequestHandler(socketserver.BaseRequestHandler):
 	def handle(self):
 		cur_thread = threading.currentThread()
 		threadName = cur_thread.getName()
-
-		# # Check DB connection:
-		# self.server.databaseManager.sayHi()	
 
 		# Get client INFO:
 		self.clientAddress = self.request.getpeername()

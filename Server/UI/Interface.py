@@ -12,7 +12,7 @@ class serverWindow(QMainWindow):
 	def __init__(self):
 		super().__init__()
 		# Set app icon
-		# self.setWindowIcon(QIcon('Resources/Assets/logo.png'))
+		self.setWindowIcon(QIcon('MainResources/Assets/logo.png'))
 		self.setWindowTitle('AnonChat Server')
 		self.setGeometry(200, 100, 400, 300) 
 		self.setMinimumWidth(400)
@@ -30,7 +30,7 @@ class startInterface(serverWindow):
 		# make a reference of App class
 		app = QApplication(sys.argv)
 		app.setStyle("Fusion")
-		# app.setStyleSheet(open('style.qss', "r").read())
+		app.setStyleSheet(open('MainResources/style.qss', "r").read())
 		app.aboutToQuit.connect(self.closeEvent)
 		serverApp = serverWindow()
 		serverApp.show()

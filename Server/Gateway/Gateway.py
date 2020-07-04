@@ -1,7 +1,7 @@
 import multiprocessing, sys, os, time
 
 from Gateway.Networking import SocketServerManager
-from Gateway.Response import ResponseManager
+from Gateway.ResponseHandler import ResponseManager
 """
 Gateway is responsible for handling client requests, and passing them serially to the Server
 The Client-Gateway communication is handled by Web Sockets, while the Server-Gateway connection is handled by RabbitMQ internally.
@@ -10,7 +10,9 @@ class Gateway():
 	"""
 	Create 2 processes:
 	0. Network Service
-	1. RabbitMQ Service
+	1. Response manager
+
+	This class also handles the correct shutdown event of the above two processes.
 	"""
 	def __init__(self, dbConnection, requestQueue, responseQueue):
 		self.responseQueue = responseQueue
