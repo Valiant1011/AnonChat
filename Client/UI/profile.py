@@ -16,6 +16,7 @@ class ProfileWidget(QWidget):
 		self.userObject = userObject
 		self.editFlag = editFlag
 		self.dataQueue = dataQueue
+		
 		try:
 			self.layout = self.getCentralLayout(viewer)
 		except Exception as error:

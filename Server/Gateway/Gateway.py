@@ -2,9 +2,10 @@ import multiprocessing, sys, os, time
 
 from Gateway.Networking import SocketServerManager
 from Gateway.ResponseHandler import ResponseManager
+from Gateway.RequestProcess import ProcessRequest
 """
-Gateway is responsible for handling client requests, and passing them serially to the Server
-The Client-Gateway communication is handled by Web Sockets, while the Server-Gateway connection is handled by RabbitMQ internally.
+Gateway is responsible for handling client requests, and handling them serially.
+The Client-Gateway communication is handled by Web Sockets.
 """
 class Gateway():
 	"""
@@ -25,6 +26,9 @@ class Gateway():
 		self.responseExitFlag = multiprocessing.Value('i')
 		self.responseExitFlag.value = 0
 
+		self.processRequestExitFlag = multiprocessing.Value('i')
+		self.processRequestExitFlag.value = 0
+
 		self.setupProcesses(dbConnection)
 
 
@@ -37,6 +41,15 @@ class Gateway():
 		self.networkProcessPID = self.networkProcess.pid
 		self.networkProcess.start()
 
+		# Start up request handler process
+		self.processRequestProcess = multiprocessing.Process(
+			target = ProcessRequest,
+			args = (self.requestQueue, self.responseQueue, self.processRequestExitFlag, )
+		)
+		self.processRequestPID = self.processRequestProcess.pid
+		self.processRequestProcess.start()
+
+		# Start up response sender process
 		self.responseProcess = multiprocessing.Process(
 			target = ResponseManager,
 			args = (self.requestQueue, self.responseExitFlag, )
@@ -48,7 +61,7 @@ class Gateway():
 	def processExit(self):
 		print('\nGateway initiating Exit...')
 
-		print('Closing Network process...')
+		print('Closing Network subprocess...')
 		self.networkExitFlag.value = 1
 		# Wait for network process exit
 		try:
@@ -56,10 +69,25 @@ class Gateway():
 				print('.', end = '')
 				time.sleep(1)
 		except:
-			print('\nNetwork process abandoned...')
+			print('\nNetwork subprocess abandoned...')
 			return
+		finally:
+			print('Network subprocess closed.')
 
-		print('\nClosing Response process...')
+		print('\nClosing ProcessRequest subprocess...')
+		self.processRequestExitFlag.value = 1
+		# Wait for response process exit
+		try:
+			while self.processRequestExitFlag.value != 0:
+				print('.', end = '')
+				time.sleep(1)
+		except:
+			print('ProcessRequest subprocess abandoned...')
+			return
+		finally:
+			print('ProcessRequest subprocess closed.')
+
+		print('\nClosing Response subprocess...')
 		self.responseExitFlag.value = 1
 		# Wait for response process exit
 		try:
@@ -67,7 +95,9 @@ class Gateway():
 				print('.', end = '')
 				time.sleep(1)
 		except:
-			print('Response process abandoned...')
+			print('Response subprocess abandoned...')
 			return
+		finally:
+			print('Response subprocess closed.')
 
 		print('\nGateway closed successfully.')

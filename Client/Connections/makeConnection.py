@@ -1,5 +1,6 @@
 import json, socket, threading, select, time
-
+from Connections.acceptConnection import ManageServerResponse
+ 
 class MakeConnection():
 	def __init__(self, flags, sessionData):
 		print('Connecting to server...')
@@ -14,7 +15,7 @@ class MakeConnection():
 		print('Server IP >', self.serverIP, ':', self.serverPort)
 
 		# Ports are fixed to limit instances of AnonChat to one per PC
-		self.clientHost = ''
+		self.clientHost = ''   # Send from all available IPs
 		self.senderPort = 40000
 		self.receiverPort = 40001
 
@@ -22,8 +23,12 @@ class MakeConnection():
 			self.recieverSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 			self.recieverSocket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 			self.recieverSocket.bind((self.clientHost, self.receiverPort))
-			self.recieverSocket.listen(1)
-			self.recieveThread = threading.Thread(target = self.recieveData)
+			self.recieverSocket.listen(5)
+
+			self.recieveThread = threading.Thread(
+				target = ManageServerResponse, 
+				args = (self.recieverSocket, self.flags, )
+			)
 			self.recieveThread.setDaemon(True)
 			self.recieveThread.start()
 		except Exception as error:
@@ -33,6 +38,10 @@ class MakeConnection():
 
 	def getListenIP(self):
 		return self.clientHost
+
+
+	def getSendPort(self):
+		return self.senderPort
 
 
 	def getListenPort(self):
@@ -114,41 +123,15 @@ class MakeConnection():
 				else:
 					time.sleep(0.1)
 			except Exception as error:
-				print('Error while recvall call:', error)
+				pass
 			
 				#When a recv returns 0 bytes, other side has closed
-		result=''.join(total_data)
+		try:
+			result=''.join(total_data)
+		except Exception as e:
+			print('Error: ', e)
+			return 'NULL'
 		return result
-
-
-	def recieveData(self):
-		# This thread acts as a "Server" for our main server, as in it listens for 
-		# socket requests from our main server, or Gateway to be precise, and accepts data from it.
-		# The data is then passed on to a shared queue for further processing.
-		print('[ CLIENT ] Started recieveing thread.')
-		print('Client info: ', self.recieverSocket.getsockname())
-
-		self.stopFlag = False
-		
-		while not self.stopFlag:
-			if self.recieverSocket._closed == True:
-				break
-
-			r, w, e = select.select((self.recieverSocket,), (), (), 1)
-			for l in r:
-				conn, addr = self.recieverSocket.accept()
-				# Check if the data is from the Server
-				if addr[0] == self.serverIP:			
-					with conn:
-						self.processServerData(conn)
-					
-			else:
-				if self.flags[0]:
-					self.stopFlag = True
-					break
-
-		self.recieverSocket.close()
-		print('[ CLIENT ] Stopped recieveing thread.')
 
 
 	def processServerData(self, conn):

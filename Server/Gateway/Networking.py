@@ -1,5 +1,5 @@
-from Gateway.RequestHandler import RequestHandler
-from Gateway.ThreadedServer import ThreadedServer
+from Gateway.SocketRequestHandler import RequestHandler
+from Gateway.ThreadedServer import ThreadedServer 
 
 import threading, socketserver, socket, time
 

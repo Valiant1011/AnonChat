@@ -16,7 +16,7 @@ sys.path.append('../')
 class Client():
 	def __init__(self):
 		# Create variables/lists that will be shared between processes
-		self.flags = multiprocessing.Array('i', 10)
+		self.flags = multiprocessing.Array('i', 5)
 		self.flags[0] = 0	# Global Exit Flag
 		self.flags[1] = 0  # Login status : 0 Init, 1 Accept, 2 Reject, 3 Error
 		# This queue will be polled from core for handling tasks
