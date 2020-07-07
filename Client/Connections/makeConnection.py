@@ -2,14 +2,14 @@ import json, socket, threading, select, time
 from Connections.acceptConnection import ManageServerResponse
  
 class MakeConnection():
-	def __init__(self, flags, sessionData):
+	def __init__(self, flags, sessionData, taskQueue):
 		print('Connecting to server...')
 		self.flags = flags
 		self.sessionData = sessionData
-		self.load()
+		self.load(taskQueue)
 
 
-	def load(self):
+	def load(self, taskQueue):
 		self.serverIP = self.sessionData.get('ip', 'localhost')
 		self.serverPort = self.sessionData.get('port', None)
 		print('Server IP >', self.serverIP, ':', self.serverPort)
@@ -19,18 +19,15 @@ class MakeConnection():
 		self.senderPort = 40000
 		self.receiverPort = 40001
 
+		# Start server response listener
 		try:
-			self.recieverSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-			self.recieverSocket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-			self.recieverSocket.bind((self.clientHost, self.receiverPort))
-			self.recieverSocket.listen(5)
-
 			self.recieveThread = threading.Thread(
 				target = ManageServerResponse, 
-				args = (self.recieverSocket, self.flags, )
+				args = (self.clientHost, self.receiverPort, self.flags, taskQueue, self.serverIP,)
 			)
 			self.recieveThread.setDaemon(True)
 			self.recieveThread.start()
+
 		except Exception as error:
 			print('Error : Can not launch multiple instances of Client.')
 			self.flags[0] = 1
@@ -58,16 +55,15 @@ class MakeConnection():
 			self.userName = message.get('userName', 'NULL')
 			self.password = message.get('password', 'NULL')
 			self.clientID = message.get('userID', 'NULL')
+
 		elif message.get('code', 'NULL') == 'Register':
-			pass
+			self.clientID = 'NULL'
+
 		else:
 			# Add authentication fields to message
 			message['userName'] = self.userName
 			message['password'] = self.password
 			message['userID'] = self.clientID
-
-		# Convert the message to JSON format:
-		message = json.dumps(message)
 
 		# Make a socket connection to the Server:
 		try:
@@ -78,6 +74,13 @@ class MakeConnection():
 		except Exception as error:
 			print('Error: Host not reachable:', error)
 			return "ERROR"
+
+		# Add common fields to message
+		message['IP'] = self.senderSocket.getsockname()[0]
+		message['PORT'] = self.receiverPort
+
+		# Convert the message to JSON format:
+		message = json.dumps(message)
 
 		# Try to send data in specific format to the server
 		#----------------------------------------------------------- Format is Yet to be decided
@@ -129,7 +132,7 @@ class MakeConnection():
 		try:
 			result=''.join(total_data)
 		except Exception as e:
-			print('Error: ', e)
+			print('Error here:', e)
 			return 'NULL'
 		return result
 

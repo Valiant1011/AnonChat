@@ -2,7 +2,7 @@ import multiprocessing, sys, os, time
 
 from Gateway.Networking import SocketServerManager
 from Gateway.ResponseHandler import ResponseManager
-from Gateway.RequestProcess import ProcessRequest
+from Gateway.RequestProcessor import ProcessRequest
 """
 Gateway is responsible for handling client requests, and handling them serially.
 The Client-Gateway communication is handled by Web Sockets.
@@ -52,7 +52,7 @@ class Gateway():
 		# Start up response sender process
 		self.responseProcess = multiprocessing.Process(
 			target = ResponseManager,
-			args = (self.requestQueue, self.responseExitFlag, )
+			args = (self.responseQueue, self.responseExitFlag, )
 		)
 		self.responsePID = self.responseProcess.pid
 		self.responseProcess.start()

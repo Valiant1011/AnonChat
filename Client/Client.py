@@ -26,12 +26,12 @@ class Client():
 		self.loadData()
 
 		# Connect to server
-		self.networkManager = MakeConnection(self.flags, self.sessionData)
+		self.networkManager = MakeConnection(self.flags, self.sessionData, self.taskQueue)
 		if self.flags[0] == 1:
 			return
 
 		# Initiate register/login UI
-		Login(self.flags, self.networkManager, self.sessionData)
+		Login(self.flags, self.networkManager, self.sessionData, self.taskQueue)
 
 		# Initialize Interface handler
 		if self.flags[1] == 1:

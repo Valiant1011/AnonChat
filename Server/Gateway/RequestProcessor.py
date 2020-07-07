@@ -15,9 +15,8 @@ class ProcessRequest():
 		while not self.exitFlag.value:
 			try:
 				data = self.requestQueue.get(block = False, timeout = 3)
-				response = self.processRequestData(data)
-				self.responseQueue.put(response)
-			
+				self.processRequestData(data)
+				
 			except KeyboardInterrupt:
 				self.exitFlag.value = 0
 				return
@@ -36,17 +35,18 @@ class ProcessRequest():
 
 			
 	def processRequestData(self, data):
+		# print('Got a new message in request queue:', data)
 		try:
-			IP = None
-			PORT = None
-			MESSAGE = None
+			IP = data.get('IP')
+			PORT = data.get('PORT')
+			MESSAGE = "Hello dude!"
 
-			data = {
-				'MESSAGE' : response,
+			response = {
+				'MESSAGE' : MESSAGE,
 				'IP' : IP,
 				'PORT' : PORT
 			} 
 		except:
 			print('Invalid request received. Discarded.')
 		finally:
-			self.responseQueue.put(data)
+			self.responseQueue.put(response)

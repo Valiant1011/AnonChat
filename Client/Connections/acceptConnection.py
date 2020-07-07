@@ -1,12 +1,19 @@
-import socket, time
+import socket, select, time
 
 """
 This class listens for any message from Server, and handles it accordingly.
 """
 class ManageServerResponse():
-	def __init__(self, recieverSocket, flags):
-		self.recieverSocket  =recieverSocket
+	def __init__(self, host, port, flags, taskQueue, serverIP = '127.0.0.1'):
+		print('Starting listen process...')
+		self.recieverSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+		self.recieverSocket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+		self.recieverSocket.bind((host, port))
+		self.recieverSocket.listen(5)
 		self.flags = flags
+		self.serverIP = serverIP
+		self.taskQueue = taskQueue
+		self.recieveData()
 
 
 	def recieveData(self):
@@ -26,8 +33,10 @@ class ManageServerResponse():
 			r, w, e = select.select((self.recieverSocket,), (), (), 1)
 			for l in r:
 				conn, addr = self.recieverSocket.accept()
-				# Check if the data is from the Server
-				if addr[0] == self.serverIP:			
+				print('Accepted a new connection from', addr)
+				if addr[0] != self.serverIP:
+					pass
+				else:
 					with conn:
 						self.processServerData(conn)
 					
@@ -40,3 +49,53 @@ class ManageServerResponse():
 		print('[ CLIENT ] Stopped recieveing thread.')
 
 
+	def processServerData(self, conn):
+		data = self.recvall(conn)
+		print('Server says:', data)
+		self.taskQueue.put(data)
+
+
+	def recvall(self, sock, timeout = 1):
+		# setup to use non-blocking sockets
+		# if no data arrives it assumes transaction is done
+		# recv() returns a string
+		sock.setblocking(0)
+		total_data = []
+		data = ''
+		begin = time.time()
+
+		while True:
+			# If you got some data, then break after wait sec
+			if total_data and time.time() - begin > timeout:
+				break
+
+			# If you got no data at all, wait a little longer
+			elif time.time() - begin > timeout * 2:
+				break
+
+			wait = 0
+			try:
+				data = sock.recv(4096).decode('utf-8')
+				if data:
+					total_data.append(data)
+					begin = time.time()
+					data = ''
+					wait = 0
+				else:
+					time.sleep(0.1)
+			except Exception as error:
+				pass
+			
+				#When a recv returns 0 bytes, other side has closed
+		try:
+			result = ''.join(total_data)
+		except Exception as e:
+			print('Error: ', e)
+			return 'NULL'
+
+		try:
+			loadedResult = json.loads(result)
+		except:
+			return result
+		else:
+			return loadedResult

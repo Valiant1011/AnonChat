@@ -9,11 +9,12 @@ def handler(msg_type, msg_log_context, msg_string):
 qInstallMessageHandler(handler) 
 
 class LoginWindow(QMainWindow):
-	def __init__(self, flags, networkManager, sessionData):
+	def __init__(self, flags, networkManager, sessionData taskQueue):
 		super().__init__()
 		self.flags = flags
 		self.networkManager = networkManager
 		self.sessionData = sessionData
+		self.taskQueue = taskQueue
 
 		self.setWindowIcon(QIcon('Resources/Assets/logo.png'))
 		self.setWindowTitle('AnonChat [ LOGIN ]')
@@ -25,6 +26,22 @@ class LoginWindow(QMainWindow):
 		self.setCentralWidget(loginWidget)
 		self.setFixedSize(600, 700)
 		self.setGeometry(600, 200, 600, 700) 
+
+		# Timer to get Server data
+		self.timer = QTimer()
+		self.timer.timeout.connect(self.updateData)
+		self.timer.start(1000)
+
+
+	def updateData(self):
+		try:
+			data = self.taskQueue.get(block = False, timeout = 0.5)
+			# data is guarenteed to be a dict type object.
+		except Exception as e:
+			if "Empty" in str(e) or str(e) == "":
+				pass
+			else:
+				print('Error: ', e)
 
 
 	def getMainLayout(self):
@@ -120,9 +137,7 @@ class LoginWindow(QMainWindow):
 			"code" : "Login",
 			"userID" : self.sessionData.get("userID", -1),
 			"userName" : self.usernameInput.text(),
-			"password" : self.passwordInput.text(),
-			"listenIP" : self.networkManager.getListenIP(),
-			"listenPort" : self.networkManager.getListenPort()
+			"password" : self.passwordInput.text()
 		}
 
 		response = self.networkManager.sendData(message)
@@ -276,11 +291,9 @@ class LoginWindow(QMainWindow):
 
 		message = {
 			"code" : "Register",
-			"userID" : -1,
+			"userID" : "NULL",
 			"userName" : self.registerUsernameInput.text(),
-			"password" : self.registerPasswordInput.text(),
-			"listenIP" : self.networkManager.getListenIP(),
-			"listenPort" : self.networkManager.getListenPort()
+			"password" : self.registerPasswordInput.text()
 		}
 
 		response = self.networkManager.sendData(message)
@@ -355,14 +368,14 @@ class LoginWindow(QMainWindow):
 
 
 class Login(LoginWindow):
-	def __init__(self, flags, networkManager, sessionData):
+	def __init__(self, flags, networkManager, sessionData, taskQueue):
 		app = QApplication(sys.argv)
 		app.setStyle("Fusion")
 		QFontDatabase.addApplicationFont("Resources/Fonts/Adequate.ttf")
 		app.setStyleSheet(open('style.qss', "r").read())
 		# If user is about to close window
 		app.aboutToQuit.connect(self.closeEvent)
-		loginApp = LoginWindow(flags, networkManager, sessionData)
+		loginApp = LoginWindow(flags, networkManager, sessionData, taskQueue)
 		loginApp.show()
 		# Execute the app mainloop
 		app.exec_()

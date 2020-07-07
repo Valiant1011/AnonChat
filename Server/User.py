@@ -67,5 +67,4 @@ class User():
 
 		data["friendData"] = []
 		data["friendCount"] = 0
-		print('Set comment:', data["comments"])
 		return data

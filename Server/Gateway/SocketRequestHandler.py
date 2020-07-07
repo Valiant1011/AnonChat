@@ -93,10 +93,7 @@ class RequestHandler(socketserver.BaseRequestHandler):
 		# Pass the request to its handler function
 		try:
 			code = data.get("code", "NULL")
-			if code == "NULL":
-				return "NULL"
-
-			elif code == "Login":
+			if code == "Login":
 				print('> Login Request')
 				return self.processLogin(data)
 
@@ -127,16 +124,22 @@ class RequestHandler(socketserver.BaseRequestHandler):
 		userName = data.get("userName", "")
 		password = data.get("password", "")
 		code = data.get("code", "NULL")
+		IP = data.get('IP', '')
+		PORT = data.get('PORT', '')
 
-		if userName == "" or password == "" or userID == "":
+		if userName == "" or password == "" or userID == "" or code == "NULL":
 			print('Invalid user details:', userID, userName, password)
+			return False
+
+		if IP == '' or PORT == '':
+			print('Invalid connection details: IP or PORT is NULL')
 			return False
 
 		if code == "Register":
 			# A new registeration need not be checked in database.
 			return True
-		# For all other requests, the client must be present in the database
 
+		# For all other requests, the client must be present in the database
 		# Hash the password
 		password = self.Hash(password)
 
@@ -152,7 +155,7 @@ class RequestHandler(socketserver.BaseRequestHandler):
 		userID = data.get("userID", "")
 		userName = data.get("userName", "")
 		password = data.get("password", "")
-
+		
 		try:
 			# The request is confirmed to be valid. So send client data.
 			# Get user data
@@ -160,6 +163,12 @@ class RequestHandler(socketserver.BaseRequestHandler):
 			filename = "Users/" + userName + '.json'
 			with open(filename, 'r') as file:
 				response = json.load(file)
+
+			# --------------------------------------- TEST
+			# print('Put message in request queue:', data)
+			self.server.requestQueue.put(data)
+			# ---------------------------------------
+
 			response = json.dumps(response)
 			return response
 			
