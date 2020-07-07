@@ -34,11 +34,9 @@ class ManageServerResponse():
 			for l in r:
 				conn, addr = self.recieverSocket.accept()
 				print('Accepted a new connection from', addr)
-				if addr[0] != self.serverIP:
-					pass
-				else:
-					with conn:
-						self.processServerData(conn)
+			
+				with conn:
+					self.processServerData(conn)
 					
 			else:
 				if self.flags[0]:
