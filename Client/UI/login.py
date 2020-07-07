@@ -9,7 +9,7 @@ def handler(msg_type, msg_log_context, msg_string):
 qInstallMessageHandler(handler) 
 
 class LoginWindow(QMainWindow):
-	def __init__(self, flags, networkManager, sessionData taskQueue):
+	def __init__(self, flags, networkManager, sessionData, taskQueue):
 		super().__init__()
 		self.flags = flags
 		self.networkManager = networkManager

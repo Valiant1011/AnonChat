@@ -1,30 +1,32 @@
 {
-    "userID": 5,
-    "userAlias": "Maestro",
-    "userAvatar": "Default",
-    "userProfileBG": "Cyberpunk.jpeg",
-    "userPrestige": "1",
-    "userRep": "1",
-    "userMotto": "Hey, I'm new here!",
+    "userID": 0,
+    "userAlias": "Valiant",
+    "userAvatar": "VFemale.png",
+    "userProfileBG": "Ciri.jpeg",
+    "userAvatarFrame": "Cyberpunk.png",
+    "userPrestige": "255",
+    "userRep": "32851",
+    "userMotto": "To Live and let Live, that's the point!",
     "memberSince": [
-        "7",
-        "July",
+        "25",
+        "May",
         "2020"
     ],
-    "aboutMe": "",
-    "badges": {},
+    "aboutMe": "  ____      ____              ___   ___                             __        \n  \\       \\   /      /____     |     |   |__|____      ____   /     |_   \n    \\       Y      /  \\__    \\  |     |   |   \\__      \\  /         \\|     __\\    \n      \\            /    / __    \\ |     |_ |   |/ __     \\|      |     \\     |       \n        \\ ___ /    (____    /____/__(____    /___|     /__ |       \n                                  \\/                           \\/          \\/      \n",
+    "badges": {
+        "Master": "You're Number 1!"
+    },
     "comments": [
         {
             "commentUser": "Valiant",
-            "commentMessage": "Welcome to AnonChat",
+            "commentMessage": "+rep Nice fella!",
             "commentDate": [
-                "7",
-                "July",
+                "27",
+                "May",
                 "2020"
             ]
         }
     ],
-    "userAvatarFrame": "Default.png",
     "availableAvatars": [
         "Default.png",
         "Spy.png",
@@ -40,6 +42,30 @@
         "Default.png",
         "Cyberpunk.png"
     ],
-    "friendData": [],
-    "friendCount": 0
+    "friends": [
+        {
+            "ID": "00101",
+            "Alias": "Sachinam_1397",
+            "Avatar": "Default.png",
+            "Status": "Online"
+        },
+        {
+            "ID": "01010",
+            "Alias": "Prashant",
+            "Avatar": "VFemale.png",
+            "Status": "Offline"
+        },
+        {
+            "ID": "010101",
+            "Alias": "Amay",
+            "Avatar": "V.png",
+            "Status": "Offline"
+        },
+        {
+            "ID": "010q11",
+            "Alias": "Aman",
+            "Avatar": "Spy.png",
+            "Status": "Offline"
+        }
+    ]
 }
