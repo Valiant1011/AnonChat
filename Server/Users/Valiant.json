@@ -2,7 +2,7 @@
     "userID": 0,
     "userAlias": "Valiant",
     "userAvatar": "VFemale.png",
-    "userProfileBG": "Ciri.jpeg",
+    "userProfileBG": "Cyberpunk.jpeg",
     "userAvatarFrame": "Default.png",
     "userPrestige": "255",
     "userRep": "32851",
@@ -44,25 +44,25 @@
     ],
     "friends": [
         {
-            "ID": "00101",
+            "ID": "100",
             "Alias": "Sachinam_1397",
             "Avatar": "Default.png",
             "Status": "Offline"
         },
         {
-            "ID": "01010",
+            "ID": "101",
             "Alias": "Prashant",
             "Avatar": "VFemale.png",
             "Status": "Offline"
         },
         {
-            "ID": "010101",
+            "ID": "102",
             "Alias": "Amay",
             "Avatar": "V.png",
             "Status": "Offline"
         },
         {
-            "ID": "010q11",
+            "ID": "103",
             "Alias": "Aman",
             "Avatar": "Spy.png",
             "Status": "Offline"

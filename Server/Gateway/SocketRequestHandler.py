@@ -106,6 +106,10 @@ class RequestHandler(socketserver.BaseRequestHandler):
 				print('> Profile Update request')
 				return self.processProfileUpdate(data)
 
+			elif code == 'Logout':
+				print('> Logout request')
+				return self.processLogout(data)
+
 		except Exception as e:
 			print('Invalid message sent by client:', data, '\nError:', e)
 			return "INVALID"
@@ -134,7 +138,6 @@ class RequestHandler(socketserver.BaseRequestHandler):
 		# For all other requests, the client must be present in the database
 		# Hash the password
 		password = self.Hash(password)
-
 		return self.server.databaseManager.authenticateUser(userID, userName, password)	
 
 
@@ -147,6 +150,8 @@ class RequestHandler(socketserver.BaseRequestHandler):
 		userID = data.get("userID", "")
 		userName = data.get("userName", "")
 		password = data.get("password", "")
+		# Update user status
+		self.server.databaseManager.setUserStatus(userID, 'Online')	
 		
 		try:
 			# The request is confirmed to be valid.
@@ -165,7 +170,20 @@ class RequestHandler(socketserver.BaseRequestHandler):
 		except Exception as error:
 			print('Error during login:', error)
 			return "INVALID"
-		
+
+
+	def processLogout(self, data):
+		userID = data.get("userID", "")
+		userName = data.get("userName", "")
+		# Update user status
+		self.server.databaseManager.setUserStatus(userID, 'Offline')
+		message = {
+				'Code' : 'Logout',
+				'userName' : userName,
+				'userID' : userID
+			}
+		self.server.requestQueue.put(message)
+		return "OK"
 
 	def processRegisteration(self, data):
 		userName = data.get("userName", "")
@@ -173,7 +191,7 @@ class RequestHandler(socketserver.BaseRequestHandler):
 		
 		# Add user to database:
 		userID = self.server.databaseManager.getNewUserID()
-		status = self.server.databaseManager.addUser(userID, userName, password)	
+		status = self.server.databaseManager.addUser(userID, userName, password)
 		if not status:
 			print('Could not register user.')
 			# Username is taken.
@@ -189,7 +207,7 @@ class RequestHandler(socketserver.BaseRequestHandler):
 			message = {
 				'IP' : data.get('IP'),
 				'PORT' : data.get('PORT'),
-				'Code' : 'Login',
+				'Code' : 'Register',
 				'userName' : userName,
 				'userID' : userID
 			}

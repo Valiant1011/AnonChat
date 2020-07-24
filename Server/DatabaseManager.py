@@ -20,7 +20,7 @@ class DatabaseManager():
 	def initTables(self):
 		try:	
 			self.dbConnection.execute(
-				"CREATE TABLE IF NOT EXISTS accounts(userID INTEGER PRIMARY KEY, userName VARCHAR2(20), password VARCHAR2(100));"
+				"CREATE TABLE IF NOT EXISTS accounts(userID INTEGER PRIMARY KEY, userName VARCHAR2(20), password VARCHAR2(50), status VARCHAR2(8) DEFAULT 'Online');"
 				)
 			self.dbConnection.commit()
 		except Exception as error:
@@ -45,6 +45,16 @@ class DatabaseManager():
 			return 0
 
 
+	def setUserStatus(self, userID, status_ = 'Offline'):
+		try:
+			self.dbConnection.execute(
+				"UPDATE accounts SET status = ? WHERE userID = ?", 
+				(status_, userID,)
+			)
+		except Exception as e:
+			print('Could not update user status:', e)
+
+
 	def addUser(self, userID, userName, password):
 		try:
 			# Check if the username is unique:
@@ -54,8 +64,8 @@ class DatabaseManager():
 				return False
 
 			self.dbConnection.execute(
-					"INSERT INTO accounts VALUES(?, ?, ?);", 
-					(userID, userName, password,)
+					"INSERT INTO accounts(userID, userName, password) VALUES(?, ?, ?);", 
+					(userID, userName, password, )
 				)
 			self.dbConnection.commit()
 		except Exception as error:

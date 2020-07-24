@@ -8,6 +8,7 @@ class ProcessRequest():
 		self.requestQueue = requestQueue
 		self.responseQueue = responseQueue
 		self.exitFlag = exitFlag
+		self.userStatus = {}
 
 		print('Start ProcessRequest subprocess')
 		self.startProcessPoll()
@@ -44,6 +45,26 @@ class ProcessRequest():
 			code = data.get('Code')
 
 			if code == 'Login':
+				# Send Profile:
+				userName = data.get('userName')
+				filename = "Users/" + userName + '.json'
+				try:
+					with open(filename, 'r') as file:
+						MESSAGE = json.load(file)
+
+					MESSAGE['Code'] = 'Profile'
+					self.userStatus[userName] = 'Online'
+				except Exception as e:
+					print('Critical Error:', e)
+					MESSAGE = 'ERROR'
+
+			elif code == 'Logout':
+				userName = data.get('userName')
+				self.userStatus[userName] = 'Offline'
+				# Get his friend list and send offline message to all his friends
+
+
+			elif code == 'Register':
 				userName = data.get('userName')
 				filename = "Users/" + userName + '.json'
 				try:
@@ -55,6 +76,10 @@ class ProcessRequest():
 				except Exception as e:
 					print('Critical Error:', e)
 					MESSAGE = 'ERROR'
+
+
+			elif code == 'ProfileUpdate':
+				pass
 
 			response['MESSAGE'] = MESSAGE
 			response['IP'] = IP

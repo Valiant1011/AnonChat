@@ -45,7 +45,7 @@ class clientWindow(QMainWindow):
 		# Timer to update GUI
 		self.timer = QTimer()
 		self.timer.timeout.connect(self.processClientData)
-		self.timer.start(500)
+		self.timer.start(1000)
 
 		self.loadingUI()
 		return 
@@ -71,6 +71,7 @@ class clientWindow(QMainWindow):
 			if status == 'OK':
 				pass
 			else:
+				# Maybe show this in a notification pop up?
 				print('Error: Could not save data to Server.')
 
 		except Exception as e:
@@ -121,8 +122,17 @@ class clientWindow(QMainWindow):
 		# More work needed--------------------------------------------------------------------------------------------------<<!
 		self.loadingWidget = QWidget()
 		self.loadingLayout = QVBoxLayout(self.loadingWidget)
+
+		loadingText = QLabel('Loading...')
+		loadingText.setObjectName('subsectionHeading')
+		self.loadingLayout.addStretch(1)
+		self.loadingLayout.addWidget(loadingText)
+		self.loadingLayout.addStretch(1)
+		self.loadingLayout.setAlignment(Qt.AlignCenter)
+
 		self.setCentralWidget(self.loadingWidget)
-		
+
+
 	# This function is responsible for creating the main UI of client
 	def initUI(self):
 		try:
@@ -290,11 +300,8 @@ class clientWindow(QMainWindow):
 
 	# This function is called when user quits the application
 	def closeEvent(self, event):
-		# Reset profile.json file
-		with open('profile.json', "w") as file:
-			file.write('Nothing to see here!')
-
-		event.accept()		
+		event.accept()	
+		
 
 
 # This class runs the main app loop for interface and calls its object
@@ -317,4 +324,16 @@ class initGUI(clientWindow):
 		client_app.showMaximized()
 		# Execute the app mainloop
 		app.exec_()
+		self.cleanUp(networkManager)
 		return
+
+
+	def cleanUp(self, networkManager):
+		# Send offline message to Server
+		message = {
+			"code" : "Logout"
+		}
+		status = networkManager.sendData(message)
+		# Reset profile.json file
+		with open('profile.json', "w") as file:
+			file.write('Nothing to see here!')
