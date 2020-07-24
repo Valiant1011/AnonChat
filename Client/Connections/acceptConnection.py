@@ -1,4 +1,4 @@
-import socket, select, time
+import socket, select, time, json
 
 """
 This class listens for any message from Server, and handles it accordingly.
@@ -48,9 +48,12 @@ class ManageServerResponse():
 
 
 	def processServerData(self, conn):
-		data = self.recvall(conn)
-		print('Server says:', data)
-		self.taskQueue.put(data)
+		try:
+			data = self.recvall(conn)
+			data = json.loads(data)
+			self.taskQueue.put(data)
+		except Exception as e:
+			print('Error while receiving server data:', e)
 
 
 	def recvall(self, sock, timeout = 1):
@@ -88,12 +91,7 @@ class ManageServerResponse():
 		try:
 			result = ''.join(total_data)
 		except Exception as e:
-			print('Error: ', e)
+			print('Error while building server data: ', e)
 			return 'NULL'
 
-		try:
-			loadedResult = json.loads(result)
-		except:
-			return result
-		else:
-			return loadedResult
+		return result

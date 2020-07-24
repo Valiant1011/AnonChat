@@ -17,13 +17,16 @@ qInstallMessageHandler(handler)
 
 # This class handles the main window of client
 class clientWindow(QMainWindow):
-	def __init__(self, networkManager):
+	def __init__(self, networkManager, taskQueue):
 		super().__init__()
 		self.editFlag = Value('i')
-		self.dataQueue = Queue(100)
 		self.editFlag.value = 0 
+		self.profileLoadedFlag = Value('i')
+		self.profileLoadedFlag.value = 0
+		self.dataQueue = Queue(100)
 		self.userChatsDict = {}  # Maps userID to their chat widget
 		self.networkManager = networkManager
+		self.taskQueue = taskQueue
 
 		# Set app icon
 		self.setWindowIcon(QIcon('Resources/Assets/logo.png'))
@@ -34,34 +37,91 @@ class clientWindow(QMainWindow):
 		self.setMinimumWidth(1066)
 		self.setMinimumHeight(600)
 
+		# Timer to handle server messages
+		self.serverDataTimer = QTimer()
+		self.serverDataTimer.timeout.connect(self.processServerData)
+		self.serverDataTimer.start(500)
+
 		# Timer to update GUI
 		self.timer = QTimer()
-		self.timer.timeout.connect(self.updateData)
-		self.timer.start(1000)
+		self.timer.timeout.connect(self.processClientData)
+		self.timer.start(500)
 
-		self.initUI()
-		return
+		self.loadingUI()
+		return 
+
 
 	# This function checks for UI updates every second
-	def updateData(self):
+	def processClientData(self):
 		if self.editFlag.value == 1:
 			self.editFlag.value = 0
 			self.initUI()
 			self.repaint()
 
+		if self.profileLoadedFlag.value == 1:
+			self.profileLoadedFlag.value = 0
+			self.initUI()
+			self.repaint()
+
+		# Handle Client to server data
 		try:
-			data = self.dataQueue.get(block = False)
+			# dataQueue contains all data which has to go from client to server
+			data = self.dataQueue.get(block = False, timeout = 0.5)
 			status = self.networkManager.sendData(data)
 			if status == 'OK':
 				pass
 			else:
-				print('Error: Could not update profile')
+				print('Error: Could not save data to Server.')
 
 		except Exception as e:
 			if "Empty" in str(e) or str(e) == "":
 				pass
 			else:
 				print('Error: ', e)
+
+
+	def processServerData(self):
+		# Handle Server to Client data
+		try:
+			# taskQueue contains all data which has to go from client to server
+			data = self.taskQueue.get(block = False, timeout = 0.5)
+			
+			code = data.get('Code', 'NULL')
+			if code == 'Profile':
+				userID = data.get('userID')
+				userName = data.get('userAlias')
+				self.updateSessionInfo(userName, userID)
+
+				with open('profile.json', "w") as file:
+					json.dump(data, file, indent = 4)
+				# --- Profile has been loaded into file
+
+				# Send this information to client data handler function
+				print('Loading profile...')
+				self.profileLoadedFlag.value = 1
+
+		except:
+			pass
+
+		
+	def updateSessionInfo(self, userName, userID):
+		filename = 'session.json'
+		with open(filename, 'r') as file:
+			sessionData = json.load(file)
+
+		sessionData['username'] = userName
+		sessionData['userID'] = userID
+		with open(filename, 'w') as file:
+			json.dump(sessionData, file, indent = 4)
+
+
+	def loadingUI(self):
+		# This is a temporary screen shown until the client gets all data from server
+		# Sort of a Loading screen, as the name suggests
+		# More work needed--------------------------------------------------------------------------------------------------<<!
+		self.loadingWidget = QWidget()
+		self.loadingLayout = QVBoxLayout(self.loadingWidget)
+		self.setCentralWidget(self.loadingWidget)
 		
 	# This function is responsible for creating the main UI of client
 	def initUI(self):
@@ -230,12 +290,16 @@ class clientWindow(QMainWindow):
 
 	# This function is called when user quits the application
 	def closeEvent(self, event):
+		# Reset profile.json file
+		with open('profile.json', "w") as file:
+			file.write('Nothing to see here!')
+
 		event.accept()		
 
 
 # This class runs the main app loop for interface and calls its object
 class initGUI(clientWindow):
-	def __init__(self, networkManager):
+	def __init__(self, networkManager, taskQueue):
 		# make a reference of App class
 		app = QApplication(sys.argv)
 		app.setStyle("Fusion")
@@ -248,7 +312,8 @@ class initGUI(clientWindow):
 		app.setStyleSheet(open('style.qss', "r").read())
 		# If user is about to close window
 		app.aboutToQuit.connect(self.closeEvent)
-		client_app = clientWindow(networkManager)
+
+		client_app = clientWindow(networkManager, taskQueue)
 		client_app.showMaximized()
 		# Execute the app mainloop
 		app.exec_()

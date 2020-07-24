@@ -3,7 +3,7 @@
     "userAlias": "Valiant",
     "userAvatar": "VFemale.png",
     "userProfileBG": "Ciri.jpeg",
-    "userAvatarFrame": "Cyberpunk.png",
+    "userAvatarFrame": "Default.png",
     "userPrestige": "255",
     "userRep": "32851",
     "userMotto": "To Live and let Live, that's the point!",
@@ -42,30 +42,30 @@
         "Default.png",
         "Cyberpunk.png"
     ],
-    "friends" : [
+    "friends": [
         {
-            "ID" : "00101", 
-            "Alias" : "Sachinam_1397", 
-            "Avatar" : "Default.png",
-            "Status" : "Online"
+            "ID": "00101",
+            "Alias": "Sachinam_1397",
+            "Avatar": "Default.png",
+            "Status": "Offline"
         },
         {
-            "ID" : "01010",
-            "Alias" : "Prashant",
-            "Avatar" : "VFemale.png",
-            "Status" : "Offline"
+            "ID": "01010",
+            "Alias": "Prashant",
+            "Avatar": "VFemale.png",
+            "Status": "Offline"
         },
         {
-            "ID" : "010101",
-            "Alias" : "Amay",
-            "Avatar" : "V.png",
-            "Status" : "Offline"
+            "ID": "010101",
+            "Alias": "Amay",
+            "Avatar": "V.png",
+            "Status": "Offline"
         },
         {
-            "ID" : "010q11",
-            "Alias" : "Aman",
-            "Avatar" : "Spy.png",
-            "Status" : "Offline"
+            "ID": "010q11",
+            "Alias": "Aman",
+            "Avatar": "Spy.png",
+            "Status": "Offline"
         }
     ]
 }

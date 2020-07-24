@@ -9,12 +9,11 @@ def handler(msg_type, msg_log_context, msg_string):
 qInstallMessageHandler(handler) 
 
 class LoginWindow(QMainWindow):
-	def __init__(self, flags, networkManager, sessionData, taskQueue):
+	def __init__(self, flags, networkManager, sessionData):
 		super().__init__()
 		self.flags = flags
 		self.networkManager = networkManager
 		self.sessionData = sessionData
-		self.taskQueue = taskQueue
 
 		self.setWindowIcon(QIcon('Resources/Assets/logo.png'))
 		self.setWindowTitle('AnonChat [ LOGIN ]')
@@ -26,22 +25,6 @@ class LoginWindow(QMainWindow):
 		self.setCentralWidget(loginWidget)
 		self.setFixedSize(600, 700)
 		self.setGeometry(600, 200, 600, 700) 
-
-		# Timer to get Server data
-		self.timer = QTimer()
-		self.timer.timeout.connect(self.updateData)
-		self.timer.start(1000)
-
-
-	def updateData(self):
-		try:
-			data = self.taskQueue.get(block = False, timeout = 0.5)
-			# data is guarenteed to be a dict type object.
-		except Exception as e:
-			if "Empty" in str(e) or str(e) == "":
-				pass
-			else:
-				print('Error: ', e)
 
 
 	def getMainLayout(self):
@@ -146,6 +129,7 @@ class LoginWindow(QMainWindow):
 			# Some error occured during login process.
 			self.flags[1] = 3
 			self.close()
+
 		elif response == "INVALID":
 			# Invalid login request
 			self.flags[1] = 2
@@ -158,6 +142,7 @@ class LoginWindow(QMainWindow):
 			infoBox.setText('Login Failed! Retry.')
 			infoBox.setStandardButtons(QMessageBox.Ok)
 			infoBox.exec_()
+
 		elif response == 'ERROR':
 			infoBox = QMessageBox()
 			infoBox.setIcon(QMessageBox.Critical)
@@ -167,26 +152,12 @@ class LoginWindow(QMainWindow):
 			infoBox.exec_()
 			self.flags[1] = 3
 			self.close()
-		else:
-			try:
-				print('Logged in!')
-				response = eval(response)
-				userID = response.get('userID')
-				self.updateSessionInfo(self.usernameInput.text(), userID)
-				with open('profile.json', "w") as file:
-					json.dump(response, file, indent = 4)
 
-			except Exception as error:
-				print(error)
-				infoBox = QMessageBox()
-				infoBox.setIcon(QMessageBox.Critical)
-				infoBox.setWindowTitle('Alert')
-				infoBox.setText('Server Connection failed! Please Retry.')
-				infoBox.setStandardButtons(QMessageBox.Ok)
-				infoBox.exec_()
-			finally:
-				self.flags[1] = 1
-				self.close()
+		elif response == 'OK':
+			# Login successful
+			print('Logged in!')
+			self.flags[1] = 1
+			self.close()
 
 
 	def getRegisterWidget(self):
@@ -329,37 +300,17 @@ class LoginWindow(QMainWindow):
 			self.registerButton.setText('Register')
 			self.registerButton.repaint()
 
-		else:
-			try:
-				print('Registered and Logged in!')
-				response = eval(response)
-				userID = response.get('userID')
-				self.updateSessionInfo(self.registerUsernameInput.text(), userID)
-				with open('profile.json', "w") as file:
-					json.dump(response, file, indent = 4)
+		elif response == 'OK':
+			print('Registered!')
+			print('Waiting for server data...')
+			
+			# userID = response.get('userID')
+			# self.updateSessionInfo(self.registerUsernameInput.text(), userID)
+			# with open('profile.json', "w") as file:
+			# 	json.dump(response, file, indent = 4)
 
-			except Exception as error:
-				print(error)
-				infoBox = QMessageBox()
-				infoBox.setIcon(QMessageBox.Critical)
-				infoBox.setWindowTitle('Alert')
-				infoBox.setText('Server Connection failed! Retry.')
-				infoBox.setStandardButtons(QMessageBox.Ok)
-				infoBox.exec_()
-			finally:
-				self.flags[1] = 1
-				self.close()
-
-
-	def updateSessionInfo(self, userName, userID):
-		filename = 'session.json'
-		with open(filename, 'r') as file:
-			sessionData = json.load(file)
-
-		sessionData['username'] = userName
-		sessionData['userID'] = userID
-		with open(filename, 'w') as file:
-			json.dump(sessionData, file, indent = 4)
+			self.flags[1] = 1
+			self.close()
 
 
 	def closeEvent(self, event):
@@ -368,14 +319,14 @@ class LoginWindow(QMainWindow):
 
 
 class Login(LoginWindow):
-	def __init__(self, flags, networkManager, sessionData, taskQueue):
+	def __init__(self, flags, networkManager, sessionData):
 		app = QApplication(sys.argv)
 		app.setStyle("Fusion")
 		QFontDatabase.addApplicationFont("Resources/Fonts/Adequate.ttf")
 		app.setStyleSheet(open('style.qss', "r").read())
 		# If user is about to close window
 		app.aboutToQuit.connect(self.closeEvent)
-		loginApp = LoginWindow(flags, networkManager, sessionData, taskQueue)
+		loginApp = LoginWindow(flags, networkManager, sessionData)
 		loginApp.show()
 		# Execute the app mainloop
 		app.exec_()

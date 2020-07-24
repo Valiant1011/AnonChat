@@ -1,0 +1,45 @@
+{
+    "userID": 6,
+    "userAlias": "Cooldude69",
+    "userAvatar": "Default",
+    "userProfileBG": "Cyberpunk.jpeg",
+    "userPrestige": "1",
+    "userRep": "1",
+    "userMotto": "Hey, I'm new here!",
+    "memberSince": [
+        "24",
+        "July",
+        "2020"
+    ],
+    "aboutMe": "",
+    "badges": {},
+    "comments": [
+        {
+            "commentUser": "Valiant",
+            "commentMessage": "Welcome to AnonChat",
+            "commentDate": [
+                "24",
+                "July",
+                "2020"
+            ]
+        }
+    ],
+    "userAvatarFrame": "Default.png",
+    "availableAvatars": [
+        "Default.png",
+        "Spy.png",
+        "V.png",
+        "VFemale.png"
+    ],
+    "availableBG": [
+        "Cyberpunk.jpeg",
+        "Tower.jpeg",
+        "Ciri.jpeg"
+    ],
+    "availableFrames": [
+        "Default.png",
+        "Cyberpunk.png"
+    ],
+    "friendData": [],
+    "friendCount": 0
+}

@@ -19,6 +19,8 @@ class Client():
 		self.flags = multiprocessing.Array('i', 5)
 		self.flags[0] = 0	# Global Exit Flag
 		self.flags[1] = 0  # Login status : 0 Init, 1 Accept, 2 Reject, 3 Error
+		
+		
 		# This queue will be polled from core for handling tasks
 		self.taskQueue = multiprocessing.Queue(maxsize = 1000) 
 
@@ -31,9 +33,9 @@ class Client():
 			return
 
 		# Initiate register/login UI
-		Login(self.flags, self.networkManager, self.sessionData, self.taskQueue)
+		Login(self.flags, self.networkManager, self.sessionData)
 
-		# Initialize Interface handler
+		# Initialize Interface handler if login is successful
 		if self.flags[1] == 1:
 			self.makeGUI()
 
@@ -47,7 +49,7 @@ class Client():
 
 
 	def makeGUI(self):
-		initGUI(self.networkManager) 
+		initGUI(self.networkManager, self.taskQueue) 
 			
 
 	def handleExit(self):

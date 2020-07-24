@@ -86,13 +86,14 @@ class RequestHandler(socketserver.BaseRequestHandler):
 				return "INVALID"
 			else:
 				pass
+
 		except Exception as e:
 			print('Error while Authentication:', e)
 			return "INVALID"
 
 		# Pass the request to its handler function
 		try:
-			code = data.get("code", "NULL")
+			code = data.get("code")
 			if code == "Login":
 				print('> Login Request')
 				return self.processLogin(data)
@@ -105,17 +106,8 @@ class RequestHandler(socketserver.BaseRequestHandler):
 				print('> Profile Update request')
 				return self.processProfileUpdate(data)
 
-			else:
-				print('Client sent:', data)
-				# Send data to Server for processing
-				self.server.requestQueue.put(data)
-				if code in []:
-					return "WAIT"		# Ask client to resume as normal
-				else:
-					return "OK"         # Ask client to wait
-
 		except Exception as e:
-			print('Invalid message sent by client:', e)
+			print('Invalid message sent by client:', data, '\nError:', e)
 			return "INVALID"
 
 
@@ -157,20 +149,18 @@ class RequestHandler(socketserver.BaseRequestHandler):
 		password = data.get("password", "")
 		
 		try:
-			# The request is confirmed to be valid. So send client data.
-			# Get user data
+			# The request is confirmed to be valid.
 			print('[ LOGIN ] Success')
-			filename = "Users/" + userName + '.json'
-			with open(filename, 'r') as file:
-				response = json.load(file)
-
-			# --------------------------------------- TEST
-			# print('Put message in request queue:', data)
-			self.server.requestQueue.put(data)
-			# ---------------------------------------
-
-			response = json.dumps(response)
-			return response
+			# Put this request in server requestQueue for further processing
+			message = {
+				'IP' : data.get('IP'),
+				'PORT' : data.get('PORT'),
+				'Code' : 'Login',
+				'userName' : userName,
+				'userID' : userID
+			}
+			self.server.requestQueue.put(message)
+			return "OK"
 			
 		except Exception as error:
 			print('Error during login:', error)
@@ -179,10 +169,8 @@ class RequestHandler(socketserver.BaseRequestHandler):
 
 	def processRegisteration(self, data):
 		userName = data.get("userName", "")
-		password = data.get("password", "")
-		# Hash the password
-		password = self.Hash(password)
-
+		password = self.Hash(data.get("password", ""))
+		
 		# Add user to database:
 		userID = self.server.databaseManager.getNewUserID()
 		status = self.server.databaseManager.addUser(userID, userName, password)	
@@ -193,14 +181,21 @@ class RequestHandler(socketserver.BaseRequestHandler):
 
 		# User is added to the database now.
 		# Make user profile:	
-		user = User(userID, userName)	# Makes user profile and maintains its dictionary
-		data = user.getData()
+		user = User(userID, userName)	 # Makes user profile and maintains its dictionary
 	
 		# Send user profile to the client
 		try:
 			print('[ REGISTER ] Success')
-			response = json.dumps(data)
-			return response
+			message = {
+				'IP' : data.get('IP'),
+				'PORT' : data.get('PORT'),
+				'Code' : 'Login',
+				'userName' : userName,
+				'userID' : userID
+			}
+			self.server.requestQueue.put(message)
+
+			return 'OK'
 		except Exception as error:
 			print('Error during registeration:', error)
 			return "NULL"
@@ -228,5 +223,6 @@ class RequestHandler(socketserver.BaseRequestHandler):
 				json.dump(data, file, indent = 4)
 
 			return 'OK'
-		except:
+		except Exception as e:
+			print('Error while processing request:', e)
 			return 'ERROR'

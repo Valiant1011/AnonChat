@@ -2,7 +2,7 @@ import threading, socket, json
 '''
 This class accepts messages from Response queue
 and sends a response to the client the message is intended for.
-'''
+''' 
 class ResponseManager():
 	def __init__(self, responseQueue, exitFlag):
 		self.responseQueue = responseQueue
@@ -25,10 +25,9 @@ class ResponseManager():
 
 				if IP == None or PORT == None or MESSAGE == None:
 					print('[ WARNING ] Message is in wrong format : Discarding')
-					# print("IP: ", IP, " Port: ", PORT, " MESSAGE: ", MESSAGE)
+					print("IP: ", IP, " Port: ", PORT, " MESSAGE: ", MESSAGE)
 
 				else:
-					print('\nSending a new message to client:', MESSAGE)
 					# Create a new thread and send the message
 					responseThread = threading.Thread(
 						target = self.startResponseThread,
@@ -67,12 +66,12 @@ class ResponseManager():
 	def startResponseThread(self, MESSAGE, IP, PORT):
 		# This Thread will try to send MESSAGE to IP:PORT 
 		# In case of any error, it will retry two times and then discard the message.
-		print('New response thread started to send:', MESSAGE, 'to', IP, ':', PORT)
 		try:
 			MESSAGE = json.dumps(MESSAGE)
 		except:
 			print('Error while converting message to JSON object.')
 			return
+
 		print('Connecting to ', IP, ':', PORT)
 		try:
 			with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
@@ -82,3 +81,5 @@ class ResponseManager():
 			print('A new response has been sent to the client < ')
 		except Exception as e:
 			print('Error : Unable to send data to client:', e)
+
+		return

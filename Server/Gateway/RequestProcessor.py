@@ -1,7 +1,8 @@
 """
 This class takes serial requests from REQUESTS queue, processes it, 
 and sends the response to RESPONSE queue, which is handled by ResponseHandler subprocess.
-"""
+""" 
+import json
 class ProcessRequest():
 	def __init__(self, requestQueue, responseQueue, exitFlag):
 		self.requestQueue = requestQueue
@@ -36,17 +37,30 @@ class ProcessRequest():
 			
 	def processRequestData(self, data):
 		# print('Got a new message in request queue:', data)
+		response = {}
 		try:
 			IP = data.get('IP')
 			PORT = data.get('PORT')
-			MESSAGE = "Hello dude!"
+			code = data.get('Code')
 
-			response = {
-				'MESSAGE' : MESSAGE,
-				'IP' : IP,
-				'PORT' : PORT
-			} 
-		except:
-			print('Invalid request received. Discarded.')
+			if code == 'Login':
+				userName = data.get('userName')
+				filename = "Users/" + userName + '.json'
+				try:
+					with open(filename, 'r') as file:
+						MESSAGE = json.load(file)
+
+					MESSAGE['Code'] = 'Profile'
+					
+				except Exception as e:
+					print('Critical Error:', e)
+					MESSAGE = 'ERROR'
+
+			response['MESSAGE'] = MESSAGE
+			response['IP'] = IP
+			response['PORT'] = PORT
+		
+		except Exception as e:
+			print('Invalid request received:', e)
 		finally:
 			self.responseQueue.put(response)
